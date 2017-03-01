@@ -7,12 +7,23 @@
     var MODULE_NAME = 'lf.cities.service';
 
     angular.module(MODULE_NAME,[
-    ]).service('lfCitiesService', Service);
+    ]).config(Config).service('lfCitiesService', Service);
+
+    /** @ngInject */
+    function Config(remoteProvider){
+        //const Nightmare = require('nightmare');
+        //var nightmare = Nightmare({ show: true });
+        remoteProvider.register('nightmare');
+    }
 
     /** @ngInject */
     function Service($rootScope,$log,$q) {
 
         var service = {};
+
+        service.testNightmare = function () {
+
+        }
 
         service.updateCities = function (completion) {
 

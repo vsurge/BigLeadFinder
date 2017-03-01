@@ -40,6 +40,8 @@
                         var prom = $q.defer();
 
                         $timeout(function(){
+                            prom.resolve('');
+                            /*
                             if (!$rootScope.authenticated) {
                                 prom.reject('');
                                 $state.go('public.sign-in');
@@ -47,6 +49,7 @@
 
                                 prom.resolve('');
                             }
+                            */
                         });
 
                         return prom;

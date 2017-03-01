@@ -6,7 +6,8 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "webpack-dev-server --history-api-fallback --progress --host 0.0.0.0",
-    "electron": "electron ./dist"
+    "clear-dist": "rm -Rf ./dist/*",
+    "copy-index": "cp ./electron/index.html ./dist/"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -23,6 +24,7 @@
     "angular-animate": "^1.5.0",
     "angular-aria": "^1.5.0",
     "angular-datatables": "^0.5.6",
+    "angular-electron": "^0.2.1",
     "angular-material": "^1.1.1",
     "angular-material-sidenav": "^0.1.1",
     "angular-mocks": "^1.5.0",
@@ -69,5 +71,7 @@
     "webpack-material-design-icons": "0.0.2",
     "write-file-webpack-plugin": "^3.4.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "nightmare": "^2.10.0"
+  }
 }

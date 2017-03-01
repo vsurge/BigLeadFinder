@@ -10,6 +10,8 @@
     require('angular-aria');
     require('angular-animate');
 
+    require('angular-electron');
+
     require('./layout/layout');
     require('./views/dashboard/dashboard');
     require('./views/sign-in/sign-in');
@@ -23,6 +25,7 @@
     angular.module(MODULE_NAME, [
         // Vendor Modules
         'ngMaterial',
+        'angular-electron',
         //'ngAria',
         //'ngAnimate',
         // App Modules
@@ -34,16 +37,19 @@
     ]).run(Run).config(Config).config(Theme)
 
     /* @ngInject */
-    function Run($rootScope,$log){
+    function Run($rootScope,$log,process){
 
-        $log.debug('app Run-X');
+        $log.debug('App is Running!');
+        $log.debug('Node v' + process.versions.node);
+        $log.debug('Chrome v' + process.versions.chrome);
+        $log.debug('Electron v' + process.versions.electron);
 
     }
 
     /* @ngInject */
-    function Config($compileProvider) {
+    function Config($compileProvider,$qProvider) {
 
-
+        $qProvider.errorOnUnhandledRejections(false);
 
     }
 

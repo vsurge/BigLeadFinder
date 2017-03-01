@@ -17,7 +17,7 @@
 
         $scope.signIn = function () {
 
-            if ($scope.user.username && $scope.user.password == 'aaa') {
+            if ($scope.user.username && $scope.user.password) {
                 $rootScope.authenticated = true;
                 $location.path('/');
             } else {
