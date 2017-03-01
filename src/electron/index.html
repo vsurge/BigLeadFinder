@@ -1,15 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app" lang="en">
   <head>
     <meta charset="UTF-8">
     <title>Hello World!</title>
+    <base href="/app/">
+
   </head>
-  <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
+  <body ng-cloak>
+  <header>
+    <div ui-view="header"></div>
+  </header>
+
+  <section layout="row" layout-fill>
+    <div ui-view="sidenav">
+    </div>
+
+    <div ui-view="container" flex layout-padding>
+    </div>
+
+  </section>
   </body>
 
   <script>

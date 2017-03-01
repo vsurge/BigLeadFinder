@@ -13,16 +13,21 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({width: 1500, height: 1000})
 
-  setTimeout(function(){
+  /*setTimeout(function(){
     mainWindow.loadURL(url.format({
       pathname: process.cwd() + '/dist/index.html',
       protocol: 'file:',
       slashes: false
     }))
-  },2000);
+  },7000);*/
 
+  mainWindow.loadURL(url.format({
+    pathname: process.cwd() + '/dist/index.html',
+    protocol: 'file:',
+    slashes: false
+  }))
 
   /*
    mainWindow.loadURL(url.format({

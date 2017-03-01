@@ -1,0 +1,33 @@
+<div id="appHeader" ng-cloak>
+
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            &nbsp;&nbsp;
+            <div layout="row" layout-margin>
+
+                <a ui-sref="app.dashboard">
+                    <!--<img src="assets/images/logo.png" style="height:64px;"/>-->
+                    <h1>LeadFinder</h1>
+
+                </a>
+
+
+
+                <md-progress-circular ng-hide="!showActivity" ng-disabled="!showActivity"
+                                      class="md-warn" md-diameter="40"></md-progress-circular>
+            </div>
+
+            <span flex></span>
+            <div layout="row" layout-margin>
+                <md-button ui-sref=".barcode" class="md-raised white">SEARCHES</md-button>
+                <md-button ui-sref=".bbk" class="md-raised white">RESPONSES</md-button>
+                <md-button ui-sref=".skus" class="md-raised white">CITIES</md-button>
+                <md-button ng-click="logout()">LOGOUT</md-button>
+            </div>
+
+            &nbsp;&nbsp;
+        </div>
+
+    </md-toolbar>
+
+</div>

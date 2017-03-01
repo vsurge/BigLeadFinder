@@ -33,7 +33,7 @@ var clientConfig = function makeWebpackClientConfig() {
      * Karma will set this when it's a test build
      */
     config.entry = isTest ? {} : {
-        app: './app/app.js'
+        app: ["webpack-dev-server/client?http://localhost:8080",'./app/app.js']
     };
 
     /**
@@ -243,7 +243,7 @@ var serverConfig = function makeWebpackServerConfig() {
     return {
         entry: {
             "main": "./electron/main.js",
-            "renderer": "./electron/renderer.js",
+            "renderer": "./electron/renderer.js"
         },
         output: {
             path:  __dirname + "/dist",

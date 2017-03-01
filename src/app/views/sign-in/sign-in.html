@@ -1,0 +1,22 @@
+<div id="appSignInForm">
+
+    <form name="loginForm" >
+        <div id="appSignInHeaderBlock" md-colors="::{background: 'default-primary'}">
+            <h1>Sign In</h1>
+        </div>
+        <div id="appSignInInputDiv">
+            <md-input-container>
+                <label>Username</label>
+                <input ng-model="user.username" required>
+            </md-input-container>
+            <md-input-container>
+                <label>Password</label>
+                <input ng-model="user.password" type="password" required>
+            </md-input-container>
+            <br />
+            <md-button class="md-raised md-accent" ng-click="signIn()" ng-disabled="!loginForm.$valid">
+                Sign In
+            </md-button>
+        </div>
+    </form>
+</div>

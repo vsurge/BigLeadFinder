@@ -4,9 +4,9 @@
   "description": "A minimal Electron application",
   "main": "main/index.js",
   "scripts": {
-    "start": "npm run electron && npm run dev",
-    "dev": "rm -Rf ./dist/* && webpack-dev-server --history-api-fallback --progress --host 0.0.0.0",
-    "electron": "electron ."
+    "start": "npm run dev",
+    "dev": "webpack-dev-server --history-api-fallback --progress --host 0.0.0.0",
+    "electron": "electron ./dist"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -19,8 +19,6 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^1.4.1",
-    "electron-webpack-plugin": "^1.2.2",
     "angular": "^1.5.0",
     "angular-animate": "^1.5.0",
     "angular-aria": "^1.5.0",
@@ -36,6 +34,8 @@
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.23.0",
     "datatables.net": "^1.10.13",
+    "electron": "^1.4.1",
+    "electron-webpack-plugin": "^1.2.2",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
     "html-webpack-plugin": "^2.7.1",
@@ -56,7 +56,7 @@
     "material-design-lite": "^1.3.0",
     "ng-annotate-webpack-plugin": "^0.1.3",
     "node-libs-browser": "^2.0.0",
-    "node-sass": "^4.1.1",
+    "node-sass": "^4.5.0",
     "null-loader": "^0.1.1",
     "postcss-loader": "^1.1.1",
     "raw-loader": "^0.5.1",
@@ -69,6 +69,5 @@
     "webpack-material-design-icons": "0.0.2",
     "write-file-webpack-plugin": "^3.4.2"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

@@ -1,0 +1,27 @@
+
+#appSignInForm {
+
+  form {
+    box-sizing: border-box;
+    width: 320px;
+    box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
+    margin: 100px auto 0;
+    border-radius: 3px;
+
+    h1 {
+      box-sizing: border-box;
+      padding: 40px;
+    }
+
+    #appSignInHeader {
+      height:66px;
+
+    }
+
+    #appSignInInputDiv {
+      padding: 40px;
+
+    }
+  }
+
+}

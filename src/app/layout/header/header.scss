@@ -1,0 +1,13 @@
+#appHeader {
+  md-toolbar {
+    box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
+  }
+  md-progress-circular {
+    border-color:white;
+    margin: 20px;
+  }
+  .white {
+    color:black;
+    background-color:white;
+  }
+}
