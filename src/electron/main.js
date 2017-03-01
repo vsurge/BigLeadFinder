@@ -15,12 +15,32 @@ function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600})
 
-  // and load the index.html of the app.
+  setTimeout(function(){
+    mainWindow.loadURL(url.format({
+      pathname: process.cwd() + '/dist/index.html',
+      protocol: 'file:',
+      slashes: false
+    }))
+  },2000);
+
+
+  /*
+   mainWindow.loadURL(url.format({
+   pathname: path.join(__dirname, 'index.html'),
+   protocol: 'file:',
+   slashes: true
+   }))
+  */
+
+
+  /*
   mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
+    host:'localhost',
+    pathname: 'index.html',
+    port:8080,
+    protocol: 'http:',
     slashes: true
-  }))
+  })) */
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools()
