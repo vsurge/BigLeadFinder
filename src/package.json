@@ -2,10 +2,12 @@
   "name": "electron-quick-start",
   "version": "1.0.0",
   "description": "A minimal Electron application",
-  "main": "main/index.js",
+  "main": "main.js",
   "scripts": {
-    "start": "npm run dev",
+    "start": "npm run electron && npm run dev",
+    "electron": "electron .",
     "dev": "webpack-dev-server --history-api-fallback --progress --host 0.0.0.0",
+    "devX": "webpack --progress --watch",
     "clear-dist": "rm -Rf ./dist/*",
     "copy-index": "cp ./electron/index.html ./dist/"
   },
@@ -37,6 +39,7 @@
     "css-loader": "^0.23.0",
     "datatables.net": "^1.10.13",
     "electron": "^1.4.1",
+    "electron-reload": "^1.1.0",
     "electron-webpack-plugin": "^1.2.2",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",

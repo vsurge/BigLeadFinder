@@ -1,4 +1,5 @@
 const electron = require('electron')
+//require('electron-reload')(process.cwd() + '/dist');
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
@@ -26,7 +27,7 @@ function createWindow () {
   },7000);*/
 
   mainWindow.loadURL(url.format({
-    pathname: process.cwd() + '/dist/index.html',
+    pathname: process.cwd() + '/index.html',
     protocol: 'file:',
     slashes: false
   }))
@@ -57,7 +58,7 @@ function createWindow () {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    mainWindow = null
+    //mainWindow = null
   })
 }
 
@@ -70,9 +71,12 @@ app.on('ready', createWindow)
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
+  app.quit()
+  /*
   if (process.platform !== 'darwin') {
     app.quit()
   }
+  */
 })
 
 app.on('activate', function () {

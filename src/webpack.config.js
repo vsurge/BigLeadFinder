@@ -33,8 +33,9 @@ var clientConfig = function makeWebpackClientConfig() {
      * Karma will set this when it's a test build
      */
     config.entry = isTest ? {} : {
-        app: ["webpack-dev-server/client?http://localhost:8080",'./app/app.js']
-        //app: ["webpack-dev-server/client?app.bundle.js", './app/app.js']
+        //app: ["webpack-dev-server/client?http://localhost:8080",'./app/app.js']
+        //app: './app/app.js',
+        "renderer": ["webpack-dev-server/client?http://localhost:8080","./renderer.js"]
     };
 
     /**
@@ -190,6 +191,10 @@ var clientConfig = function makeWebpackClientConfig() {
             // Extract css files
             // Disabled when in test mode or not in build mode
             new ExtractTextPlugin('[name].[hash].css', {disable: !isProd}),
+            new ElectronPlugin({
+                relaunchPathMatch: "./app",
+                path: "./"
+            })/*,
             new CopyWebpackPlugin([{
                 from: __dirname + '/app/index.html',
                 to: 'index.html'
@@ -205,11 +210,7 @@ var clientConfig = function makeWebpackClientConfig() {
             new CopyWebpackPlugin([{
                 from: __dirname + '/app/main.js',
                 to: 'main.js'
-            }]),
-            new ElectronPlugin({
-                relaunchPathMatch: "./app",
-                path: "dist"
-            })
+            }])*/
         )
     }
 
