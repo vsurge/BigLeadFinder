@@ -8,7 +8,9 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 var ElectronPlugin = require("electron-webpack-plugin");
+//var ElectronConnectWebpackPlugin = require('electron-connect-webpack-plugin');
 var WriteFilePlugin = require('write-file-webpack-plugin');
+var path = require("path");
 
 /**
  * Env
@@ -33,9 +35,11 @@ var clientConfig = function makeWebpackClientConfig() {
      * Karma will set this when it's a test build
      */
     config.entry = isTest ? {} : {
-        //app: ["webpack-dev-server/client?http://localhost:8080",'./app/app.js']
+        //app: ["webpack-dev-server/client?http://localhost:8080",'./app/app.js'],
         //app: './app/app.js',
-        "renderer": ["webpack-dev-server/client?http://localhost:8080","./renderer.js"]
+        "renderer": ["webpack-dev-server/client?http://localhost:8080","./app/renderer.js"],
+        //"renderer": "./app/renderer.js",
+        "main": "./app/main.js"
     };
 
     /**
@@ -182,7 +186,7 @@ var clientConfig = function makeWebpackClientConfig() {
         // Render index.html
         config.plugins.push(
             /*new HtmlWebpackPlugin({
-             template: './electron/index.html',
+             template: './app/index.html',
              //inject: 'head'
              inject: 'body'
              }),*/
@@ -191,26 +195,31 @@ var clientConfig = function makeWebpackClientConfig() {
             // Extract css files
             // Disabled when in test mode or not in build mode
             new ExtractTextPlugin('[name].[hash].css', {disable: !isProd}),
-            new ElectronPlugin({
-                relaunchPathMatch: "./app",
-                path: "./"
-            })/*,
-            new CopyWebpackPlugin([{
-                from: __dirname + '/app/index.html',
-                to: 'index.html'
-            }]),
             new CopyWebpackPlugin([{
                 from: __dirname + '/app/package.json',
                 to: 'package.json'
-            }]),
+            }]),new CopyWebpackPlugin([{
+                from: __dirname + '/app/index.html',
+                to: 'index.html'
+            }]),new ElectronPlugin({
+                relaunchPathMatch: "./app",
+                path: "./dist"
+            })/*
+             ,
+             new CopyWebpackPlugin([{
+             from: __dirname + '/app/scripts/main.js',
+             to: 'main.js'
+             }])
             new CopyWebpackPlugin([{
                 from: __dirname + '/app/renderer.js',
                 to: 'renderer.js'
             }]),
-            new CopyWebpackPlugin([{
-                from: __dirname + '/app/main.js',
-                to: 'main.js'
-            }])*/
+            new ElectronConnectWebpackPlugin({
+                path: __dirname,
+                logLevel: 1
+            }),*/
+
+
         )
     }
 
@@ -257,6 +266,8 @@ var clientConfig = function makeWebpackClientConfig() {
         // required for write-file
         outputPath: "./dist"
     };
+
+    config.target = "electron-renderer";
 
     return config;
 }();
@@ -338,7 +349,7 @@ var rendererConfig = function makeWebpackRendererConfig() {
         devServer: {
             outputPath: __dirname + '/dist'
         },
-        target: "electron-renderer"
+        target: "electron"
     };
 
 }();

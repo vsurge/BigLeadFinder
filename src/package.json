@@ -39,6 +39,8 @@
     "css-loader": "^0.23.0",
     "datatables.net": "^1.10.13",
     "electron": "^1.4.1",
+    "electron-connect": "^0.6.1",
+    "electron-connect-webpack-plugin": "^0.1.1",
     "electron-reload": "^1.1.0",
     "electron-webpack-plugin": "^1.2.2",
     "extract-text-webpack-plugin": "^1.0.1",

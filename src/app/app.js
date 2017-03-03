@@ -47,10 +47,11 @@
     }
 
     /* @ngInject */
-    function Config($compileProvider,$qProvider) {
+    function Config($compileProvider,$qProvider,remoteProvider) {
 
         $qProvider.errorOnUnhandledRejections(false);
 
+        //remoteProvider.register({name: 'electronConnect', require: 'electron-connect'});
     }
 
     /* @ngInject */
