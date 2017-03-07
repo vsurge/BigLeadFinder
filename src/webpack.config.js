@@ -201,6 +201,9 @@ var clientConfig = function makeWebpackClientConfig() {
             }]),new CopyWebpackPlugin([{
                 from: __dirname + '/app/index.html',
                 to: 'index.html'
+            }]),new CopyWebpackPlugin([{
+                from: __dirname + '/app/Browser.js',
+                to: 'Browser.js'
             }]),new ElectronPlugin({
                 relaunchPathMatch: "./app",
                 path: "./dist"
@@ -256,10 +259,6 @@ var clientConfig = function makeWebpackClientConfig() {
         contentBase: './app/',
         stats: 'minimal',
         proxy: {
-            '/api/**': "http://127.0.0.1:3000",
-            '/jobs': "http://127.0.0.1:3000",
-            '/api-docs/**': "http://127.0.0.1:3000"
-            , '/assets/env.js': 'http://127.0.0.1:3000'
         },
         // electron will break if client is inlined in main process
         inline: false,

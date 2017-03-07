@@ -13,7 +13,7 @@
 
         $scope.cities = function() {
 
-            AppServices.cl.cities.testNightmare();
+            AppServices.cl.cities.updateCities();
 
         };
 

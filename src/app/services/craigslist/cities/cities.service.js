@@ -6,75 +6,153 @@
 
     var MODULE_NAME = 'lf.cities.service';
 
-    angular.module(MODULE_NAME,[
+    require('angular-local-storage');
+
+    //var Nightmare = require('nightmare');
+    //require('nightmare-window-manager')(Nightmare);
+
+    angular.module(MODULE_NAME, [
+        'LocalStorageModule'
     ]).config(Config).service('lfCitiesService', Service);
 
     /** @ngInject */
-    function Config(remoteProvider){
-        //const Nightmare = require('nightmare');
-        //var nightmare = Nightmare({ show: true });
+    function Config(remoteProvider) {
+
+        /*
+         //const Nightmare = require('nightmare');
+         //var nightmare = Nightmare({ show: true });
+         //
+         remoteProvider.register('winMgr','nightmare-window-manager');
+         //remoteProvider.register('nightmare-window-manager');
+
+         remoteProvider.register('Nightmare', function(remote) {
+
+         var Nightmare = remote.require('nightmare');
+
+         console.dir(Nightmare.action);
+
+         remote.require('nightmare-window-manager')(Nightmare);
+
+         return Nightmare;
+         });
+         */
+
         remoteProvider.register('nightmare');
         remoteProvider.register('electron');
+        remoteProvider.register('Browser','./Browser');
+
+
+
     }
 
     /** @ngInject */
-    function Service($rootScope,$log,$q,nightmare,electron) {
+    function Service($rootScope, $log, $q, path, electron, localStorageService, nightmare, Browser) {
 
         var service = {};
 
-        var browser = nightmare({ show: true, electronPath: electron.app.getPath('exe')});
+        //var Browser = require('electron').remote.require('./Browser');
 
-        service.testNightmare = function () {
+        service.updateCities = function () {
 
-            browser.goto('https://www.craigslist.org')
-                .end()
-                .then(function (result) {
-                    $log.debug('result: ' + JSON.stringify(result,null,2));
-                })
-                .catch(function (error) {
-                    $log.error('error:', error);
-                });
+            //var test = localStorageService.get('test');
 
-        }
+            $log.debug('Starting updateCities');
 
-        service.updateCities = function (completion) {
-
-            $log.debug('lfCitiesService.updateCities');
-
-            service.openCities().then(function(cl){
-                $log.debug('Got window: ' + cl);
+            Browser.updateCities(function(result){
+                $log.debug('result: ' + result);
             });
 
-        };
+            /*
 
-        service.openCities = function(ready) {
+            var jqueryPath = path.resolve('../src/node_modules/jquery/dist/jquery.min.js');
 
-            var deferred = $q.defer();
+            //$log.debug('jqueryPath: ' + jqueryPath);
 
-            $.ajax( "//medialab.github.io/artoo/public/dist/artoo-latest.min.js" )
-                .done(function(data) {
+            //$log.debug('jqueryPath: ' + jqueryPath);
 
-                    var cl = window.open('https://www.craigslist.org/about/sites');
+            var hostConsole = window.console;
 
-                    $log.debug(cl);
+            //.wait('h1')
+            var url = 'https://www.craigslist.org/about/sites';
+            /* browser.on('did-finish-load', function () {
+             console.log(url + ' Did finish loading');
 
-                    $(cl.document).ready(function(){
 
-                        var actualCode = '(' + function() {
-                                window.console.log('Hello World!');
-                            } + ')();';
-                        var script = document.createElement('script');
-                        script.textContent = actualCode;
-                        (cl.document.head||cl.document.documentElement).appendChild(script);
-                        //script.remove();
+             }); */
 
-                        deferred.resolve(cl);
+            /*
+            console.dir(window.document)
 
-                    });
+            browser
+                .goto(url)
+                .evaluate(function () {
 
+                    //window.console.log('test');
+                    //console.dir(window.document)
+
+                })
+                .end()
+                .then(function () {
+
+                    $log.debug('log debug');
+                    console.log('browser end');
                 });
+            */
 
-            return deferred.promise;
+            /*
+             .inject('js',jqueryPath).evaluate(function () {
+
+             var $j = window.jQuery.noConflict();
+             var result = $j('.logo').innerText;
+
+             // now we're executing inside the browser scope.
+             console.log('logo: ' + result);
+
+             return result;
+             })
+             * */
+            /*
+             .evaluate(function () {
+             var result = document.querySelector('.logo').innerText;
+             console.log('result: ' + result);
+             return result;
+             })
+             .end()
+             .then(function (result) {
+             //hostConsole.log('then result: ' + JSON.stringify(result,null,2));
+             console.log('then result: ' + JSON.stringify(result, null, 2));
+             });
+
+             /*.catch(function (error) {
+             $log.debug('Ending updateCities');
+             console.log('error:', error);
+             });*/
+            /*
+             .evaluate(function () {
+
+             var $jQuery = jQuery.noConflict();
+             var logo = $jQuery('.logo').innerText;
+
+             // now we're executing inside the browser scope.
+             console.log('logo: ' + logo);
+             var result =  document.querySelector('h1').innerText;
+             console.log('result: ' + result);
+             return result;
+             })
+
+             .inject('js',jqueryPath)
+             .evaluate(function () {
+
+             var $jQuery = jQuery.noConflict();
+             var logo = $jQuery('.logo').innerText;
+
+             // now we're executing inside the browser scope.
+             console.log('logo: ' + logo);
+             var result =  document.querySelector('h1').innerText;
+             console.log('result: ' + result);
+             })
+
+             */
         };
 
         return service;

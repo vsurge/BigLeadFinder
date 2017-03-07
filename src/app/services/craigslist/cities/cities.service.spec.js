@@ -1,18 +1,18 @@
-var module = require('./eta-users.service');
+var module = require('./cities.service');
 
-describe('EtaUsersService', function() {
+describe('lfCitiesService', function() {
 
-    var EtaUsersService = null;
+    var lfCitiesService = null;
     beforeEach(function() {
         angular.mock.module(module);
 
-        angular.mock.inject(function(_EtaUsersService_){
-            EtaUsersService = _EtaUsersService_;
+        angular.mock.inject(function(_lfCitiesService_){
+            lfCitiesService = _lfCitiesService_;
         });
     });
 
     it("instantiates", function() {
-        expect(EtaUsersService).toBeFunction();
+        expect(lfCitiesService).toBeFunction();
     });
 
 });

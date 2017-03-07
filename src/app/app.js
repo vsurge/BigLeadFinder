@@ -3,7 +3,7 @@
 
     require('angular-material/angular-material.css');
 
-    window.jQuery = window.$ = require('jquery');
+    window.$jQuery = require('jquery').noConflict();
 
     require('angular');
     require('angular-material');

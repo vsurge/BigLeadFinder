@@ -9,7 +9,9 @@
     "dev": "webpack-dev-server --history-api-fallback --progress --host 0.0.0.0",
     "devX": "webpack --progress --watch",
     "clear-dist": "rm -Rf ./dist/*",
-    "copy-index": "cp ./electron/index.html ./dist/"
+    "copy-index": "cp ./electron/index.html ./dist/",
+    "test": "karma start",
+    "test-watch": "karma start --auto-watch --no-single-run"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -27,6 +29,7 @@
     "angular-aria": "^1.5.0",
     "angular-datatables": "^0.5.6",
     "angular-electron": "^0.2.1",
+    "angular-local-storage": "^0.5.2",
     "angular-material": "^1.1.1",
     "angular-material-sidenav": "^0.1.1",
     "angular-mocks": "^1.5.0",
@@ -65,6 +68,7 @@
     "node-libs-browser": "^2.0.0",
     "node-sass": "^4.5.0",
     "null-loader": "^0.1.1",
+    "phantomjs": "^2.1.7",
     "postcss-loader": "^1.1.1",
     "raw-loader": "^0.5.1",
     "sass-loader": "^4.1.1",
@@ -77,6 +81,7 @@
     "write-file-webpack-plugin": "^3.4.2"
   },
   "dependencies": {
-    "nightmare": "^2.10.0"
+    "nightmare": "^2.10.0",
+    "nightmare-window-manager": "^0.2.2"
   }
 }
