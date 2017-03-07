@@ -1,0 +1,34 @@
+<div id="skus-container">
+
+
+    <div layout="row" width="100%">
+        <div layout="column" flex="50">
+            <div class="md-display-1">Cities</div>
+        </div>
+        <div layout="column" layout-align="end end" flex="50">
+            <div layout="row" flex>
+                <md-button ng-click="refreshCities()" class="md-primary md-raised">Refresh Cities</md-button>
+                <md-button ng-click="clearCities()" class="md-warn md-raised">Clear Cities</md-button>
+            </div>
+
+        </div>
+    </div>
+    <md-divider>
+        <md-card>
+
+            <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="mdl-data-table dt-left">
+                <thead>
+                <tr>
+                    <th>HREF</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in data">
+                    <td>{{ item.href }}</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </md-card>
+
+</div>

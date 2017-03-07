@@ -3,7 +3,8 @@
 
     require('angular-material/angular-material.css');
 
-    window.$jQuery = require('jquery').noConflict();
+    window.$ = window.jQuery = require('jquery');
+    window._ = require('underscore');
 
     require('angular');
     require('angular-material');
@@ -14,6 +15,7 @@
 
     require('./layout/layout');
     require('./views/dashboard/dashboard');
+    require('./views/cities/cities');
     require('./views/sign-in/sign-in');
 
     require('./services/app.services');
@@ -32,34 +34,35 @@
         'app.layout',
         'app.views.sign-in',
         'app.views.dashboard',
-        // App Services
+        'app.views.cities',
+        // App Services,
         'app.services'
-    ]).run(Run).config(Config).config(Theme)
+    ]).constant('_',
+        window._
+    ).run(Run).config(Config).config(Theme)
 
     /* @ngInject */
-    function Run($rootScope,$log,process){
+    function Run($rootScope,$log,process,AppServices){
 
-        $log.debug('App is Running!');
         $log.debug('Node v' + process.versions.node);
         $log.debug('Chrome v' + process.versions.chrome);
         $log.debug('Electron v' + process.versions.electron);
 
+        AppServices.db.initDb();
+
     }
 
     /* @ngInject */
-    function Config($compileProvider,$qProvider,remoteProvider) {
+    function Config($qProvider,$urlRouterProvider) {
 
         $qProvider.errorOnUnhandledRejections(false);
-
-        //remoteProvider.register({name: 'electronConnect', require: 'electron-connect'});
+        $urlRouterProvider.otherwise('/cities');
     }
 
     /* @ngInject */
     function Theme($mdThemingProvider) {
 
         $mdThemingProvider.theme('default');
-
-
     }
 
     module.exports = MODULE_NAME;

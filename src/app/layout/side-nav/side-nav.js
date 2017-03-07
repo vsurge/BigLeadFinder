@@ -20,9 +20,9 @@
             type:'link'
         },
             {
-                id:'app.barcode',
-                name:'Barcode',
-                state:'app.barcode',
+                id:'app.cities',
+                name:'Cities',
+                state:'app.cities',
                 type:'link'
             }]);
 

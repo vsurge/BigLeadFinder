@@ -2,20 +2,21 @@
     'use strict';
 
     require('./api/api.services');
-    require('./craigslist/craigslist.service');
+    require('./db/db.service');
+
 
     var MODULE_NAME = 'app.services';
 
     angular.module(MODULE_NAME, [
         'api.services',
-        'ls.craisglist.service'
+        'db.service'
     ]).service('AppServices', Service);
 
     /* @ngInject */
-    function Service(ApiServices,lfCraigslist,$log) {
+    function Service(ApiServices,$log,DB) {
 
         this.api = ApiServices;
-        this.cl = lfCraigslist;
+        this.db = DB;
     };
 
     module.exports = MODULE_NAME;
