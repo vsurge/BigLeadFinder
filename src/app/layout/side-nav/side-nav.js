@@ -14,22 +14,26 @@
     /* @ngInject */
     function Config(ssSideNavSectionsProvider, $mdThemingProvider) {
         ssSideNavSectionsProvider.initWithSections([{
-            id:'app.dashboard',
-            name:'Dashboard',
-            state:'app.dashboard',
-            type:'link'
+            id: 'app.dashboard',
+            name: 'Dashboard',
+            state: 'app.dashboard',
+            type: 'link'
         }, {
-            id:'app.posts',
-            name:'Posts',
-            state:'app.posts',
-            type:'link'
-        },
-            {
-                id:'app.cities',
-                name:'Cities',
-                state:'app.cities',
-                type:'link'
-            }]);
+            id: 'app.searches',
+            name: 'Searches',
+            state: 'app.searches',
+            type: 'link'
+        }, {
+            id: 'app.posts',
+            name: 'Posts',
+            state: 'app.posts',
+            type: 'link'
+        }, {
+            id: 'app.cities',
+            name: 'Cities',
+            state: 'app.cities',
+            type: 'link'
+        }]);
 
 
     };
@@ -40,11 +44,11 @@
 
         // Show or Hide menu
 
-         ssSideNav.setVisible('app.dashboard');
-         ssSideNav.setVisibleFor([{
-         id: 'app.dashboard',
-         value: true
-         }]);
+        ssSideNav.setVisible('app.dashboard');
+        ssSideNav.setVisibleFor([{
+            id: 'app.dashboard',
+            value: true
+        }]);
 
     };
 

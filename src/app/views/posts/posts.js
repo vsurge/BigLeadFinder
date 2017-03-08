@@ -62,10 +62,13 @@
 
                 //$log.debug('AppServices.api.posts.find(): ' + JSON.stringify(result,null,2));
 
-                if (result) {
-                    $log.debug('found posts: ' + result.length);
+                if (result && result.docs) {
+                    //$log.debug('found posts: ' + result.docs.length);
                     $scope.data = result.docs;
                 }
+
+                $rootScope.ngProgress.complete();
+                $rootScope.ngProgress.reset();
 
             });
         };

@@ -1,0 +1,34 @@
+<div id="skus-container">
+
+
+    <div layout="row" width="100%">
+        <div layout="column" flex="50">
+            <div class="md-display-1">Searches</div>
+        </div>
+        <div layout="column" layout-align="end end" flex="50">
+            <div layout="row" flex>
+            </div>
+
+        </div>
+    </div>
+    <md-divider>
+        <md-card>
+
+            <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="mdl-data-table dt-left">
+                <thead>
+                <tr>
+                    <th>QUERY</th>
+                    <th>CATEGORIES</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in data">
+                    <td>{{ item.query }}</td>
+                    <td>{{ item.categories | json}}</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </md-card>
+
+</div>

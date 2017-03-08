@@ -54,14 +54,15 @@
 
                     if (result.cities.length > 0) {
 
-                        service.remove().then(function(){
-                            $q.all(deferred,DB.createCollection('city',result.cities));
+                        service.remove().then(function (){
+                            return DB.createCollection('city',result.cities);
+                        }).then(function(){
+                            deferred.resolve()
                         });
 
-                        //service.db.remove(row.id, row.value.rev);
+                    } else {
+                        deferred.resolve(result);
                     }
-
-                    deferred.resolve(result);
 
                 }
 

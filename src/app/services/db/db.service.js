@@ -33,14 +33,10 @@
 
             var defaultSelector = {type: {$eq: type}};
 
-            $rootScope.ngProgress.start();
-
             return service.db.find({
                 selector: defaultSelector
             }).then(function (result) {
 
-                $rootScope.ngProgress.complete();
-                $rootScope.ngProgress.reset();
                 return result;
 
             },function(error){
@@ -51,7 +47,6 @@
 
         service.removeDocs = function (type, selector) {
 
-            $rootScope.ngProgress.start();
             return service.findDocs(type, selector).then(function (result) {
 
                 if (result && result.docs) {
@@ -64,22 +59,22 @@
                     service.db.remove(doc);
                 });
 
-                $rootScope.ngProgress.complete();
-                $rootScope.ngProgress.reset();
-
             })
 
         }
 
-        service.createCollection = function (type, items) {
+        service.create = function(type,doc) {
 
-            $rootScope.ngProgress.start();
+            return service.createCollection(type,[doc]);
+        }
+
+        service.createCollection = function (type, docs) {
 
             var deferred = $q.defer();
 
-            var docs = _.map(items, function (item) {
-                item.type = type;
-                return item;
+            var docs = _.map(docs, function (doc) {
+                doc.type = type;
+                return doc;
             });
 
             service.db.bulkDocs(docs)
@@ -94,8 +89,7 @@
                     deferred.reject(err);
                 })
                 .finally(function () {
-                    $rootScope.ngProgress.complete();
-                    $rootScope.ngProgress.reset();
+
                 });
 
             return deferred.promise;
