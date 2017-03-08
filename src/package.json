@@ -38,6 +38,7 @@
     "angular-ui-router": "^0.3.2",
     "artoo-js": "^0.3.4",
     "autoprefixer": "^6.0.3",
+    "co": "^4.6.0",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.23.0",
     "datatables.net": "^1.10.13",

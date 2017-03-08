@@ -46,7 +46,7 @@
 
         var browser = Service.browserFactory();
 
-        var url = 'https://www.craigslist.org/about/sites';
+        var sites_url = 'https://www.craigslist.org/about/sites';
         var jqueryPath = path.resolve('../src/node_modules/jquery/dist/jquery.js');
         //var jq = fs.readFileSync(jqueryPath, "utf8");
 
@@ -66,7 +66,7 @@
          },jq)
         */
         browser
-            .goto(url)
+            .goto(sites_url)
             .inject('js',jqueryPath)
             .wait(500)
             .evaluate(function () {
@@ -77,7 +77,13 @@
 
                 var boxes = $('.colmask').first().find('.box > ul > li > a').each(function(index,element){
 
-                    cities.push({href:element.href});
+                    var host_parts = element.hostname.split('.');
+
+                    cities.push({
+                        href:element.href,
+                        _id:host_parts[0],
+                        city_name:element.innerText
+                    });
 
                 });
 
@@ -89,14 +95,14 @@
             })
             .end()
             .then(function (result) {
-                console.log('end()');
-                console.log('result: ' + JSON.stringify(result,null,2));
+                console.log('Browser.getCities end()');
+                //console.log('result: ' + JSON.stringify(result,null,2));
                 callback(result,null);
 
             })
             .catch(function (error) {
 
-                console.error('error: ' + error);
+                console.error('Browser.getCities error: ' + error);
                 callback(null,error);
 
             });

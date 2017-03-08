@@ -1,7 +1,7 @@
 (function(){
     'use strict';
 
-    var MODULE_NAME = 'app.views.cities';
+    var MODULE_NAME = 'app.views.posts';
 
     require('angular-ui-router');
 
@@ -12,15 +12,15 @@
     require('dataTables.material');
     require('dataTables.material.css');
 
-    require('./cities.scss');
+    require('./posts.scss');
 
     angular.module(MODULE_NAME,[
         'ui.router',
         'datatables'
-    ]).config(Config).controller('CitiesCtrl',Controller);
+    ]).config(Config).controller('PostsCtrl',Controller);
 
     /* @ngInject */
-    function Controller($rootScope,$scope,$log, AppServices, DTOptionsBuilder, DTColumnDefBuilder,ngProgress) {
+    function Controller($rootScope,$scope,$log, AppServices, DTOptionsBuilder, DTColumnDefBuilder) {
 
         function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
             // Unbind first in order to avoid any duplicate handler (see https://github.com/l-lin/angular-datatables/issues/87)
@@ -54,43 +54,39 @@
             .withOption('order', [[ 0, "asc" ]]);
         $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0).withOption('className', 'mdl-data-table__cell--non-numeric'),
-            DTColumnDefBuilder.newColumnDef(1).withOption('className', 'mdl-data-table__cell--non-numeric'),
-            DTColumnDefBuilder.newColumnDef(2).withOption('className', 'mdl-data-table__cell--non-numeric'),
         ];
 
-        $scope.refreshCities = function(){
+        $scope.refreshPosts = function(){
             $rootScope.ngProgress.start();
-            AppServices.api.cities.find().then(function(result){
+            AppServices.api.posts.find().then(function(result){
 
-                //$log.debug('AppServices.api.cities.find(): ' + JSON.stringify(result,null,2));
+                //$log.debug('AppServices.api.posts.find(): ' + JSON.stringify(result,null,2));
 
                 if (result) {
+                    $log.debug('found posts: ' + result.length);
                     $scope.data = result.docs;
                 }
-                $rootScope.ngProgress.complete();
-                $rootScope.ngProgress.reset();
 
             });
         };
 
-        $scope.updateCities = function(){
+        $scope.updatePosts = function(){
             $rootScope.ngProgress.start();
-            AppServices.api.cities.updateCities().then(function(result){
+            AppServices.api.posts.updatePosts().then(function(result){
 
-                if (result) {
-                    $scope.data = result.docs;
-                }
 
+                $log.debug('update posts: ' + result.length);
+
+                $scope.refreshPosts();
                 $rootScope.ngProgress.complete();
                 $rootScope.ngProgress.reset();
 
             },function(){})
         };
 
-
-        $scope.clearCities = function(){
+        $scope.clearPosts = function(){
             $rootScope.ngProgress.start();
-            AppServices.api.cities.remove().then(function(result){
+            AppServices.api.posts.remove().then(function(result){
 
                 $scope.data = [];
                 $rootScope.ngProgress.complete();
@@ -101,8 +97,7 @@
 
         function Init() {
 
-            $scope.refreshCities();
-
+            $scope.refreshPosts();
         }
 
         Init();
@@ -113,12 +108,12 @@
     /* @ngInject */
     function Config($stateProvider) {
         $stateProvider
-            .state('app.cities', {
-                url: '/cities',
+            .state('app.posts', {
+                url: '/posts',
                 views: {
                     'container@': {
-                        template: require('./cities.html'),
-                        controller: 'CitiesCtrl',
+                        template: require('./posts.html'),
+                        controller: 'PostsCtrl',
                         controllerAs: 'vm'
                     }
                 },

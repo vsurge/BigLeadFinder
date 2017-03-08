@@ -5,17 +5,20 @@
     'use strict';
 
     require('./cities/cities.service');
+    require('./posts/posts.service');
 
     var MODULE_NAME = 'api.services';
 
     angular.module(MODULE_NAME, [
-        'api.cities'
+        'api.cities',
+        'api.posts'
     ]).service('ApiServices', Service);
 
     /** @ngInject */
-    function Service(CitiesService,$log) {
+    function Service(CitiesService,PostsService,$log) {
 
         this.cities = CitiesService;
+        this.posts = PostsService;
     };
 
     module.exports = MODULE_NAME;

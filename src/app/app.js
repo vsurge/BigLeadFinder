@@ -17,6 +17,7 @@
     require('./views/dashboard/dashboard');
     require('./views/cities/cities');
     require('./views/sign-in/sign-in');
+    require('./views/posts/posts');
 
     require('./services/app.services');
 
@@ -35,9 +36,12 @@
         'app.views.sign-in',
         'app.views.dashboard',
         'app.views.cities',
+        'app.views.posts',
         // App Services,
         'app.services'
-    ]).constant('_',
+    ]).constant('$',
+        window.$
+    ).constant('_',
         window._
     ).run(Run).config(Config).config(Theme)
 
@@ -56,7 +60,7 @@
     function Config($qProvider,$urlRouterProvider) {
 
         $qProvider.errorOnUnhandledRejections(false);
-        $urlRouterProvider.otherwise('/cities');
+        $urlRouterProvider.otherwise('/posts');
     }
 
     /* @ngInject */

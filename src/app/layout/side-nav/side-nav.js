@@ -18,6 +18,11 @@
             name:'Dashboard',
             state:'app.dashboard',
             type:'link'
+        }, {
+            id:'app.posts',
+            name:'Posts',
+            state:'app.posts',
+            type:'link'
         },
             {
                 id:'app.cities',
