@@ -36,6 +36,9 @@
                         controller: 'DashboardCtrl',
                         controllerAs: 'vm'
                     }
+                },
+                ncyBreadcrumb: {
+                    label: 'Dashboard'
                 }
             });
     };

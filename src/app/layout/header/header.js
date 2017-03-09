@@ -8,8 +8,12 @@
     require('ngprogress/build/ngProgress.js');
     require('ngprogress/ngProgress.css');
 
+    require('angular-breadcrumb');
+    require('bootstrap/dist/css/bootstrap.css')
+
     angular.module(MODULE_NAME,[
-        'ngProgress'
+        'ngProgress',
+        'ncy-angular-breadcrumb'
     ]).controller('HeaderCtrl',Controller);
 
     /* @ngInject */

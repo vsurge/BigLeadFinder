@@ -66,7 +66,7 @@
                 //$log.debug('AppServices.api.posts.find(): ' + JSON.stringify(result,null,2));
 
                 if (result && result.docs) {
-                    $log.debug('found searches: ' + result.docs.length);
+                    //$log.debug('found searches: ' + result.docs.length);
                     $scope.data = result.docs;
                 }
 
@@ -97,6 +97,10 @@
                         controller: 'SearchesCtrl',
                         controllerAs: 'vm'
                     }
+                },
+                ncyBreadcrumb: {
+                    label: 'Searches',
+                    parent:'app.dashboard'
                 },
                 resolve:{
                 }

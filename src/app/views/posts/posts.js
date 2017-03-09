@@ -120,6 +120,10 @@
                         controllerAs: 'vm'
                     }
                 },
+                ncyBreadcrumb: {
+                    label: 'Posts',
+                    parent:'app.dashboard'
+                },
                 resolve:{
                 }
             });

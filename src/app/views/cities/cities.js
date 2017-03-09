@@ -123,6 +123,10 @@
                         controllerAs: 'vm'
                     }
                 },
+                ncyBreadcrumb: {
+                    label: 'Cities',
+                    parent:'app.dashboard'
+                },
                 resolve:{
                 }
             });
