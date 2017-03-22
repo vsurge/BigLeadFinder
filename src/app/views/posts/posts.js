@@ -35,6 +35,8 @@
 
         $scope.onRowSelect = function (item) {
 
+            AppServices.api.posts.showPost(item[1]);
+
         };
 
         $scope.data = [];
@@ -54,7 +56,13 @@
             .withOption('order', [[ 0, "asc" ]]);
         $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0).withOption('className', 'mdl-data-table__cell--non-numeric'),
+            DTColumnDefBuilder.newColumnDef(1).withOption('visible', false)
         ];
+
+        $scope.showPost = function (url) {
+
+            AppServices.api.posts.showPost(url);
+        };
 
         $scope.refreshPosts = function(){
             $rootScope.ngProgress.start();

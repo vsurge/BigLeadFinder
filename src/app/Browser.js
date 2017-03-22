@@ -7,6 +7,7 @@
     var path = require('path');
     var fs = require('fs');
 
+
     var Service = {};
 
     Service.browserFactory = function (config) {
@@ -22,27 +23,18 @@
             loadTimeout: timeout,
             executionTimeout: timeout
         };
-        var browserConfig = config || defaultConfig;
+
+        var browserConfig = defaultConfig;
+
+        if (config) {
+            browserConfig = Object.assign(defaultConfig,config)
+        }
+
         var browser = Nightmare(browserConfig);
         return browser;
     };
 
     Service.getCities = function (callback) {
-
-        //var timeout = 60000;
-
-        /* var browserConfig = {
-            show: false,
-            electronPath: electron.app.getPath('exe'),
-            openDevTools: {
-                mode: 'right'
-            },
-            gotoTimeout: timeout,
-            loadTimeout: timeout,
-            executionTimeout: timeout
-        }; */
-
-        //var browser = Nightmare(browserConfig);
 
         var browser = Service.browserFactory();
 
@@ -109,7 +101,33 @@
 
     };
 
-    Service.openPost = function () {};
+    Service.openPost = function (postUrl,callback) {
+
+        console.log('openPost: ' + postUrl)
+        var jqueryPath = path.resolve('../src/node_modules/jquery/dist/jquery.js');
+        var browser = Service.browserFactory({show:true,openDevTools:false});
+        browser
+            .goto(postUrl)
+            .inject('js',jqueryPath)
+            .wait(10000)
+            .evaluate(function () {
+
+            })
+            .end()
+            .then(function (result) {
+                console.log('Browser.openPost end()');
+                //console.log('result: ' + JSON.stringify(result,null,2));
+                callback(result,null);
+
+            })
+            .catch(function (error) {
+
+                console.error('Browser.openPost error: ' + error);
+                callback(null,error);
+
+            });
+
+    };
 
     module.exports = Service;
 

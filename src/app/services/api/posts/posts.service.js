@@ -112,6 +112,30 @@
 
         };
 
+        service.showPost = function (postUrl) {
+
+            $log.debug('Starting showPost: ' + postUrl);
+
+            var deferred = $q.defer();
+
+            Browser.openPost(postUrl,function (result, error) {
+                if (result) {
+
+                    $log.debug('result: ' + JSON.stringify(result,null,2));
+                    deferred.resolve();
+                }
+
+                if (error) {
+                    $log.error('error: ' + error)
+
+                    deferred.reject(error);
+                }
+
+            });
+
+            return deferred.promise;
+        };
+
         return service;
     };
 
