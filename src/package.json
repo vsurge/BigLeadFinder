@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "npm run electron && npm run dev",
-    "electron": "electron .",
+    "electron": "electron ./dist",
     "dev": "webpack-dev-server --history-api-fallback --progress --host 0.0.0.0",
     "devX": "webpack --progress --watch",
     "clear-dist": "rm -Rf ./dist/*",
@@ -88,6 +88,7 @@
   "dependencies": {
     "angular-pouchdb": "^5.0.0",
     "electron-debug": "^1.1.0",
+    "electron-positioner": "^3.0.0",
     "nightmare": "^2.10.0",
     "nightmare-window-manager": "^0.2.2",
     "pouchdb-browser": "^6.1.2",

@@ -109,6 +109,8 @@
 
     };
 
+    Service.openPost = function () {};
+
     module.exports = Service;
 
 })();

@@ -5,6 +5,10 @@ const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 
+
+
+
+
 require('electron-debug')({showDevTools: true})
 
 const path = require('path')
@@ -17,19 +21,27 @@ let mainWindow
 
 
 function createWindow () {
+
+  var Positioner = require('electron-positioner')
+
+
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1500, height: 1000,
+  mainWindow = new BrowserWindow({width: 1500, height: 800,
     "node-integration": "iframe", // and this line
     "web-preferences": {
       "web-security": false
     }
   })
 
+  var positioner = new Positioner(mainWindow)
+
   mainWindow.loadURL(url.format({
     pathname: process.cwd() + '/dist/index.html',
     protocol: 'file:',
     slashes: false
   }))
+
+  positioner.move('topRight')
 
   // Connect to server process
   //client.create(mainWindow);
