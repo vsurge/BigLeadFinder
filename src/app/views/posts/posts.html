@@ -1,4 +1,4 @@
-<div id="skus-container">
+<div id="posts-container">
 
 
     <div layout="row" width="100%">
@@ -14,24 +14,40 @@
 
         </div>
     </div>
-    <md-divider>
-        <md-card>
+    <md-divider/>
 
-            <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="mdl-data-table dt-left">
-                <thead>
-                <tr>
-                    <th>TITLE</th>
-                    <th>URL</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="item in data">
-                    <td>{{ item.title }}</td>
-                    <td>{{ item.link }}</td>
-                </tr>
-                </tbody>
-            </table>
+    <div layout="row">
+        <div flex="50">
+            <md-card >
 
-        </md-card>
+                <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="mdl-data-table dt-left">
+                    <thead>
+                    <tr>
+                        <th>TITLE</th>
+                        <th>URL</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in data">
+                        <td>{{ item.title }}</td>
+                        <td>{{ item.link }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </md-card>
+        </div>
+       <div flex>
+           <md-card layout-margin>
+
+               <post-detail post="post"></post-detail>
+
+           </md-card>
+       </div>
+
+
+    </div>
+
+
 
 </div>

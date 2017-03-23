@@ -14,14 +14,17 @@
 
     require('./posts.scss');
 
+    require('directives/post-detail/post-detail.directive');
+
     angular.module(MODULE_NAME,[
         'ui.router',
-        'datatables'
+        'datatables',
+        'app.post-detail.directive'
     ]).config(Config).controller('PostsCtrl',Controller);
 
     /* @ngInject */
     function Controller($rootScope,$scope,$log, AppServices, DTOptionsBuilder, DTColumnDefBuilder) {
-
+        $scope.post = {}
         function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
             // Unbind first in order to avoid any duplicate handler (see https://github.com/l-lin/angular-datatables/issues/87)
             $('td', nRow).unbind('click');
@@ -35,7 +38,10 @@
 
         $scope.onRowSelect = function (item) {
 
-            AppServices.api.posts.showPost(item[1]);
+            AppServices.api.posts.getPostDetails(item[1]).then(function(post){
+                $scope.post = post;
+                $log.debug('$scope.post: ' + JSON.stringify($scope.post,null,2))
+            })
 
         };
 

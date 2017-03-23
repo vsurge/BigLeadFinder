@@ -112,7 +112,7 @@
 
         };
 
-        service.showPost = function (postUrl) {
+        service.openPost = function (postUrl) {
 
             $log.debug('Starting showPost: ' + postUrl);
 
@@ -127,6 +127,30 @@
 
                 if (error) {
                     $log.error('error: ' + error)
+
+                    deferred.reject(error);
+                }
+
+            });
+
+            return deferred.promise;
+        };
+
+        service.getPostDetails = function (postUrl) {
+
+            $log.debug('Starting getPostDetails: ' + postUrl);
+
+            var deferred = $q.defer();
+
+            Browser.getPostDetails(postUrl,function (result, error) {
+                if (result) {
+
+                    $log.debug('getPostDetails result: ' + JSON.stringify(result,null,2));
+                    deferred.resolve(result);
+                }
+
+                if (error) {
+                    $log.error('getPostDetails error: ' + error)
 
                     deferred.reject(error);
                 }

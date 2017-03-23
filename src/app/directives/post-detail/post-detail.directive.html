@@ -1,0 +1,6 @@
+<div layout="column">
+    <div class="md-display-1">{{post.title}}</div>
+    <a ng-href="mailto:{{post.email}}">{{post.email}}</a>
+    <md-divider/>
+    <p ng-bind-html="renderHtml(post.body)"></p>
+</div>

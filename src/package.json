@@ -90,8 +90,11 @@
     "electron-debug": "^1.1.0",
     "electron-positioner": "^3.0.0",
     "nightmare": "^2.10.0",
+    "nightmare-evaluate-async": "^0.1.4",
     "nightmare-window-manager": "^0.2.2",
     "pouchdb-browser": "^6.1.2",
-    "pouchdb-find": "^0.10.5"
+    "pouchdb-find": "^0.10.5",
+    "promise": "^7.1.1",
+    "vo": "^4.0.2"
   }
 }
