@@ -11,6 +11,7 @@
     var Q = require('q');
     var vo = require('vo');
 
+
     var Service = {};
 
     Service.browserFactory = function (config) {
@@ -106,7 +107,7 @@
 
     Service.openPost = function (postUrl,emailCallback,completionCallback) {
 
-        console.log('openPost: ' + postUrl)
+        console.log('x openPost: ' + postUrl)
         var jqueryPath = path.resolve('../src/node_modules/jquery/dist/jquery.js');
         var noConflictPath = path.resolve('./app/jQueryNoConflict.js');
 
@@ -118,6 +119,7 @@
 
         Service.visibleBrowser
             .goto(postUrl)
+            .then(function(){})
             .inject('js',jqueryPath)
             .inject('js',noConflictPath)
             .wait('.anonemail')
@@ -136,6 +138,12 @@
                 }
 
             })
+
+        console.log('Service.visibleBrowser: ' + JSON.stringify(Service.visibleBrowser,null,2));
+
+        var Positioner = require('electron-positioner');
+        var positioner = new Positioner(Service.visibleBrowser)
+        positioner.move('topLeft')
 
     };
 
