@@ -108,58 +108,34 @@
 
         console.log('openPost: ' + postUrl)
         var jqueryPath = path.resolve('../src/node_modules/jquery/dist/jquery.js');
-        var browser = Service.browserFactory({show:true,openDevTools:false});
+        var noConflictPath = path.resolve('./app/jQueryNoConflict.js');
 
-        // button .reply_button js-only
+        //var qPath = path.resolve('../src/node_modules/q/q.js');
 
-        browser
+        if (!Service.visibleBrowser) {
+            Service.visibleBrowser = Service.browserFactory({show:true,openDevTools:false});
+        }
+
+        Service.visibleBrowser
             .goto(postUrl)
             .inject('js',jqueryPath)
+            .inject('js',noConflictPath)
             .wait('.anonemail')
             .evaluate(function () {
 
-                var p = $('.anonemail').text()
+                var p = JQ('.anonemail').text()
                 return p;
 
             })
-            .end()
             .then(function (result) {
-                console.log('Browser.openPost end()');
-                console.log('result: ' + JSON.stringify(result,null,2));
+
+                console.log('email result: ' + JSON.stringify(result,null,2));
 
                 if (emailCallback) {
                     emailCallback(result)
                 }
 
-                //callback(result,null);
-
             })
-            .catch(function (error) {
-
-                console.error('Browser.openPost error: ' + error);
-                callback(null,error);
-
-            });
-
-            /*
-            .wait(10000)
-            .evaluate(function () {
-
-            })
-            .end()
-            .then(function (result) {
-                console.log('Browser.openPost end()');
-                //console.log('result: ' + JSON.stringify(result,null,2));
-                callback(result,null);
-
-            })
-            .catch(function (error) {
-
-                console.error('Browser.openPost error: ' + error);
-                callback(null,error);
-
-            });
-            */
 
     };
 
@@ -167,8 +143,9 @@
 
         console.log('getPostDetails: ' + postUrl)
         var jqueryPath = path.resolve('../src/node_modules/jquery/dist/jquery.js');
+        var noConflictPath = path.resolve('.jQueryNoConflict.js');
         //var qPath = path.resolve('../src/node_modules/q/q.js');
-        var promisePath = path.resolve('../src/node_modules/promise/index.js');
+        //var promisePath = path.resolve('../src/node_modules/promise/index.js');
 
         var browser = Service.browserFactory({show:true,openDevTools:false});
 
@@ -178,15 +155,16 @@
         browser
             .goto(postUrl)
             .inject('js',jqueryPath)
+            .inject('js',noConflictPath)
             .wait('#titletextonly')
             .then(function(){
 
                 browser.evaluate(function () {
 
                     var browserPost = {}
-                    var title = $('#titletextonly').text()
+                    var title = JQ('#titletextonly').text()
                     browserPost.title = title
-                    var body = $('#postingbody')
+                    var body = JQ('#postingbody')
                     body.find('div:first').remove()
                     browserPost.body = body.html()
 
@@ -208,7 +186,7 @@
                         .wait('.anonemail')
                         .evaluate(function () {
 
-                            var p = $('.anonemail').text()
+                            var p = JQ('.anonemail').text()
                             return p;
 
                         })

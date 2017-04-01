@@ -131,6 +131,8 @@
                     deferred.reject(error);
                 }
 
+            },function(){
+
             });
 
             return deferred.promise;

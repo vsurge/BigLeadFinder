@@ -38,10 +38,13 @@
 
         $scope.onRowSelect = function (item) {
 
+            AppServices.api.posts.openPost(item[1]);
+
+            /*
             AppServices.api.posts.getPostDetails(item[1]).then(function(post){
                 $scope.post = post;
                 $log.debug('$scope.post: ' + JSON.stringify($scope.post,null,2))
-            })
+            }) */
 
         };
 
