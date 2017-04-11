@@ -2,6 +2,7 @@
     'use strict';
 
     require('angular-material/angular-material.css');
+    require('webpack-material-design-icons');
 
     window.$ = window.jQuery = require('jquery');
     window._ = require('underscore');

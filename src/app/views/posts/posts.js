@@ -38,7 +38,7 @@
 
         $scope.onRowSelect = function (item) {
 
-            AppServices.api.posts.openPost(item[0]);
+            //AppServices.api.posts.openPost(item[0]);
 
             /*
             AppServices.api.posts.getPostDetails(item[1]).then(function(post){
@@ -60,20 +60,33 @@
 
         $scope.dtOptions = DTOptionsBuilder.newOptions()
             .withPaginationType('simple_numbers')
-            .withOption('rowCallback', rowCallback)
+            //.withOption('rowCallback', rowCallback)
             .withOption('searching', false)
             .withOption('order', [[ 1, "desc" ]]);
         $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(1).withOption('visible', false),
-            DTColumnDefBuilder.newColumnDef(2).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '300px'),
+            DTColumnDefBuilder.newColumnDef(2).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '500px'),
             DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--non-numeric')
 
         ];
 
-        $scope.showPost = function (url) {
+        $scope.rejectPost = function(item){
 
-            AppServices.api.posts.showPost(url);
+            $log.debug('$scope.rejectPost: ' + JSON.stringify(item,null,2));
+
+        };
+
+        $scope.respondPost = function(item){
+
+            $log.debug('$scope.respondPost: ' + JSON.stringify(item,null,2));
+
+        };
+
+        $scope.openPost = function (item) {
+
+            //$log.debug('$scope.openPost: ' + JSON.stringify(item,null,2));
+            AppServices.api.posts.openPost(item.link);
         };
 
         $scope.refreshPosts = function(){
@@ -96,7 +109,6 @@
         $scope.updatePosts = function(){
             $rootScope.ngProgress.start();
             AppServices.api.posts.updatePosts().then(function(result){
-
 
                 $log.debug('update posts: ' + result.length);
 

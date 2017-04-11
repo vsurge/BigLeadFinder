@@ -78,7 +78,7 @@
             var deferred = $q.defer();
             // https://austin.craigslist.org/search/sof?format=rss&query=ios
 
-            var url = city.href + 'search/' + cat._id + '?format=rss&query=' + encodeURIComponent(query.text);
+            var url = city.href + 'search/' + cat._id + '?format=rss&query=' + encodeURIComponent(query.query);
 
             $.get(url, function (data) {
                 var $xml = $(data);

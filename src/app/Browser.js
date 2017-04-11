@@ -5,6 +5,9 @@
     var Nightmare = require('nightmare');
     require('nightmare-evaluate-async')(Nightmare)
     require('nightmare-window-manager')(Nightmare)
+    var electron = require('electron')
+    // Module to create native browser window.
+    var BrowserWindow = electron.BrowserWindow
 
     var electron = require('electron');
     var path = require('path');
@@ -113,7 +116,8 @@
 
         //var qPath = path.resolve('../src/node_modules/q/q.js');
 
-
+        var windows = BrowserWindow.getAllWindows()
+        console.log('windows: ' + windows.length)
 
         if (!Service.visibleBrowser) {
 
@@ -126,12 +130,12 @@
              }
             * */
 
-            var positionConfig = Object.assign(bounds,{x:bounds.x + bounds.width})
+            var positionConfig = Object.assign(bounds,{x:bounds.x + bounds.width,width:bounds.width * .666})
             var config = Object.assign({show:true,openDevTools:false},positionConfig)
 
             Service.visibleBrowser = Service.browserFactory(config);
 
-            console.log('Service.visibleBrowser: ' + JSON.stringify(Service.visibleBrowser,null,2));
+            //console.log('Service.visibleBrowser: ' + JSON.stringify(Service.visibleBrowser,null,2));
 
         }
 
@@ -141,23 +145,11 @@
 
         //var Positioner = require('electron-positioner');
 
-        Nightmare.action('onClose',
-            function(name, options, parent, win, renderer, done) {
 
-                parent.on('closed',function(){
-                    console.log('CLOSED!')
-                })
-                done();
-            },
-            function(done) {
-                console.log('DONE!')
-                //this.child.call('clearCache', done);
-            });
 
 
         Service.visibleBrowser
             .goto(postUrl)
-            .onClose()
             .inject('js',jqueryPath)
             .inject('js',noConflictPath)
             .wait('.anonemail')
@@ -175,6 +167,8 @@
                     emailCallback(result)
                 }
 
+            }).catch(function(error){
+                console.log(error)
             })
 
 
