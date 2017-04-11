@@ -55,10 +55,11 @@
         $log.debug('Electron v' + process.versions.electron);
 
         AppServices.db.initDb();
+        AppServices.api.posts.createIndexes();
 
         AppServices.api.searches.find().then(function(searches){
 
-            //$log.debug('searches.find(): ' + JSON.stringify(searches,null,2));
+            // $log.debug('searches.find(): ' + JSON.stringify(searches,null,2));
             if (!searches || !searches.docs || searches.docs.length < 1) {
 
                 AppServices.api.searches.create('ios',['sof','cpg']);

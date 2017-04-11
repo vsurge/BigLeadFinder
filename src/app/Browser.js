@@ -128,11 +128,11 @@
             var config = Object.assign({show:true,openDevTools:false},positionConfig)
 
             Service.visibleBrowser = Service.browserFactory(config);
+
+            console.log('Service.visibleBrowser: ' + JSON.stringify(Service.visibleBrowser,null,2));
         }
 
         //var Positioner = require('electron-positioner');
-
-        console.log('Service.visibleBrowser: ' + JSON.stringify(Service.visibleBrowser,null,2));
 
         Service.visibleBrowser
             .goto(postUrl)

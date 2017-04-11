@@ -30,6 +30,12 @@
             return DB.removeDocs('post', selector);
         };
 
+        service.createIndexes = function () {
+
+            DB.createIndex('_post_link_type',['link','type'])
+            DB.createIndex('_post_query_id',['query_id'])
+        };
+
         service.updatePosts = function () {
 
             $log.debug('Starting updatePosts');
@@ -115,30 +121,52 @@
 
         service.openPost = function (postUrl) {
 
-            $log.debug('Starting showPost: ' + postUrl);
+            //$log.debug('Starting showPost: ' + postUrl);
             var bounds = currentWindow.getBounds()
-            $log.debug('currentWindow.getBounds(): ' + JSON.stringify(bounds,null,2));
+            //$log.debug('currentWindow.getBounds(): ' + JSON.stringify(bounds,null,2));
 
             var deferred = $q.defer();
 
-            Browser.openPost(bounds,postUrl, function (result, error) {
-                if (result) {
+            Browser.openPost(bounds,postUrl, function (email, error) {
+                if (email) {
 
-                    $log.debug('result: ' + JSON.stringify(result, null, 2));
-                    deferred.resolve();
+                    //$log.debug('email: ' + JSON.stringify(email, null, 2));
+                    //deferred.resolve();
+
+                    DB.findDocs('post',{link:{$eq:postUrl}}).then(function(results){
+                    //DB.findDocs('post',{link:postUrl}).then(function(posts){
+                        //$log.debug('posts: ' + JSON.stringify(results, null, 2));
+
+                        if (results && results.docs && results.docs.length > 0) {
+
+                            var post = results.docs[0];
+
+                            post.email = email;
+
+                            DB.db.put(post).then(function(result){
+
+                                //$log.debug('db.put result: ' + JSON.stringify(result,null,2));
+
+                            }).catch(function(error){
+                                $log.error('db.put error:' + error);
+                            });
+
+
+                        }
+                    })
                 }
 
                 if (error) {
                     $log.error('error: ' + error)
 
-                    deferred.reject(error);
+                    //deferred.reject(error);
                 }
 
             }, function () {
 
             });
 
-            return deferred.promise;
+            //return deferred.promise;
         };
 
         service.getPostDetails = function (postUrl) {

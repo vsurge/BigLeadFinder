@@ -21,7 +21,7 @@ function createWindow () {
   var Positioner = require('electron-positioner')
 
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1200, height: 800,
+  mainWindow = new BrowserWindow({width: 1200, height: 1100,
     "node-integration": "iframe", // and this line
     "web-preferences": {
       "web-security": false

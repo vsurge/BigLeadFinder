@@ -27,17 +27,51 @@
         service.initDb = function () {
 
             service.db = pouchDB('lead_finder');
+            service.createIndex('_type',['type'])
         };
 
-        service.findDocs = function (type, selector) {
+        service.createIndex = function (name,fields) {
 
+            return service.db.createIndex({
+                index: {
+                    name: name,
+                    fields: fields
+                }
+            }).then(function(result){
+                //$log.debug('result: ' + JSON.stringify(result,null,2))
+
+            }).catch(function(error){
+                $log.debug('error: ' + error);
+
+                deferred.reject(error)
+            });
+        };
+
+        service.findDocs = function (type, selector, options) {
+
+            var predicate = {};
+            var finalSelector = {};
             var defaultSelector = {type: {$eq: type}};
 
-            return service.db.find({
-                selector: defaultSelector
-            }).then(function (result) {
+            //$log.debug('selector: ',JSON.stringify(selector,null,2))
 
-                return result;
+            if (selector) {
+                finalSelector = {$and:[defaultSelector,selector]};
+            } else {
+                finalSelector = defaultSelector
+            }
+
+            predicate.selector = finalSelector;
+
+            if (options) {
+                predicate = Object.assign(predicate,options)
+            }
+
+            //$log.debug('predicate: ',JSON.stringify(predicate,null,2))
+
+            return service.db.find(predicate).then(function (results) {
+
+                return results;
 
             },function(error){
 
