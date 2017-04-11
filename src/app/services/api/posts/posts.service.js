@@ -46,7 +46,7 @@
 
             var cities = [{href: 'https://austin.craigslist.org/', _id: "austin"}];
             var cats = [{_id: 'sof', name: "Software/QA/DBA"}, {_id: 'cpg', name: "Computer Programming Gigs"}];
-            var query = {_id: "a1b2c3d4e5", text: 'ios'};
+            var query = {_id: "a1b2c3d4e5", query: 'ios'};
 
             cities.forEach(function (city) {
 
@@ -133,8 +133,8 @@
                     //$log.debug('email: ' + JSON.stringify(email, null, 2));
                     //deferred.resolve();
 
-                    DB.findDocs('post',{link:{$eq:postUrl}}).then(function(results){
-                    //DB.findDocs('post',{link:postUrl}).then(function(posts){
+                    //DB.findDocs('post',{link:{$eq:postUrl}}).then(function(results){
+                    DB.findDocs('post',{link:postUrl}).then(function(results){
                         //$log.debug('posts: ' + JSON.stringify(results, null, 2));
 
                         if (results && results.docs && results.docs.length > 0) {
