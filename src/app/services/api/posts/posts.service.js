@@ -38,28 +38,28 @@
 
             var promises = [];
 
-            var cities = ['https://austin.craigslist.org/'];
-            var cats = ['sof','cpg'];
-            var query = 'ios';
+            var cities = [{href: 'https://austin.craigslist.org/', _id: "austin"}];
+            var cats = [{_id: 'sof', name: "Software/QA/DBA"}, {_id: 'cpg', name: "Computer Programming Gigs"}];
+            var query = {_id: "a1b2c3d4e5", text: 'ios'};
 
-            cities.forEach(function(cityUrl){
+            cities.forEach(function (city) {
 
-                cats.forEach(function(cat){
+                cats.forEach(function (cat) {
 
-                    chain = chain.then(function(items){
-                        return service.getCityRss(cityUrl,cat,query,items);
+                    chain = chain.then(function (items) {
+                        return service.getCityRss(city, cat, query, items);
                     });
 
                 });
             });
 
-            chain.then(function(items){
+            chain.then(function (items) {
 
                 //$log.debug('AppServices.api.posts.updatePosts(): ' + JSON.stringify(items,null,2));
-                return DB.createCollection('post',items);
+                return DB.createCollection('post', items);
             });
 
-            chain.then(function(){
+            chain.then(function () {
 
                 return service.find();
             });
@@ -67,17 +67,17 @@
             return chain;
         };
 
-        service.getCityRss = function (cityUrl, cat, query, items) {
+        service.getCityRss = function (city, cat, query, items) {
 
             var deferred = $q.defer();
             // https://austin.craigslist.org/search/sof?format=rss&query=ios
 
-            var url = cityUrl + 'search/' + cat + '?format=rss&query=' + encodeURIComponent(query);
+            var url = city.href + 'search/' + cat._id + '?format=rss&query=' + encodeURIComponent(query.text);
 
-            $.get(url, function(data) {
+            $.get(url, function (data) {
                 var $xml = $(data);
                 var _items = (items === undefined) ? [] : items;
-                $xml.find("item").each(function() {
+                $xml.find("item").each(function () {
                     var $this = $(this);
 
                     var link = $this.find("link").text();
@@ -91,14 +91,15 @@
                     var post_id = filename.split('.')[0];
 
                     var item = {
-                            _id:post_id,
-                            title: $this.find("title").text(),
-                            link: link,
-                            description: $this.find("description").text(),
-                            publish_date: $this.find("date").text()
-                        }
-
-
+                        _id: post_id,
+                        title: $this.find("title").text(),
+                        link: link,
+                        description: $this.find("description").text(),
+                        publish_date: $this.find("date").text(),
+                        city_id: city._id,
+                        query_id: query._id,
+                        category_id: cat._id
+                    };
 
                     _items.push(item);
                 });
@@ -118,10 +119,10 @@
 
             var deferred = $q.defer();
 
-            Browser.openPost(postUrl,function (result, error) {
+            Browser.openPost(postUrl, function (result, error) {
                 if (result) {
 
-                    $log.debug('result: ' + JSON.stringify(result,null,2));
+                    $log.debug('result: ' + JSON.stringify(result, null, 2));
                     deferred.resolve();
                 }
 
@@ -131,7 +132,7 @@
                     deferred.reject(error);
                 }
 
-            },function(){
+            }, function () {
 
             });
 
@@ -144,10 +145,10 @@
 
             var deferred = $q.defer();
 
-            Browser.getPostDetails(postUrl,function (result, error) {
+            Browser.getPostDetails(postUrl, function (result, error) {
                 if (result) {
 
-                    $log.debug('getPostDetails result: ' + JSON.stringify(result,null,2));
+                    $log.debug('getPostDetails result: ' + JSON.stringify(result, null, 2));
                     deferred.resolve(result);
                 }
 

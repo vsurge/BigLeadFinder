@@ -44,11 +44,13 @@
 
         // Show or Hide menu
 
+        /*
         ssSideNav.setVisible('app.dashboard');
         ssSideNav.setVisibleFor([{
             id: 'app.dashboard',
             value: true
         }]);
+        */
 
     };
 

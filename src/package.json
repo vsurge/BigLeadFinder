@@ -4,7 +4,7 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "start": "npm run electron && npm run dev",
+    "start": "npm run dev",
     "electron": "electron ./dist",
     "dev": "webpack-dev-server --history-api-fallback --progress --host 0.0.0.0",
     "devX": "webpack --progress --watch",
