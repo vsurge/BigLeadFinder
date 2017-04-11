@@ -4,7 +4,7 @@
 
     var Nightmare = require('nightmare');
     require('nightmare-evaluate-async')(Nightmare)
-    //require('nightmare-window-manager')(Nightmare)
+    require('nightmare-window-manager')(Nightmare)
 
     var electron = require('electron');
     var path = require('path');
@@ -113,6 +113,8 @@
 
         //var qPath = path.resolve('../src/node_modules/q/q.js');
 
+
+
         if (!Service.visibleBrowser) {
 
             /*
@@ -130,12 +132,32 @@
             Service.visibleBrowser = Service.browserFactory(config);
 
             console.log('Service.visibleBrowser: ' + JSON.stringify(Service.visibleBrowser,null,2));
+
         }
+
+        //console.log('Service.visibleBrowser.windows(): ' + JSON.stringify(Service.visibleBrowser.windows(),null,2));
+
+        //console.log('Service.visibleBrowser: ' + JSON.stringify(Service.visibleBrowser,null,2));
 
         //var Positioner = require('electron-positioner');
 
+        Nightmare.action('onClose',
+            function(name, options, parent, win, renderer, done) {
+
+                parent.on('closed',function(){
+                    console.log('CLOSED!')
+                })
+                done();
+            },
+            function(done) {
+                console.log('DONE!')
+                //this.child.call('clearCache', done);
+            });
+
+
         Service.visibleBrowser
             .goto(postUrl)
+            .onClose()
             .inject('js',jqueryPath)
             .inject('js',noConflictPath)
             .wait('.anonemail')

@@ -38,7 +38,7 @@
 
         $scope.onRowSelect = function (item) {
 
-            AppServices.api.posts.openPost(item[1]);
+            AppServices.api.posts.openPost(item[0]);
 
             /*
             AppServices.api.posts.getPostDetails(item[1]).then(function(post){
@@ -62,10 +62,13 @@
             .withPaginationType('simple_numbers')
             .withOption('rowCallback', rowCallback)
             .withOption('searching', false)
-            .withOption('order', [[ 0, "asc" ]]);
+            .withOption('order', [[ 1, "desc" ]]);
         $scope.dtColumnDefs = [
-            DTColumnDefBuilder.newColumnDef(0).withOption('className', 'mdl-data-table__cell--non-numeric'),
-            DTColumnDefBuilder.newColumnDef(1).withOption('visible', false)
+            DTColumnDefBuilder.newColumnDef(0).withOption('visible', false),
+            DTColumnDefBuilder.newColumnDef(1).withOption('visible', false),
+            DTColumnDefBuilder.newColumnDef(2).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '300px'),
+            DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--non-numeric')
+
         ];
 
         $scope.showPost = function (url) {

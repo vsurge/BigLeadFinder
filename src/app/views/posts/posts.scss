@@ -1,4 +1,28 @@
 #posts-container {
   min-width:480px;
 
+  table {
+    table-layout: fixed;
+    display:table;
+  }
+
+  td {
+    white-space: -o-pre-wrap;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+
+  }
+
+  .postTitle {
+    word-wrap: break-word;
+    max-width:300px;
+  }
+
+  .postDescription {
+    word-wrap: break-word;
+    max-width:600px;
+  }
 }
+
+

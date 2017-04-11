@@ -23,14 +23,19 @@
                 <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="mdl-data-table dt-left">
                     <thead>
                     <tr>
-                        <th>TITLE</th>
                         <th>URL</th>
+                        <th>DATE</th>
+                        <th>TITLE</th>
+                        <th>Description</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="item in data">
-                        <td>{{ item.title }}</td>
-                        <td>{{ item.link }}</td>
+                        <td>{{item.link}}</td>
+                        <td>{{item.publish_date}}</td>
+                        <td class="postTitle">{{ item.title }}</td>
+                        <td class="postDescription">{{ item.description }}</td>
+
                     </tr>
                     </tbody>
                 </table>
