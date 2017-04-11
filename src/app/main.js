@@ -20,7 +20,6 @@ function createWindow () {
 
   var Positioner = require('electron-positioner')
 
-
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 1200, height: 800,
     "node-integration": "iframe", // and this line
@@ -44,7 +43,7 @@ function createWindow () {
   //client.create(mainWindow);
 
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {

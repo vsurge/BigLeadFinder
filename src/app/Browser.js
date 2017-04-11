@@ -4,13 +4,13 @@
 
     var Nightmare = require('nightmare');
     require('nightmare-evaluate-async')(Nightmare)
+    //require('nightmare-window-manager')(Nightmare)
 
     var electron = require('electron');
     var path = require('path');
     var fs = require('fs');
     var Q = require('q');
     var vo = require('vo');
-
 
     var Service = {};
 
@@ -105,21 +105,37 @@
 
     };
 
-    Service.openPost = function (postUrl,emailCallback,completionCallback) {
+    Service.openPost = function (bounds,postUrl,emailCallback,completionCallback) {
 
-        console.log('x openPost: ' + postUrl)
+        console.log('openPost: ' + postUrl)
         var jqueryPath = path.resolve('../src/node_modules/jquery/dist/jquery.js');
         var noConflictPath = path.resolve('./app/jQueryNoConflict.js');
 
         //var qPath = path.resolve('../src/node_modules/q/q.js');
 
         if (!Service.visibleBrowser) {
-            Service.visibleBrowser = Service.browserFactory({show:true,openDevTools:false});
+
+            /*
+             {
+             "x": 0,
+             "y": 23,
+             "width": 1200,
+             "height": 800
+             }
+            * */
+
+            var positionConfig = Object.assign(bounds,{x:bounds.x + bounds.width})
+            var config = Object.assign({show:true,openDevTools:false},positionConfig)
+
+            Service.visibleBrowser = Service.browserFactory(config);
         }
+
+        //var Positioner = require('electron-positioner');
+
+        console.log('Service.visibleBrowser: ' + JSON.stringify(Service.visibleBrowser,null,2));
 
         Service.visibleBrowser
             .goto(postUrl)
-            .then(function(){})
             .inject('js',jqueryPath)
             .inject('js',noConflictPath)
             .wait('.anonemail')
@@ -139,11 +155,7 @@
 
             })
 
-        console.log('Service.visibleBrowser: ' + JSON.stringify(Service.visibleBrowser,null,2));
 
-        var Positioner = require('electron-positioner');
-        var positioner = new Positioner(Service.visibleBrowser)
-        positioner.move('topLeft')
 
     };
 

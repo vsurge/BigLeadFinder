@@ -18,7 +18,7 @@
     }
 
     /** @ngInject */
-    function Service($rootScope, $log, $q, Browser, DB, _, $) {
+    function Service($rootScope, $log, $q, Browser, DB, _, $, currentWindow) {
 
         var service = {};
 
@@ -116,10 +116,12 @@
         service.openPost = function (postUrl) {
 
             $log.debug('Starting showPost: ' + postUrl);
+            var bounds = currentWindow.getBounds()
+            $log.debug('currentWindow.getBounds(): ' + JSON.stringify(bounds,null,2));
 
             var deferred = $q.defer();
 
-            Browser.openPost(postUrl, function (result, error) {
+            Browser.openPost(bounds,postUrl, function (result, error) {
                 if (result) {
 
                     $log.debug('result: ' + JSON.stringify(result, null, 2));
