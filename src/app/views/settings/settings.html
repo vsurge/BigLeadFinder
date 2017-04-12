@@ -1,2 +1,51 @@
 <div class="md-display-2">SETTINGS</div>
 <md-divider ></md-divider>
+
+<div layout="column">
+
+    <md-content layout-padding>
+
+        <div class="md-display-1">SMTP</div>
+
+        <form name="settingsForm">
+
+            <md-input-container class="md-block">
+                <label>SMTP Server</label>
+                <input required name="smtp_server" ng-model="settings.email.smtp_server">
+                <div ng-messages="settings.email.smtp_server.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+
+            <md-input-container class="md-block">
+                <label>SMTP Port</label>
+                <input required name="smtp_port" ng-model="settings.email.smtp_port">
+                <div ng-messages="settings.email.smtp_port.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+
+            <md-input-container class="md-block">
+                <label>SMTP Username</label>
+                <input required name="smtp_username" ng-model="settings.email.smtp_username">
+                <div ng-messages="settings.email.smtp_username.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+
+            <md-input-container class="md-block">
+                <label>SMTP Password</label>
+                <input required name="smtp_password" ng-model="settings.email.smtp_password">
+                <div ng-messages="settings.email.smtp_password.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+
+            <div>
+                <md-button type="submit" class="md-raised md-primary" ng-disabled="settingsForm.$invalid">Save</md-button>
+            </div>
+
+        </form>
+    </md-content>
+
+</div>

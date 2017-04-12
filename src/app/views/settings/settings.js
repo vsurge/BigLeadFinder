@@ -11,6 +11,12 @@
     /* @ngInject */
     function Controller($scope,$log,AppServices) {
 
+        $scope.refreshDefaultSettings = function (){
+            return AppServices.api.settings.defaultSettings();
+        };
+
+        $scope.settings = {};
+
         var Init = function () {
 
         }

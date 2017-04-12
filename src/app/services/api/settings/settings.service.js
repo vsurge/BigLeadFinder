@@ -22,6 +22,19 @@
 
         var service = {};
 
+        service.defaultSettings = function () {
+            return {
+                _id:"0",
+                name:"default",
+                email:{
+                    smtp_server:"demo.smtp.com",
+                    smtp_port:25,
+                    smtp_username:"test@user.com",
+                    smtp_password:"abc123"
+                }
+            };
+        };
+
         service.find = function (selector) {
             return DB.findDocs('setting', selector);
         };
