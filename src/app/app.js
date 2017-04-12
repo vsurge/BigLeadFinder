@@ -20,6 +20,8 @@
     require('./views/sign-in/sign-in');
     require('./views/posts/posts');
     require('./views/searches/searches');
+    require('./views/responses/responses');
+    require('./views/settings/settings');
 
     require('./services/app.services');
 
@@ -40,6 +42,8 @@
         'app.views.cities',
         'app.views.posts',
         'app.views.searches',
+        'app.views.responses',
+        'app.views.settings',
         // App Services,
         'app.services'
     ]).constant('$',

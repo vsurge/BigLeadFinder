@@ -34,12 +34,14 @@
                     <tr ng-repeat="item in data">
                         <td>{{item.link}}</td>
                         <td>{{item.publish_date}}</td>
-                        <td class="postTitle" ng-click="openPost(item)">{{ item.title }}</td>
+                        <td  ng-click="openPost(item)"><p class="postTitle">{{ item.title }}</p></td>
                         <!--<td class="postDescription">{{ item.description }}</td>-->
-                        <td>
-                            <div layout="row" layout-margin>
+                        <td >
+                            <div layout="row" >
                                 <md-button  ng-click="respondPost(item)" class="md-fab md-mini md-primary md-raised" ng-disabled="!item.email"><md-icon md-font-library="material-icons" aria-label="send" >send</md-icon></md-button>
                                 <md-button  ng-click="rejectPost(item)" class="md-fab md-mini md-warn md-raised"><md-icon md-font-library="material-icons" aria-label="delete">delete</md-icon></md-button>
+                                <md-button  ng-click="editPost(item)" class="md-fab md-mini md-secondary
+                                md-raised md-hue-1"><md-icon md-font-library="material-icons" aria-label="edit">mode_edit</md-icon></md-button>
                             </div>
 
                         </td>
