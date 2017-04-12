@@ -38,7 +38,7 @@
                         <!--<td class="postDescription">{{ item.description }}</td>-->
                         <td>
                             <div layout="row" layout-margin>
-                                <md-button  ng-click="respondPost(item)" class="md-fab md-mini md-primary md-raised"><md-icon md-font-library="material-icons" aria-label="send">send</md-icon></md-button>
+                                <md-button  ng-click="respondPost(item)" class="md-fab md-mini md-primary md-raised" ng-disabled="!item.email"><md-icon md-font-library="material-icons" aria-label="send" >send</md-icon></md-button>
                                 <md-button  ng-click="rejectPost(item)" class="md-fab md-mini md-warn md-raised"><md-icon md-font-library="material-icons" aria-label="delete">delete</md-icon></md-button>
                             </div>
 

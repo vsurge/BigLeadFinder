@@ -61,13 +61,13 @@
         $scope.dtOptions = DTOptionsBuilder.newOptions()
             .withPaginationType('simple_numbers')
             //.withOption('rowCallback', rowCallback)
-            .withOption('searching', false)
+            .withOption('searching', true)
             .withOption('order', [[ 1, "desc" ]]);
         $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(1).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(2).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '500px'),
-            DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--non-numeric')
+            DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '180px')
 
         ];
 
