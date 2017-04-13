@@ -12,13 +12,25 @@
     function Controller($scope,$log,AppServices) {
 
         $scope.refreshDefaultSettings = function (){
-            return AppServices.api.settings.defaultSettings();
+            return AppServices.api.settings.getDefaultSettings().then(function(settings){
+
+                //$log.debug('settings: ' + JSON.stringify(settings,null,2))
+                $scope.settings = settings;
+
+            }).catch(function(error){
+                $log.error(error)
+            });
         };
+
+        $scope.updateSettings = function (settings) {
+            //$log.debug('settings: ' + JSON.stringify(settings,null,2));
+            AppServices.api.settings.create(settings)
+        }
 
         $scope.settings = {};
 
         var Init = function () {
-
+            $scope.refreshDefaultSettings();
         }
 
         Init();

@@ -19,13 +19,15 @@
             <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="mdl-data-table dt-left">
                 <thead>
                 <tr>
+                    <th>ID</th>
                     <th>NAME</th>
                     <th>BODY</th>
                     <th>ATTACHMENT</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="item in data">
+                <tr ng-repeat="item in data" ng-click="onRowSelect(item)">
+                    <td>{{ item._id }}</td>
                     <td>{{ item.name }}</td>
                     <td>{{ item.body}}</td>
                     <td>{{ item.attachment}}</td>

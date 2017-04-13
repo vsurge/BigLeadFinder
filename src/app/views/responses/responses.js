@@ -11,13 +11,16 @@
     require('dataTables.material');
     require('dataTables.material.css');
 
+    require('./response/response');
+
     angular.module(MODULE_NAME,[
         'ui.router',
-        'datatables'
+        'datatables',
+        'app.views.response'
     ]).config(Config).controller('ResponsesCtrl',Controller);
 
     /* @ngInject */
-    function Controller($scope,$log,AppServices, DTOptionsBuilder, DTColumnDefBuilder) {
+    function Controller($scope,$log,$state,AppServices,responses, DTOptionsBuilder, DTColumnDefBuilder) {
 
         function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
             // Unbind first in order to avoid any duplicate handler (see https://github.com/l-lin/angular-datatables/issues/87)
@@ -31,6 +34,9 @@
         }
 
         $scope.onRowSelect = function (item) {
+
+            //$log.debug('item: ' + JSON.stringify(item,null,2));
+            $state.go('app.response',item)
 
         };
 
@@ -46,18 +52,19 @@
 
         $scope.dtOptions = DTOptionsBuilder.newOptions()
             .withPaginationType('simple_numbers')
-            .withOption('rowCallback', rowCallback)
+            //.withOption('rowCallback', rowCallback)
             .withOption('searching', false)
             .withOption('order', [[ 0, "asc" ]]);
         $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0).withOption('className', 'mdl-data-table__cell--non-numeric'),
             DTColumnDefBuilder.newColumnDef(1).withOption('className', 'mdl-data-table__cell--non-numeric'),
             DTColumnDefBuilder.newColumnDef(2).withOption('className', 'mdl-data-table__cell--non-numeric'),
+            DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--non-numeric'),
         ];
 
         $scope.refreshResponses = function(){
 
-            $scope.data = [{name:"Response1",body:"Lorem Ipsum dolor sit amit.",attachment:"/opt/var/bin/file.doc"}];
+            //$scope.data = [{name:"Response1",body:"Lorem Ipsum dolor sit amit.",attachment:"/opt/var/bin/file.doc"}];
 
 
 
@@ -81,7 +88,12 @@
 
         function Init() {
 
-            $scope.refreshResponses();
+            $log.debug('$scope.data: ' + JSON.stringify($scope.data,null,2));
+
+
+            if (responses && responses.docs) {
+                $scope.data = responses.docs;
+            }
         }
 
         Init();
@@ -98,6 +110,11 @@
                         template: require('./responses.html'),
                         controller: 'ResponsesCtrl',
                         controllerAs: 'vm'
+                    }
+                },
+                resolve:{
+                    responses: function (AppServices) {
+                        return AppServices.api.responses.find({});
                     }
                 },
                 ncyBreadcrumb: {

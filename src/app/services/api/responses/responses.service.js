@@ -22,6 +22,20 @@
 
         var service = {};
 
+        service.seedResponse = function () {
+
+            var response = {_id:"response_0",name:"Response1",body:"Lorem Ipsum dolor sit amit.",attachment:"/opt/var/bin/file.doc"};
+            // Save File
+            // Create Response
+            return service.create(response)
+        };
+
+        service.saveAttachment = function (data,filename) {
+
+            $log.debug('data: ' + JSON.stringify(data,null,2));
+            $log.debug('filename: ' + filename);
+        };
+
         service.find = function (selector) {
             return DB.findDocs('response', selector);
         };
@@ -30,14 +44,9 @@
             return DB.removeDocs('response', selector);
         };
 
-        service.create = function (query,categories) {
+        service.create = function (response) {
 
-            var search = {};
-
-            search.categories = categories;
-            search.query = query;
-
-            return DB.create('response',search);
+            return DB.create('response',response);
         }
 
         return service;

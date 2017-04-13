@@ -61,6 +61,8 @@
 
         AppServices.db.initDb();
         AppServices.api.posts.createIndexes();
+        AppServices.api.settings.seedDefaultSettings();
+        AppServices.api.responses.seedResponse();
 
         AppServices.api.searches.find().then(function(searches){
 

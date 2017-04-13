@@ -1,0 +1,38 @@
+<div class="md-display-2">RESPONSE</div>
+<md-divider ></md-divider>
+
+<div layout="column">
+
+    <md-content layout-padding>
+
+        <form name="responseForm">
+
+            <md-input-container class="md-block">
+                <label>Name</label>
+                <input required name="name" ng-model="response.name">
+                <div ng-messages="response.name.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+
+            <md-input-container class="md-block">
+                <label>Body</label>
+                <input required name="body" ng-model="response.body">
+                <div ng-messages="response.body.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+
+            <md-input-container class="md-block">
+                <label>Attachment</label>
+                <div class="dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods" ng-dropzone></div>
+            </md-input-container>
+
+            <div>
+                <md-button ng-click="updateResponse(response)" type="submit" class="md-raised md-primary" ng-disabled="responseForm.$invalid">Save</md-button>
+            </div>
+
+        </form>
+    </md-content>
+
+</div>
