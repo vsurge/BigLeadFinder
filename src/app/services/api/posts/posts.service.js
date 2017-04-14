@@ -80,6 +80,14 @@
 
             var url = city.href + 'search/' + cat._id + '?format=rss&query=' + encodeURIComponent(query.query);
 
+            /*
+            States:
+            created
+            responded
+            rejected
+            archived
+            */
+
             $.get(url, function (data) {
                 var $xml = $(data);
                 var _items = (items === undefined) ? [] : items;
@@ -103,7 +111,7 @@
                         description: $this.find("description").text(),
                         publish_date: $this.find("date").text(),
                         city_id: city._id,
-                        query_id: query._id,
+                        search_id: query._id,
                         category_id: cat._id
                     };
 

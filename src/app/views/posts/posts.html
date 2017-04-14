@@ -1,6 +1,5 @@
 <div id="posts-container">
 
-
     <div layout="row" width="100%">
         <div layout="column" flex="50">
             <div class="md-display-1">Posts</div>
@@ -20,40 +19,33 @@
         <div flex>
             <md-card >
 
-                <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="mdl-data-table dt-left">
-                    <thead>
-                    <tr>
-                        <th>URL</th>
-                        <th>DATE</th>
-                        <th>TITLE</th>
-                        <!--<th>Description</th>-->
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="item in data">
-                        <td>{{item.link}}</td>
-                        <td>{{item.publish_date}}</td>
-                        <td  ng-click="openPost(item)"><p class="postTitle">{{ item.title }}</p></td>
-                        <!--<td class="postDescription">{{ item.description }}</td>-->
-                        <td >
-                            <div layout="row" >
-                                <md-button  ng-click="respondPost(item)" class="md-fab md-mini md-primary md-raised" ng-disabled="!item.email"><md-icon md-font-library="material-icons" aria-label="send" >send</md-icon></md-button>
-                                <md-button  ng-click="rejectPost(item)" class="md-fab md-mini md-warn md-raised"><md-icon md-font-library="material-icons" aria-label="delete">delete</md-icon></md-button>
-                                <md-button  ng-click="editPost(item)" class="md-fab md-mini md-secondary
-                                md-raised md-hue-1"><md-icon md-font-library="material-icons" aria-label="edit">mode_edit</md-icon></md-button>
-                            </div>
+                <md-tabs md-dynamic-height md-border-bottom>
+                    <md-tab label="created">
+                        <md-content class="md-padding">
+                            <posts posts="posts"></posts>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="archived">
+                        <md-content class="md-padding">
+                            <posts posts="posts"></posts>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="responded">
+                        <md-content class="md-padding">
+                            <posts posts="posts"></posts>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="rejected">
+                        <md-content class="md-padding">
+                            <posts posts="posts"></posts>
+                        </md-content>
+                    </md-tab>
+                </md-tabs>
 
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+
 
             </md-card>
         </div>
-
     </div>
-
-
 
 </div>
