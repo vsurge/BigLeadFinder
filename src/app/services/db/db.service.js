@@ -129,6 +129,8 @@
             return deferred.promise;
         };
 
+        service.initDb();
+
         return service;
     };
 

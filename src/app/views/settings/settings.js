@@ -12,7 +12,7 @@
     function Controller($scope,$log,AppServices) {
 
         $scope.refreshDefaultSettings = function (){
-            return AppServices.api.settings.getDefaultSettings().then(function(settings){
+            return AppServices.api.settings.refreshDefaultSettings().then(function(settings){
 
                 //$log.debug('settings: ' + JSON.stringify(settings,null,2))
                 $scope.settings = settings;

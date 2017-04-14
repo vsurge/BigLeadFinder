@@ -37,7 +37,7 @@
             return service.create(settings);
         };
 
-        service.getDefaultSettings = function () {
+        service.refreshDefaultSettings = function () {
 
             var deferred = $q.defer();
 
@@ -46,7 +46,9 @@
                 //$log.debug('service.getDefaultSettings: ' + JSON.stringify(result,null,2));
 
                 if (result && result.docs && result.docs.length > 0) {
-                    deferred.resolve(result.docs[0]);
+
+                    service.defaultSettings = result.docs[0];
+                    deferred.resolve(service.defaultSettings);
                 } else {
                     deferred.reject({message:'Not found.'})
                 }
@@ -69,10 +71,19 @@
 
         service.create = function (settings) {
 
-            return DB.create('setting',settings);
+            return DB.create('setting',settings).then(function(){
+                service.refreshDefaultSettings();
+            });
         }
 
 
+        function Init () {
+
+            service.refreshDefaultSettings();
+
+        }
+
+        Init();
 
         return service;
     };

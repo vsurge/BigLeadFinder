@@ -36,6 +36,7 @@ function createWindow () {
     slashes: false
   }))
 
+
   //positioner.move('trayLeft',mainWindow.getBounds())
   positioner.move('topLeft') //
 

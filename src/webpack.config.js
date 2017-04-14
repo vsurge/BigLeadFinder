@@ -204,6 +204,12 @@ var clientConfig = function makeWebpackClientConfig() {
             }]),new CopyWebpackPlugin([{
                 from: __dirname + '/app/Browser.js',
                 to: 'Browser.js'
+            }]),new CopyWebpackPlugin([{
+                from: __dirname + '/app/File.js',
+                to: 'File.js'
+            }]),new CopyWebpackPlugin([{
+                from: __dirname + '/app/Email.js',
+                to: 'Email.js'
             }]),new ElectronPlugin({
                 relaunchPathMatch: "./app",
                 path: "./dist"

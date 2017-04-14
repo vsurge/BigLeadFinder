@@ -59,7 +59,7 @@
         $log.debug('Chrome v' + process.versions.chrome);
         $log.debug('Electron v' + process.versions.electron);
 
-        AppServices.db.initDb();
+        //AppServices.db.initDb();
         AppServices.api.posts.createIndexes();
         AppServices.api.settings.seedDefaultSettings();
         AppServices.api.responses.seedResponse();
@@ -79,6 +79,7 @@
 
     /* @ngInject */
     function Config($qProvider,$urlRouterProvider) {
+
 
         $qProvider.errorOnUnhandledRejections(false);
         $urlRouterProvider.otherwise('/posts');

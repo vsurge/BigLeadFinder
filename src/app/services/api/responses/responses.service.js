@@ -14,26 +14,51 @@
 
     /** @ngInject */
     function Config(remoteProvider) {
-        remoteProvider.register('Browser', './Browser');
+        remoteProvider.register('File', './File');
+        remoteProvider.register('Email', './Email');
     }
 
     /** @ngInject */
-    function Service($rootScope, $log, $q, Browser, DB, _, $) {
+    function Service($rootScope, $log, $q, File, Email, DB, _, $, SettingsService) {
 
         var service = {};
 
         service.seedResponse = function () {
 
-            var response = {_id:"response_0",name:"Response1",body:"Lorem Ipsum dolor sit amit.",attachment:"/opt/var/bin/file.doc"};
+            var response = {
+                _id: "response_0",
+                name: "Response1",
+                body: "Lorem Ipsum dolor sit amit."
+            };
             // Save File
             // Create Response
             return service.create(response)
         };
 
-        service.saveAttachment = function (data,filename) {
+        service.saveAttachment = function (file, callback) {
 
-            $log.debug('data: ' + JSON.stringify(data,null,2));
-            $log.debug('filename: ' + filename);
+            $log.debug('saveAttachment file: ' + JSON.stringify(file, null, 2));
+
+            var reader = new FileReader();
+            reader.addEventListener("loadend", function () {
+                // reader.result contains the contents of blob as a typed array
+
+                File.saveFile(reader.result, file.name, function (filename, error) {
+                    $log.debug('saveAttachment complete: ' + error);
+
+                    if (callback) {
+                        callback(filename,error);
+                    }
+                })
+            });
+
+            //reader.readAsArrayBuffer(file);
+            reader.readAsBinaryString(file);
+        };
+
+        service.sendResponse = function (post, response) {
+
+
         };
 
         service.find = function (selector) {
@@ -44,9 +69,38 @@
             return DB.removeDocs('response', selector);
         };
 
-        service.create = function (response) {
+        service.create = function (response, attachment) {
 
-            return DB.create('response',response);
+            var deferred = $q.defer();
+
+            if (attachment) {
+                response.attachment = attachment.name;
+            }
+
+            //$log.debug('response, attachment: ' + response, attachment)
+
+            DB.create('response', response).then(function () {
+
+                if (attachment) {
+                    service.saveAttachment(attachment, function (filename,error) {
+
+                        if (error) {
+                            deferred.reject(error);
+                        } else {
+                            deferred.resolve();
+                        }
+                    });
+                } else {
+
+                    deferred.resolve();
+
+                }
+
+            }).catch(function(error){
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
         }
 
         return service;

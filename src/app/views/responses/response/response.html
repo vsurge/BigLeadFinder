@@ -25,7 +25,12 @@
 
             <md-input-container class="md-block">
                 <label>Attachment</label>
-                <div class="dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods" ng-dropzone></div>
+                <input required name="attachment" ng-model="response.attachment" disabled>
+            </md-input-container>
+
+            <md-input-container class="md-block">
+                <label>Attachment</label>
+                <div class="dropzone" id="responseAttachmentDropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods" ng-dropzone></div>
             </md-input-container>
 
             <div>
