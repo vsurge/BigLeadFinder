@@ -24,14 +24,26 @@
 
         service.seedDefaultSettings = function () {
             var settings = {
-                _id:"settings_0",
-                name:"default"//,
-                // email:{
-                //     smtp_server:"demo.smtp.com",
-                //     smtp_port:25,
-                //     smtp_username:"test@user.com",
-                //     smtp_password:"abc123"
-                // }
+                _id: "settings_0",
+                name: "default",
+                email: {
+                    from:'',
+                    test_mode: true,
+                    test_mode_email: '',
+                    smtp: {
+                        host: "",
+                        port: 465,
+                        secure: true, // upgrade later with STARTTLS
+                        auth: {
+                            user: '',
+                            pass: ''
+                        },
+                        tls: {
+                            // do not fail on invalid certs
+                            rejectUnauthorized: false
+                        }
+                    }
+                }
             };
 
             return service.create(settings);
@@ -41,7 +53,7 @@
 
             var deferred = $q.defer();
 
-            service.find({name:'default'}).then(function(result){
+            service.find({name: 'default'}).then(function (result) {
 
                 //$log.debug('service.getDefaultSettings: ' + JSON.stringify(result,null,2));
 
@@ -50,10 +62,10 @@
                     service.defaultSettings = result.docs[0];
                     deferred.resolve(service.defaultSettings);
                 } else {
-                    deferred.reject({message:'Not found.'})
+                    deferred.reject({message: 'Not found.'})
                 }
 
-            }).catch(function(error){
+            }).catch(function (error) {
                 $log.error('service.getDefaultSettings.error: ' + error)
                 deferred.reject(error)
             });
@@ -71,13 +83,13 @@
 
         service.create = function (settings) {
 
-            return DB.create('setting',settings).then(function(){
+            return DB.create('setting', settings).then(function () {
                 service.refreshDefaultSettings();
             });
         }
 
 
-        function Init () {
+        function Init() {
 
             service.refreshDefaultSettings();
 

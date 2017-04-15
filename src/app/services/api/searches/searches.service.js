@@ -25,13 +25,9 @@
         service.seedSearches = function () {
             service.find().then(function (searches) {
 
-                // $log.debug('searches.find(): ' + JSON.stringify(searches,null,2));
-                if (!searches || !searches.docs || searches.docs.length < 1) {
-
-                    service.create('iOS', 'ios', ['sof', 'cpg']);
-                    service.create('Angular', 'angular', ['sof', 'cpg']);
-                    service.create('Rails', 'rails', ['sof', 'cpg']);
-                }
+                service.create({_id:'Search_0',name:'iOS', query:'ios', categories:['sof', 'cpg'], default_response:'response_0'});
+                service.create({_id:'Search_1',name:'Angular', query:'angular', categories:['sof', 'cpg'], default_response:'response_0'});
+                service.create({_id:'Search_2',name:'Rails', query:'rails', categories:['sof', 'cpg'], default_response:'response_0'});
             });
         };
 
@@ -43,13 +39,7 @@
             return DB.removeDocs('search', selector);
         };
 
-        service.create = function (name, query, categories) {
-
-            var search = {};
-
-            search.categories = categories;
-            search.query = query;
-            search.name = name;
+        service.create = function (search) {
 
             return DB.create('search', search);
         };

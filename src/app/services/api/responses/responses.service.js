@@ -56,8 +56,21 @@
             reader.readAsBinaryString(file);
         };
 
-        service.sendResponse = function (post, response) {
+        service.sendResponse = function (post, response,callback) {
 
+            var settings = SettingsService.defaultSettings.email;
+
+            var message = {
+                from: settings.from,
+                to: settings.test_mode_email,
+                subject: 'Message title',
+                text: 'Plaintext version of the message',
+                html: '<p>HTML version of the message</p>'
+            };
+
+
+
+            Email.sendEmail(message,settings.smtp,callback);
 
         };
 

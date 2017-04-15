@@ -23,7 +23,7 @@
     ]).config(Config).controller('PostsCtrl',Controller);
 
     /* @ngInject */
-    function Controller($rootScope, $scope, $log, $q, AppServices, DTOptionsBuilder, DTColumnDefBuilder,$stateParams,search_data) {
+    function Controller($rootScope, $scope, $log, $q, $timeout, AppServices, DTOptionsBuilder, DTColumnDefBuilder,$stateParams,search_data) {
 
         $scope.posts = {};
         $scope.search = search_data.docs[0];
@@ -77,7 +77,13 @@
 
                 $log.debug('update posts: ' + result.length);
 
-                $scope.refreshPosts();
+                $timeout(function(){
+
+                    $scope.$apply(function(){
+                        $scope.refreshPosts();
+                    });
+                });
+
                 $rootScope.ngProgress.complete();
                 $rootScope.ngProgress.reset();
 
