@@ -9,7 +9,7 @@
     ]).config(Config).controller('SettingsCtrl',Controller);
 
     /* @ngInject */
-    function Controller($rootScope,s$scope,$log,$q,AppServices) {
+    function Controller($rootScope,$scope,$log,$q,AppServices) {
 
         $scope.refreshDefaultSettings = function (){
             return AppServices.api.settings.refreshDefaultSettings().then(function(settings){

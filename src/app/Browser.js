@@ -41,6 +41,40 @@
         return browser;
     };
 
+    Service.isWindowOpen = function (browser) {
+
+        browser.evaluate_now(function(done){
+            return document;
+        },function(){
+            console.log('done!')
+        }).then(
+            function(doc){
+                console.log('doc: ' + doc)
+            }
+        )
+        //console.dir(browser.title())
+        //console.log('browser.title(): ' + JSON.stringify(browser.title(),null,2));
+
+        /*
+
+        browser.evaluate(function() {
+
+            //console.log('document.documentElement: ' + document.documentElement.outerHTML);
+
+
+            return 'xxx';
+            //return document.documentElement.outerHTML;
+            //document.documentElement
+        }).then(function(html){
+
+            console.log('document.documentElement: ' + html);
+            //document.documentElement
+        });
+
+        */
+
+    }
+
     Service.getCities = function (callback) {
 
         var browser = Service.browserFactory();
@@ -108,7 +142,7 @@
 
     };
 
-    Service.openPost = function (bounds,postUrl,emailCallback,completionCallback) {
+    Service.openPost = function (bounds,postUrl,emailCallback,completionCallback,newWindow) {
 
         console.log('openPost: ' + postUrl)
         var jqueryPath = path.resolve('../src/node_modules/jquery/dist/jquery.js');
@@ -116,19 +150,19 @@
 
         //var qPath = path.resolve('../src/node_modules/q/q.js');
 
-        var windows = BrowserWindow.getAllWindows()
-        console.log('windows: ' + windows.length)
+        //var windows = BrowserWindow.getAllWindows()
+
+        if (Service.visibleBrowser && newWindow) {
+            //console.log('Service.visibleBrowser: ' + Service.visibleBrowser)
+            //Service.isWindowOpen(Service.visibleBrowser)
+            //console.log('Service.visibleBrowser.running: ' + Service.visibleBrowser.running)
+
+            Service.visibleBrowser._endNow();
+            Service.visibleBrowser = null;
+
+        }
 
         if (!Service.visibleBrowser) {
-
-            /*
-             {
-             "x": 0,
-             "y": 23,
-             "width": 1200,
-             "height": 800
-             }
-            * */
 
             var positionConfig = Object.assign(bounds,{x:bounds.x + bounds.width,width:bounds.width * .666})
             var config = Object.assign({show:true,openDevTools:false},positionConfig)
@@ -136,17 +170,7 @@
             Service.visibleBrowser = Service.browserFactory(config);
 
             //console.log('Service.visibleBrowser: ' + JSON.stringify(Service.visibleBrowser,null,2));
-
         }
-
-        //console.log('Service.visibleBrowser.windows(): ' + JSON.stringify(Service.visibleBrowser.windows(),null,2));
-
-        //console.log('Service.visibleBrowser: ' + JSON.stringify(Service.visibleBrowser,null,2));
-
-        //var Positioner = require('electron-positioner');
-
-
-
 
         Service.visibleBrowser
             .goto(postUrl)
@@ -170,9 +194,6 @@
             }).catch(function(error){
                 console.log(error)
             })
-
-
-
     };
 
     Service.getPostDetails = function (postUrl,completionCallback) {

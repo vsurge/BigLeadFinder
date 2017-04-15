@@ -199,7 +199,11 @@
 
         };
 
-        service.openPost = function (postUrl) {
+        service.openPost = function (postUrl,newWindow,emailCallback,completionCallback) {
+
+            if (newWindow === undefined) {
+                newWindow = false;
+            }
 
             //$log.debug('Starting showPost: ' + postUrl);
             var bounds = currentWindow.getBounds()
@@ -226,6 +230,9 @@
                             DB.db.put(post).then(function (result) {
 
                                 //$log.debug('db.put result: ' + JSON.stringify(result,null,2));
+                                if (emailCallback) {
+                                    emailCallback(result);
+                                }
 
                             }).catch(function (error) {
                                 $log.error('db.put error:' + error);
@@ -244,7 +251,7 @@
 
             }, function () {
 
-            });
+            },newWindow);
 
             //return deferred.promise;
         };

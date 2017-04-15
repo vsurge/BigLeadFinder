@@ -109,9 +109,7 @@
 
         function Init() {
 
-            $scope.refreshPosts();
-
-
+            //$scope.refreshPostState(AppServices.api.posts.states.created);
 
         }
 

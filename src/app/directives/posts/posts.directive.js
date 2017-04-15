@@ -44,7 +44,7 @@
             DTColumnDefBuilder.newColumnDef(0).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(1).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(2).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '500px'),
-            DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--numeric').withOption('width', '280px')
+            DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--numeric').withOption('width', '320px')
 
         ];
 
@@ -85,10 +85,21 @@
 
         };
 
-        $scope.openPost = function (item) {
+        $scope.openPost = function (item,newWindow) {
 
             //$log.debug('$scope.openPost: ' + JSON.stringify(item,null,2));
-            AppServices.api.posts.openPost(item.link);
+            AppServices.api.posts.openPost(item.link,newWindow,function(result){
+                //$log.debug('$scope.openPost email result: ' + JSON.stringify(result,null,2));
+
+                var updatedPost =  AppServices.api.posts.find({_id:item._id}).then(function(result){
+                    //$log.debug('$scope.openPost email result: ' + JSON.stringify(result,null,2));
+
+                    $scope.$apply(function(){
+                        $scope.updatePost(result.docs[0]);
+                    });
+
+                })
+            });
         };
 
         $scope.removePost = function (item) {
@@ -107,6 +118,29 @@
                 });
             });
             */
+        };
+
+        $scope.updatePost = function (item) {
+
+            $scope.posts = _.map($scope.posts,function(post){
+
+                if (post._id == item._id) {
+
+                    post = item;
+                }
+                return post;
+            });
+            /*
+             $timeout(function(){
+             $scope.$apply(function(){
+             $scope.posts = _.reject($scope.posts,function(post){
+             return post._id == item._id;
+             });
+
+             $log.debug('$scope.rejectPost/$scope.posts: ' + JSON.stringify($scope.posts,null,2));
+             });
+             });
+             */
         };
 
         function Init() {
