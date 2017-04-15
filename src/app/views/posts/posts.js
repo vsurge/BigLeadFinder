@@ -134,7 +134,7 @@
                 },
                 ncyBreadcrumb: {
                     label: 'Posts',
-                    parent:'app.dashboard'
+                    parent:'app.searches'
                 },
                 resolve:{
                     search_data: function (AppServices,$stateParams) {
