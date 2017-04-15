@@ -22,6 +22,58 @@
 
         var service = {};
 
+        /*
+         States:
+
+         created
+         responded
+         rejected
+         archived
+         error
+         */
+
+        service.states = {};
+        service.states.created = 'created';
+        service.states.responded = 'responded';
+        service.states.rejected = 'rejected';
+        service.states.archived = 'archived';
+        service.states.error = 'error';
+        Object.freeze(service.states);
+
+        service.updateState = function (_id,newState) {
+            var deferred = $q.defer();
+
+            service.find({_id:_id}).then(function(result){
+
+                if (result && result.docs && result.docs.length > 0) {
+                    var post = result.docs[0];
+
+                    post.state = newState;
+
+                    service.create(post).then(function(create_result){
+
+                        deferred.resolve(create_result)
+                    })
+
+                } else {
+
+                    deferred.reject({message:'No results found.'});
+                }
+
+
+            }).catch(function(error){
+                $log.error('updateState: ' + error);
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        };
+
+        service.create = function (item) {
+
+            return DB.create('post',item);
+        }
+
         service.find = function (selector) {
             return DB.findDocs('post', selector);
         };
@@ -32,8 +84,8 @@
 
         service.createIndexes = function () {
 
-            DB.createIndex('_post_link_type',['link','type'])
-            DB.createIndex('_post_query_id',['query_id'])
+            DB.createIndex('_post_link_type', ['link', 'type'])
+            DB.createIndex('_post_query_id', ['query_id'])
         };
 
         service.updatePosts = function () {
@@ -80,47 +132,59 @@
 
             var url = city.href + 'search/' + cat._id + '?format=rss&query=' + encodeURIComponent(query.query);
 
-            /*
-            States:
-            created
-            responded
-            rejected
-            archived
-            */
+            service.find({
+                city_id: city._id,
+                search_id: query._id,
+                category_id: cat._id
+            }).then(function(result){
 
-            $.get(url, function (data) {
-                var $xml = $(data);
-                var _items = (items === undefined) ? [] : items;
-                $xml.find("item").each(function () {
-                    var $this = $(this);
+                $log.debug('service.getCityRss result: ' + JSON.stringify(result,null,2));
 
-                    var link = $this.find("link").text();
+                var existing_posts = (result.docs === undefined) ? [] : result.docs;
 
-                    var a = document.createElement('a');
-                    a.id = 'temp_link';
-                    a.href = link;
-                    var link_parts = a.pathname.split('/');
-                    //$log.debug('link_parts: ' + JSON.stringify(link_parts,null,2));
-                    var filename = link_parts.pop();
-                    var post_id = filename.split('.')[0];
+                $.get(url, function (data) {
+                    var $xml = $(data);
+                    var _items = (items === undefined) ? [] : items;
+                    $xml.find("item").each(function () {
+                        var $this = $(this);
 
-                    var item = {
-                        _id: post_id,
-                        title: $this.find("title").text(),
-                        link: link,
-                        description: $this.find("description").text(),
-                        publish_date: $this.find("date").text(),
-                        city_id: city._id,
-                        search_id: query._id,
-                        category_id: cat._id
-                    };
+                        var link = $this.find("link").text();
 
-                    _items.push(item);
+                        var a = document.createElement('a');
+                        a.id = 'temp_link';
+                        a.href = link;
+                        var link_parts = a.pathname.split('/');
+                        //$log.debug('link_parts: ' + JSON.stringify(link_parts,null,2));
+                        var filename = link_parts.pop();
+                        var post_id = filename.split('.')[0];
+
+                        var item = {
+                            _id: post_id,
+                            title: $this.find("title").text(),
+                            link: link,
+                            description: $this.find("description").text(),
+                            publish_date: $this.find("date").text(),
+                            city_id: city._id,
+                            search_id: query._id,
+                            category_id: cat._id,
+                            state: service.states.created
+                        };
+
+                        // Let's retain the state for any existing item...
+                        var existing_item = _.find(existing_posts,{_id:item._id});
+
+                        if (existing_item) {
+                            $log.debug('service.getCityRss existing item found! ' + JSON.stringify(existing_item,null,2));
+                            item.state = existing_item.state;
+                        }
+
+                        _items.push(item);
+                    });
+
+                    //$log.debug('items: ' + JSON.stringify(_items,null,2));
+
+                    deferred.resolve(_items);
                 });
-
-                //$log.debug('items: ' + JSON.stringify(_items,null,2));
-
-                deferred.resolve(_items);
             });
 
             return deferred.promise;
@@ -135,14 +199,14 @@
 
             var deferred = $q.defer();
 
-            Browser.openPost(bounds,postUrl, function (email, error) {
+            Browser.openPost(bounds, postUrl, function (email, error) {
                 if (email) {
 
                     //$log.debug('email: ' + JSON.stringify(email, null, 2));
                     //deferred.resolve();
 
                     //DB.findDocs('post',{link:{$eq:postUrl}}).then(function(results){
-                    DB.findDocs('post',{link:postUrl}).then(function(results){
+                    DB.findDocs('post', {link: postUrl}).then(function (results) {
                         //$log.debug('posts: ' + JSON.stringify(results, null, 2));
 
                         if (results && results.docs && results.docs.length > 0) {
@@ -151,11 +215,11 @@
 
                             post.email = email;
 
-                            DB.db.put(post).then(function(result){
+                            DB.db.put(post).then(function (result) {
 
                                 //$log.debug('db.put result: ' + JSON.stringify(result,null,2));
 
-                            }).catch(function(error){
+                            }).catch(function (error) {
                                 $log.error('db.put error:' + error);
                             });
 

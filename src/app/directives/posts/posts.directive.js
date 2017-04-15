@@ -50,7 +50,11 @@
 
         $scope.rejectPost = function(item){
 
-            $log.debug('$scope.rejectPost: ' + JSON.stringify(item,null,2));
+            AppServices.api.posts.updateState(item._id,AppServices.api.posts.states.rejected).then(function(result){
+                $log.debug('$scope.rejectPost: ' + JSON.stringify(result,null,2));
+            }).catch(function(error){
+                $log.error('$scope.rejectPost: ' + error);
+            });
 
         };
 

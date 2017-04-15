@@ -20,29 +20,38 @@
             <md-card >
 
                 <md-tabs md-dynamic-height md-border-bottom>
-                    <md-tab label="created">
+
+                    <md-tab label="created" md-on-select="refreshPostState('created')">
                         <md-content class="md-padding">
-                            <posts posts="posts"></posts>
+                            <posts posts="posts.created"></posts>
                         </md-content>
                     </md-tab>
-                    <md-tab label="archived">
+
+                    <md-tab label="archived" md-on-select="refreshPostState('archived')">
                         <md-content class="md-padding">
-                            <posts posts="posts"></posts>
+                            <posts posts="posts.archived"></posts>
                         </md-content>
                     </md-tab>
-                    <md-tab label="responded">
+
+                    <md-tab label="responded" md-on-select="refreshPostState('responded')">
                         <md-content class="md-padding">
-                            <posts posts="posts"></posts>
+                            <posts posts="posts.responded"></posts>
                         </md-content>
                     </md-tab>
-                    <md-tab label="rejected">
+
+                    <md-tab label="rejected" md-on-select="refreshPostState('rejected')">
                         <md-content class="md-padding">
-                            <posts posts="posts"></posts>
+                            <posts posts="posts.rejected"></posts>
                         </md-content>
                     </md-tab>
+
+                    <md-tab label="error" md-on-select="refreshPostState('error')">
+                        <md-content class="md-padding">
+                            <posts posts="posts.error"></posts>
+                        </md-content>
+                    </md-tab>
+
                 </md-tabs>
-
-
 
             </md-card>
         </div>

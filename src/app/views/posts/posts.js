@@ -23,22 +23,50 @@
     ]).config(Config).controller('PostsCtrl',Controller);
 
     /* @ngInject */
-    function Controller($rootScope,$scope,$log, AppServices, DTOptionsBuilder, DTColumnDefBuilder) {
+    function Controller($rootScope, $scope, $log, $q, AppServices, DTOptionsBuilder, DTColumnDefBuilder) {
+
+        $scope.posts = {};
 
         $scope.refreshPosts = function(){
             $rootScope.ngProgress.start();
-            AppServices.api.posts.find().then(function(result){
+            var chain = $q.when();
+
+            for(var key in AppServices.api.posts.states) {
+
+                (function(state) {
+                    //var state = JSON.parse(JSON.stringify(input));
+                    //$log.debug(state);
+
+                    chain.then(function(){
+
+                        return $scope.refreshPostState(state);
+                    });
+
+                })(key)
+
+            }
+
+            chain.then(function(){
+                //$log.debug('complete');
+                $rootScope.ngProgress.complete();
+                $rootScope.ngProgress.reset();
+            });
+        };
+
+        $scope.refreshPostState = function (state) {
+            AppServices.api.posts.find({state:state}).then(function(result){
 
                 //$log.debug('AppServices.api.posts.find(): ' + JSON.stringify(result,null,2));
 
                 if (result && result.docs) {
                     //$log.debug('found posts: ' + result.docs.length);
-                    $scope.posts = result.docs;
+                    $scope.posts[state] = result.docs;
+
+                    //$log.debug('$scope.posts[' + state + ']: ' + JSON.stringify($scope.posts[state],null,2) );
                 }
 
-                $rootScope.ngProgress.complete();
-                $rootScope.ngProgress.reset();
-
+            }).catch(function(error){
+                $log.debug('$scope.posts[' + state + ']: ERROR: ' + error );
             });
         };
 
