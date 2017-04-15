@@ -94,6 +94,18 @@
             },function(){})
         };
 
+        $scope.clearRejectedPosts = function(){
+            $rootScope.ngProgress.start();
+            AppServices.api.posts.remove({state:AppServices.api.posts.states.rejected}).then(function(result){
+
+                $scope.posts[AppServices.api.posts.states.rejected] = [];
+                $rootScope.ngProgress.complete();
+                $rootScope.ngProgress.reset();
+
+            },function(){})
+        };
+
+
         function Init() {
 
             $scope.refreshPosts();

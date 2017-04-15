@@ -23,7 +23,7 @@
     }
 
     /* @ngInject */
-    function Controller($rootScope, $scope, $log, AppServices, DTOptionsBuilder, DTColumnDefBuilder) {
+    function Controller($rootScope, $scope, $log, $timeout, AppServices, DTOptionsBuilder, DTColumnDefBuilder, _) {
 
         $scope.posts = [];
 
@@ -44,16 +44,37 @@
             DTColumnDefBuilder.newColumnDef(0).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(1).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(2).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '500px'),
-            DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--numeric').withOption('width', '200px')
+            DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--numeric').withOption('width', '280px')
 
         ];
 
         $scope.rejectPost = function(item){
 
-            AppServices.api.posts.updateState(item._id,AppServices.api.posts.states.rejected).then(function(result){
-                $log.debug('$scope.rejectPost: ' + JSON.stringify(result,null,2));
+            $scope.updateState(item,AppServices.api.posts.states.rejected);
+
+        };
+
+        $scope.archivePost = function(item){
+
+            $scope.updateState(item,AppServices.api.posts.states.archived);
+
+        };
+
+        $scope.setCreatedPost = function(item){
+
+            $scope.updateState(item,AppServices.api.posts.states.created);
+
+        };
+
+        $scope.updateState = function(item,state){
+
+            AppServices.api.posts.updateState(item._id,state).then(function(result){
+                //$log.debug('$scope.rejectPost: ' + JSON.stringify(result,null,2));
+
+                $scope.removePost(item);
+
             }).catch(function(error){
-                $log.error('$scope.rejectPost: ' + error);
+                $log.error('$scope.updateState: ' +state + ' - ' + error);
             });
 
         };
@@ -68,6 +89,24 @@
 
             //$log.debug('$scope.openPost: ' + JSON.stringify(item,null,2));
             AppServices.api.posts.openPost(item.link);
+        };
+
+        $scope.removePost = function (item) {
+
+            $scope.posts = _.reject($scope.posts,function(post){
+                return post._id == item._id;
+            });
+            /*
+            $timeout(function(){
+                $scope.$apply(function(){
+                    $scope.posts = _.reject($scope.posts,function(post){
+                        return post._id == item._id;
+                    });
+
+                    $log.debug('$scope.rejectPost/$scope.posts: ' + JSON.stringify($scope.posts,null,2));
+                });
+            });
+            */
         };
 
         function Init() {

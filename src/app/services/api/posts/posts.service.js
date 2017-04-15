@@ -40,28 +40,28 @@
         service.states.error = 'error';
         Object.freeze(service.states);
 
-        service.updateState = function (_id,newState) {
+        service.updateState = function (_id, newState) {
             var deferred = $q.defer();
 
-            service.find({_id:_id}).then(function(result){
+            service.find({_id: _id}).then(function (result) {
 
                 if (result && result.docs && result.docs.length > 0) {
                     var post = result.docs[0];
 
                     post.state = newState;
 
-                    service.create(post).then(function(create_result){
+                    service.create(post).then(function (create_result) {
 
                         deferred.resolve(create_result)
                     })
 
                 } else {
 
-                    deferred.reject({message:'No results found.'});
+                    deferred.reject({message: 'No results found.'});
                 }
 
 
-            }).catch(function(error){
+            }).catch(function (error) {
                 $log.error('updateState: ' + error);
                 deferred.reject(error);
             });
@@ -71,7 +71,7 @@
 
         service.create = function (item) {
 
-            return DB.create('post',item);
+            return DB.create('post', item);
         }
 
         service.find = function (selector) {
@@ -136,19 +136,21 @@
                 city_id: city._id,
                 search_id: query._id,
                 category_id: cat._id
-            }).then(function(result){
+            }).then(function (result) {
 
-                $log.debug('service.getCityRss result: ' + JSON.stringify(result,null,2));
+                $log.debug('service.getCityRss result: ' + JSON.stringify(result, null, 2));
 
                 var existing_posts = (result.docs === undefined) ? [] : result.docs;
 
                 $.get(url, function (data) {
                     var $xml = $(data);
+                    //var xmlDoc = $.parseXML(data);
+                    //var $xml = $(xmlDoc)
                     var _items = (items === undefined) ? [] : items;
                     $xml.find("item").each(function () {
                         var $this = $(this);
 
-                        var link = $this.find("link").text();
+                        var link = $this.find("link").first().text();
 
                         var a = document.createElement('a');
                         a.id = 'temp_link';
@@ -158,11 +160,13 @@
                         var filename = link_parts.pop();
                         var post_id = filename.split('.')[0];
 
+                        //$log.debug('title: ' + $this.find("title").first().text());
+
                         var item = {
                             _id: post_id,
-                            title: $this.find("title").text(),
+                            title: $this.find("title").first().text(),
                             link: link,
-                            description: $this.find("description").text(),
+                            description: $this.find("description").first().text(),
                             publish_date: $this.find("date").text(),
                             city_id: city._id,
                             search_id: query._id,
@@ -171,10 +175,10 @@
                         };
 
                         // Let's retain the state for any existing item...
-                        var existing_item = _.find(existing_posts,{_id:item._id});
+                        var existing_item = _.find(existing_posts, {_id: item._id});
 
                         if (existing_item) {
-                            $log.debug('service.getCityRss existing item found! ' + JSON.stringify(existing_item,null,2));
+                            $log.debug('service.getCityRss existing item found! ' + JSON.stringify(existing_item, null, 2));
                             item.state = existing_item.state;
                         }
 
