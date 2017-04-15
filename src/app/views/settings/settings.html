@@ -1,6 +1,16 @@
-<div class="md-display-2">SETTINGS</div>
-<md-divider ></md-divider>
+<div layout="row" width="100%">
+    <div layout="column" flex="50">
+        <div class="md-display-2">SETTINGS</div>
+    </div>
+    <div layout="column" layout-align="end end" flex="50">
+        <div layout="row" flex>
+            <md-button ng-click="clearAllData()" class="md-warn md-raised">Clear All Data</md-button>
 
+        </div>
+
+    </div>
+</div>
+<md-divider/>
 <div layout="column">
 
     <md-content layout-padding>

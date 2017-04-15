@@ -23,9 +23,10 @@
     ]).config(Config).controller('PostsCtrl',Controller);
 
     /* @ngInject */
-    function Controller($rootScope, $scope, $log, $q, AppServices, DTOptionsBuilder, DTColumnDefBuilder) {
+    function Controller($rootScope, $scope, $log, $q, AppServices, DTOptionsBuilder, DTColumnDefBuilder,$stateParams,search_data) {
 
         $scope.posts = {};
+        $scope.search = search_data.docs[0];
 
         $scope.refreshPosts = function(){
             $rootScope.ngProgress.start();
@@ -54,7 +55,7 @@
         };
 
         $scope.refreshPostState = function (state) {
-            AppServices.api.posts.find({state:state}).then(function(result){
+            AppServices.api.posts.find({state:state,search_id:$stateParams.search_id}).then(function(result){
 
                 //$log.debug('AppServices.api.posts.find(): ' + JSON.stringify(result,null,2));
 
@@ -72,7 +73,7 @@
 
         $scope.updatePosts = function(){
             $rootScope.ngProgress.start();
-            AppServices.api.posts.updatePosts().then(function(result){
+            AppServices.api.posts.updatePosts($scope.search).then(function(result){
 
                 $log.debug('update posts: ' + result.length);
 
@@ -109,6 +110,9 @@
         function Init() {
 
             $scope.refreshPosts();
+
+
+
         }
 
         Init();
@@ -120,7 +124,7 @@
     function Config($stateProvider) {
         $stateProvider
             .state('app.posts', {
-                url: '/posts',
+                url: '/posts/:search_id',
                 views: {
                     'container@': {
                         template: require('./posts.html'),
@@ -133,6 +137,9 @@
                     parent:'app.dashboard'
                 },
                 resolve:{
+                    search_data: function (AppServices,$stateParams) {
+                        return AppServices.api.searches.find({_id:$stateParams.search_id});
+                    }
                 }
             });
     };

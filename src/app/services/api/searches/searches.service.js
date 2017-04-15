@@ -22,6 +22,19 @@
 
         var service = {};
 
+        service.seedSearches = function () {
+            service.find().then(function (searches) {
+
+                // $log.debug('searches.find(): ' + JSON.stringify(searches,null,2));
+                if (!searches || !searches.docs || searches.docs.length < 1) {
+
+                    service.create('iOS', 'ios', ['sof', 'cpg']);
+                    service.create('Angular', 'angular', ['sof', 'cpg']);
+                    service.create('Rails', 'rails', ['sof', 'cpg']);
+                }
+            });
+        };
+
         service.find = function (selector) {
             return DB.findDocs('search', selector);
         };
@@ -30,15 +43,17 @@
             return DB.removeDocs('search', selector);
         };
 
-        service.create = function (query,categories) {
+        service.create = function (name, query, categories) {
 
             var search = {};
 
             search.categories = categories;
             search.query = query;
+            search.name = name;
 
-            return DB.create('search',search);
-        }
+            return DB.create('search', search);
+        };
+
 
         return service;
     };

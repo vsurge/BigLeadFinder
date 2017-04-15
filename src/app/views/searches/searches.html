@@ -17,14 +17,17 @@
             <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="mdl-data-table dt-left">
                 <thead>
                 <tr>
-                    <th>QUERY</th>
-                    <th>CATEGORIES</th>
+                    <th>NAME</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="item in data">
-                    <td>{{ item.query }}</td>
-                    <td>{{ item.categories | json}}</td>
+                <tr ng-repeat="item in searches">
+                    <td ng-click="gotoPosts(item)">{{ item.name }}</td>
+                    <td><md-button ng-click="editSearch(item)" class="md-fab md-mini md-secondary
+                                md-raised md-hue-1">
+                        <md-icon md-font-library="material-icons" aria-label="edit">mode_edit</md-icon>
+                    </md-button></td>
                 </tr>
                 </tbody>
             </table>

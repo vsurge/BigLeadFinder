@@ -9,7 +9,7 @@
     ]).config(Config).controller('SettingsCtrl',Controller);
 
     /* @ngInject */
-    function Controller($scope,$log,AppServices) {
+    function Controller($rootScope,s$scope,$log,$q,AppServices) {
 
         $scope.refreshDefaultSettings = function (){
             return AppServices.api.settings.refreshDefaultSettings().then(function(settings){
@@ -25,7 +25,32 @@
         $scope.updateSettings = function (settings) {
             //$log.debug('settings: ' + JSON.stringify(settings,null,2));
             AppServices.api.settings.create(settings)
-        }
+        };
+
+        $scope.clearAllData = function () {
+
+            var chain = $q.when();
+
+            for(var key in AppServices.api) {
+
+                (function(service) {
+                    //var state = JSON.parse(JSON.stringify(input));
+                    //$log.debug(state);
+
+                    chain.then(function(){
+
+                        return AppServices.api[service].remove({}).then(function(){
+                            $rootScope.seedDb();
+                        });
+                    });
+
+                })(key)
+
+            }
+
+            return chain;
+
+        };
 
         $scope.settings = {};
 

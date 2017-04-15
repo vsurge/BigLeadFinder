@@ -60,20 +60,13 @@
         $log.debug('Electron v' + process.versions.electron);
 
         //AppServices.db.initDb();
-        AppServices.api.posts.createIndexes();
-        AppServices.api.settings.seedDefaultSettings();
-        AppServices.api.responses.seedResponse();
+        $rootScope.seedDb = function (){
+            AppServices.api.posts.createIndexes();
+            AppServices.api.settings.seedDefaultSettings();
+            AppServices.api.responses.seedResponse();
+            AppServices.api.searches.seedSearches();
+        }
 
-        AppServices.api.searches.find().then(function(searches){
-
-            // $log.debug('searches.find(): ' + JSON.stringify(searches,null,2));
-            if (!searches || !searches.docs || searches.docs.length < 1) {
-
-                AppServices.api.searches.create('ios',['sof','cpg']);
-                AppServices.api.searches.create('angular',['sof','cpg']);
-                AppServices.api.searches.create('rails',['sof','cpg']);
-            }
-        });
 
     }
 
@@ -82,7 +75,7 @@
 
 
         $qProvider.errorOnUnhandledRejections(false);
-        $urlRouterProvider.otherwise('/posts');
+        $urlRouterProvider.otherwise('/searches');
     }
 
     /* @ngInject */

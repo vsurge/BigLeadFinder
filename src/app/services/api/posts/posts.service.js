@@ -88,7 +88,7 @@
             DB.createIndex('_post_query_id', ['query_id'])
         };
 
-        service.updatePosts = function () {
+        service.updatePosts = function (search) {
 
             $log.debug('Starting updatePosts');
 
@@ -97,15 +97,17 @@
             var promises = [];
 
             var cities = [{href: 'https://austin.craigslist.org/', _id: "austin"}];
-            var cats = [{_id: 'sof', name: "Software/QA/DBA"}, {_id: 'cpg', name: "Computer Programming Gigs"}];
-            var query = {_id: "a1b2c3d4e5", query: 'ios'};
+
+            var cats = search.categories;
+            //var cats = [{_id: 'sof', name: "Software/QA/DBA"}, {_id: 'cpg', name: "Computer Programming Gigs"}];
+            //var search = {_id: "a1b2c3d4e5", query: 'ios', name:'iOS'};
 
             cities.forEach(function (city) {
 
                 cats.forEach(function (cat) {
 
                     chain = chain.then(function (items) {
-                        return service.getCityRss(city, cat, query, items);
+                        return service.getCityRss(city, cat, search, items);
                     });
 
                 });
@@ -130,7 +132,9 @@
             var deferred = $q.defer();
             // https://austin.craigslist.org/search/sof?format=rss&query=ios
 
-            var url = city.href + 'search/' + cat._id + '?format=rss&query=' + encodeURIComponent(query.query);
+            var url = city.href + 'search/' + cat + '?format=rss&query=' + encodeURIComponent(query.query);
+
+            $log.debug('url: ' + url);
 
             service.find({
                 city_id: city._id,
