@@ -22,6 +22,11 @@
 
         var service = {};
 
+        service.seed = function () {
+            DB.createIndex('_post_link_type', ['link', 'type']);
+            DB.createIndex('_post_query_id', ['query_id']);
+        };
+
         /*
          States:
 
@@ -80,12 +85,6 @@
 
         service.remove = function (selector) {
             return DB.removeDocs('post', selector);
-        };
-
-        service.createIndexes = function () {
-
-            DB.createIndex('_post_link_type', ['link', 'type'])
-            DB.createIndex('_post_query_id', ['query_id'])
         };
 
         service.updatePosts = function (search) {

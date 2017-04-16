@@ -22,7 +22,7 @@
 
         var service = {};
 
-        service.seedSearches = function () {
+        service.seed = function () {
             service.find().then(function (searches) {
 
                 service.create({_id:'Search_0',name:'iOS', query:'ios', categories:['sof', 'cpg'], default_response:'response_0'});

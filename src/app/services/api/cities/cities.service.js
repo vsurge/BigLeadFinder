@@ -31,6 +31,8 @@
 
         var service = {};
 
+        service.seed = function () {};
+
         service.find = function (selector) {
             return DB.findDocs('city',selector);
 

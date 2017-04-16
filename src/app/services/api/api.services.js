@@ -21,7 +21,9 @@
     ]).service('ApiServices', Service);
 
     /** @ngInject */
-    function Service($log,CitiesService,PostsService,SearchesService,ResponsesService,SettingsService) {
+    function Service($log,$q,CitiesService,PostsService,SearchesService,ResponsesService,SettingsService) {
+
+
 
         this.cities = CitiesService;
         this.posts = PostsService;

@@ -23,9 +23,9 @@
         //console.log('message: ' + JSON.stringify(message,null,2));
         //console.log('settings: ' + JSON.stringify(settings,null,2));
 
-        var transporter = nodemailer.createTransport(settings)
+        var transporter = nodemailer.createTransport(settings);
 
-        /*
+
         // verify connection configuration
         transporter.verify(function(error, success) {
             if (error) {
@@ -35,7 +35,7 @@
             }
         });
 
-        */
+
 
         transporter.sendMail(message,callback)
 

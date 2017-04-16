@@ -21,7 +21,7 @@
                 <tr>
                     <th>ID</th>
                     <th>NAME</th>
-                    <th>BODY</th>
+                    <th>SUBJECT</th>
                     <th>ATTACHMENT</th>
                 </tr>
                 </thead>
@@ -29,8 +29,8 @@
                 <tr ng-repeat="item in data" ng-click="onRowSelect(item)">
                     <td>{{ item._id }}</td>
                     <td>{{ item.name }}</td>
-                    <td>{{ item.body}}</td>
-                    <td>{{ item.attachment}}</td>
+                    <td>{{ item.message.subject}}</td>
+                    <td>{{ item.message.attachments[0].filename}}</td>
                 </tr>
                 </tbody>
             </table>

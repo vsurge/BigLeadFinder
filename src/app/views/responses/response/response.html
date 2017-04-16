@@ -16,16 +16,24 @@
             </md-input-container>
 
             <md-input-container class="md-block">
-                <label>Body</label>
-                <input required name="body" ng-model="response.body">
-                <div ng-messages="response.body.$error">
+                <label>Subject</label>
+                <input required name="subject" ng-model="response.message.subject">
+                <div ng-messages="response.subject.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+
+            <md-input-container class="md-block">
+                <label>Text</label>
+                <input required name="text" ng-model="response.message.text">
+                <div ng-messages="response.text.$error">
                     <div ng-message="required">This is required.</div>
                 </div>
             </md-input-container>
 
             <md-input-container class="md-block">
                 <label>Attachment</label>
-                <input required name="attachment" ng-model="response.attachment" disabled>
+                <input name="attachment" ng-model="response.message.attachments[0].filename" disabled>
             </md-input-container>
 
             <div class="dropzone" id="responseAttachmentDropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods" ng-dropzone></div>

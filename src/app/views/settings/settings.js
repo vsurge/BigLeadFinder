@@ -40,13 +40,17 @@
                     chain.then(function(){
 
                         return AppServices.api[service].remove({}).then(function(){
-                            $rootScope.seedDb();
+
                         });
                     });
 
                 })(key)
 
             }
+
+            chain.then(function(){
+                AppServices.seed();
+            })
 
             return chain;
 

@@ -88,7 +88,7 @@
 
         function Init() {
 
-            $log.debug('$scope.data: ' + JSON.stringify($scope.data,null,2));
+            //$log.debug('$scope.data: ' + JSON.stringify($scope.data,null,2));
 
 
             if (responses && responses.docs) {

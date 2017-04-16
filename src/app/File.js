@@ -35,15 +35,20 @@
 
     };
 
+    Service.deleteFile = function (filename) {
+
+
+    };
+
     Service.responseAttachmentPath = function (filename) {
 
         return Service.response_attachments + filename;
-    }
+    };
 
     Service.responseAttachment = function (filename) {
 
 
-    }
+    };
 
 
     Service.init();

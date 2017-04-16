@@ -11,6 +11,7 @@ var ElectronPlugin = require("electron-webpack-plugin");
 //var ElectronConnectWebpackPlugin = require('electron-connect-webpack-plugin');
 var WriteFilePlugin = require('write-file-webpack-plugin');
 var path = require("path");
+var fs = require('fs');
 
 /**
  * Env
@@ -210,26 +211,22 @@ var clientConfig = function makeWebpackClientConfig() {
             }]),new CopyWebpackPlugin([{
                 from: __dirname + '/app/Email.js',
                 to: 'Email.js'
+            }]),new CopyWebpackPlugin([{
+                from: __dirname + '/app/Process.js',
+                to: 'Process.js'
             }]),new ElectronPlugin({
                 relaunchPathMatch: "./app",
                 path: "./dist"
-            })/*
-             ,
-             new CopyWebpackPlugin([{
-             from: __dirname + '/app/scripts/main.js',
-             to: 'main.js'
-             }])
-            new CopyWebpackPlugin([{
-                from: __dirname + '/app/renderer.js',
-                to: 'renderer.js'
-            }]),
-            new ElectronConnectWebpackPlugin({
-                path: __dirname,
-                logLevel: 1
-            }),*/
-
-
+            })
         )
+
+        if (fs.existsSync(__dirname + '/app/.env')) {
+            config.plugins.push(new CopyWebpackPlugin([{
+                from: __dirname + '/app/.env',
+                toType:'file',
+                to: '.env'
+            }]))
+        }
     }
 
     // Add build specific plugins

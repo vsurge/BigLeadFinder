@@ -14,29 +14,29 @@
 
     /** @ngInject */
     function Config(remoteProvider) {
-        remoteProvider.register('Browser', './Browser');
+        remoteProvider.register('Process', './Process');
     }
 
     /** @ngInject */
-    function Service($rootScope, $log, $q, Browser, DB, _, $) {
+    function Service($rootScope, $log, $q, Process, DB, _, $) {
 
         var service = {};
 
-        service.seedDefaultSettings = function () {
+        service.seed = function () {
             var settings = {
                 _id: "settings_0",
                 name: "default",
                 email: {
-                    from:'',
+                    from:Process.env.SMTP_FROM,
                     test_mode: true,
-                    test_mode_email: '',
+                    test_mode_email: Process.env.SMTP_TEST_TO,
                     smtp: {
-                        host: "",
+                        host: Process.env.SMTP_HOST,
                         port: 465,
                         secure: true, // upgrade later with STARTTLS
                         auth: {
-                            user: '',
-                            pass: ''
+                            user: Process.env.SMTP_USER,
+                            pass: Process.env.SMTP_PASS
                         },
                         tls: {
                             // do not fail on invalid certs

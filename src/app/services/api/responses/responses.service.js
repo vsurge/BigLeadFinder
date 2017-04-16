@@ -23,12 +23,17 @@
 
         var service = {};
 
-        service.seedResponse = function () {
+        service.seed = function () {
 
             var response = {
                 _id: "response_0",
                 name: "Response1",
-                body: "Lorem Ipsum dolor sit amit."
+                settings_id:'settings_0',
+                message: {
+                    subject: '',
+                    text: '',
+                    attachments:[]
+                }
             };
             // Save File
             // Create Response
@@ -44,10 +49,10 @@
                 // reader.result contains the contents of blob as a typed array
 
                 File.saveFile(reader.result, file.name, function (filename, error) {
-                    $log.debug('saveAttachment complete: ' + error);
+                    //$log.debug('saveAttachment complete: ' + error);
 
                     if (callback) {
-                        callback(filename,error);
+                        callback(filename, error);
                     }
                 })
             });
@@ -56,22 +61,32 @@
             reader.readAsBinaryString(file);
         };
 
-        service.sendResponse = function (post, response,callback) {
+        service.sendResponse = function (post, response, callback) {
 
-            var settings = SettingsService.defaultSettings.email;
+            $log.debug('response: ' + JSON.stringify(response, null, 2));
 
-            var message = {
-                from: settings.from,
-                to: settings.test_mode_email,
-                subject: 'Message title',
-                text: 'Plaintext version of the message',
-                html: '<p>HTML version of the message</p>'
-            };
+            SettingsService.find({_id:response.settings_id}).then(function(result){
 
+                $log.debug('settings results: ' + JSON.stringify(result, null, 2));
 
+                if (result && result.docs && result.docs.length > 0)
+                {
+                    var settings = result.docs[0];
 
-            Email.sendEmail(message,settings.smtp,callback);
+                    response.message.from = settings.email.from;
+                    response.message.to = settings.email.test_mode_email;
 
+                    // TODO: parse and replace the response for tokens from the post
+
+                    Email.sendEmail(response.message, settings.email.smtp, callback);
+                } else {
+
+                    if (callback) {
+                        callback({message:'Could not find settings from response: ' + JSON.stringify(response, null, 2)})
+                    }
+                }
+
+            });
         };
 
         service.find = function (selector) {
@@ -82,36 +97,44 @@
             return DB.removeDocs('response', selector);
         };
 
-        service.create = function (response, attachment) {
+        service.create = function (response, file) {
 
             var deferred = $q.defer();
 
-            if (attachment) {
-                response.attachment = attachment.name;
+            if (file) {
+                service.saveAttachment(file, function (filename, error) {
+
+                    if (error) {
+                        $log.error('response.create.saveAttachment: '  + error);
+                        deferred.reject(error);
+                    } else {
+
+                        var attachment = {};
+                        attachment.filename = file.name;
+                        attachment.path = File.responseAttachmentPath(file.name);
+                        response.message.attachments = [attachment];
+
+                        CreateResponseRecord(response,deferred);
+                    }
+                });
+            } else {
+
+                CreateResponseRecord(response,deferred);
+
+            }
+
+            function CreateResponseRecord(response,deferred){
+                DB.create('response', response).then(function (result) {
+
+                    deferred.resolve(result);
+
+                }).catch(function (error) {
+                    deferred.reject(error);
+                });
             }
 
             //$log.debug('response, attachment: ' + response, attachment)
 
-            DB.create('response', response).then(function () {
-
-                if (attachment) {
-                    service.saveAttachment(attachment, function (filename,error) {
-
-                        if (error) {
-                            deferred.reject(error);
-                        } else {
-                            deferred.resolve();
-                        }
-                    });
-                } else {
-
-                    deferred.resolve();
-
-                }
-
-            }).catch(function(error){
-                deferred.reject(error);
-            });
 
             return deferred.promise;
         }

@@ -81,13 +81,15 @@
 
         $scope.respondPost = function(item){
 
-            $log.debug('$scope.respondPost: ' + JSON.stringify(item,null,2));
+            //$log.debug('$scope.respondPost: ' + JSON.stringify(item,null,2));
 
             AppServices.api.searches.find({_id:item.search_id}).then(function(search){
 
                 // TODO: Change this to an instance of the default response or let it get set per post...
-                AppServices.api.responses.find({_id:search.default_response}).then(function(response){
+                AppServices.api.responses.find({_id:search.default_response}).then(function(result){
 
+                    //$log.debug('result: ' + JSON.stringify(result,null,2));
+                    var response = result.docs[0];
                     AppServices.api.responses.sendResponse(item,response,function(err,result){
 
                         if (err) {

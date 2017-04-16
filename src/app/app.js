@@ -59,15 +59,7 @@
         $log.debug('Chrome v' + process.versions.chrome);
         $log.debug('Electron v' + process.versions.electron);
 
-        //AppServices.db.initDb();
-        $rootScope.seedDb = function (){
-            AppServices.api.posts.createIndexes();
-            AppServices.api.settings.seedDefaultSettings();
-            AppServices.api.responses.seedResponse();
-            AppServices.api.searches.seedSearches();
-        }
-
-
+        AppServices.seed();
     }
 
     /* @ngInject */

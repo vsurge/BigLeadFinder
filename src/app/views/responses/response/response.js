@@ -45,7 +45,7 @@
         //Visit http://www.dropzonejs.com/#configuration-options for more options
         $scope.dzOptions = {
             url : function (files) {
-                $log.debug('addedfile ' + JSON.stringify(files,null,2));
+                //$log.debug('addedfile ' + JSON.stringify(files,null,2));
 
             },
             uploadMultiple:false,
@@ -62,12 +62,12 @@
                 //$scope.newFile = file;
             },
             'success' : function(file, xhr){
-                $log.debug(file, xhr);
+                //$log.debug(file, xhr);
             }
         };
 
         var Init = function () {
-            //$log.debug('response: ' + JSON.stringify(response,null,2));
+            $log.debug('response: ' + JSON.stringify($scope.response,null,2));
 
             $timeout(function(){
                 $scope.dropzone = $scope.dzMethods.getDropzone();
