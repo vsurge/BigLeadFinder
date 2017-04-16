@@ -23,12 +23,9 @@
         var service = {};
 
         service.seed = function () {
-            service.find().then(function (searches) {
-
-                service.create({_id:'Search_0',name:'iOS', query:'ios', categories:['sof', 'cpg'], default_response:'response_0'});
-                service.create({_id:'Search_1',name:'Angular', query:'angular', categories:['sof', 'cpg'], default_response:'response_0'});
-                service.create({_id:'Search_2',name:'Rails', query:'rails', categories:['sof', 'cpg'], default_response:'response_0'});
-            });
+            service.create({_id:'Search_0',name:'iOS', query:'ios', categories:['sof', 'cpg'], default_response:'response_0'});
+            service.create({_id:'Search_1',name:'Angular', query:'angular', categories:['sof', 'cpg'], default_response:'response_0'});
+            service.create({_id:'Search_2',name:'Rails', query:'rails', categories:['sof', 'cpg'], default_response:'response_0'});
         };
 
         service.find = function (selector) {

@@ -34,6 +34,7 @@
                 $scope.dropzone.removeAllFiles(true);
 
                 Response(AppServices,{_id:$scope.response._id}).then(function(updatedResponse){
+                    $log.debug('$scope.response: ' + JSON.stringify($scope.response,null,2));
                     $scope.response = updatedResponse.docs[0];
                 })
             });

@@ -90,14 +90,19 @@
 
                     //$log.debug('result: ' + JSON.stringify(result,null,2));
                     var response = result.docs[0];
-                    AppServices.api.responses.sendResponse(item,response,function(err,result){
+                    AppServices.api.responses.sendResponse(item,response,function(err,result,post){
 
                         if (err) {
                             $log.error(err)
                         }
 
                         if (result) {
-                            $log.debug('$scope.respondPost: ' + JSON.stringify(result,null,2));
+                            //$log.debug('$scope.respondPost: ' + JSON.stringify(result,null,2));
+                        }
+
+                        if (post) {
+                            $log.debug('post: ' + JSON.stringify(post,null,2));
+                            $scope.updatePost(post.docs[0]);
                         }
 
                     })

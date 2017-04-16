@@ -11,9 +11,8 @@
 
         Service.env = process.env;
 
-        //console.log('dotenv result: ' + JSON.stringify(result,null,2));
-        //console.log('process.env.SMTP_HOST: ' +  process.env.SMTP_HOST)
-    }
+        console.log('dotenv result: ' + JSON.stringify(result,null,2));
+    };
 
     Service.init();
 

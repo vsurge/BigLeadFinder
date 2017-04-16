@@ -15,7 +15,7 @@
 
     Service.init = function () {
 
-        console.log('File.response_attachments: ' + File.response_attachments);
+        //console.log('File.response_attachments: ' + File.response_attachments);
     }
 
     Service.sendEmail = function (message,settings,callback) {

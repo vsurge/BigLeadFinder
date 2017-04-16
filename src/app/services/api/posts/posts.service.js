@@ -18,7 +18,7 @@
     }
 
     /** @ngInject */
-    function Service($rootScope, $log, $q, Browser, DB, _, $, currentWindow) {
+    function Service($rootScope, $log, $q, Browser, DB, _, $, currentWindow, CitiesService) {
 
         var service = {};
 
@@ -93,34 +93,40 @@
 
             var chain = $q.when();
 
-            var promises = [];
+            CitiesService.find({}).then(function (result) {
 
-            var cities = [{href: 'https://austin.craigslist.org/', _id: "austin"}];
+                var promises = [];
 
-            var cats = search.categories;
-            //var cats = [{_id: 'sof', name: "Software/QA/DBA"}, {_id: 'cpg', name: "Computer Programming Gigs"}];
-            //var search = {_id: "a1b2c3d4e5", query: 'ios', name:'iOS'};
+                //var cities = [{href: 'https://austin.craigslist.org/', _id: "austin"}];
+                var cities = result.docs;
 
-            cities.forEach(function (city) {
+                var cats = search.categories;
+                //var cats = [{_id: 'sof', name: "Software/QA/DBA"}, {_id: 'cpg', name: "Computer Programming Gigs"}];
+                //var search = {_id: "a1b2c3d4e5", query: 'ios', name:'iOS'};
 
-                cats.forEach(function (cat) {
+                cities.forEach(function (city) {
 
-                    chain = chain.then(function (items) {
-                        return service.getCityRss(city, cat, search, items);
+                    cats.forEach(function (cat) {
+
+                        chain = chain.then(function (items) {
+                            return service.getCityRss(city, cat, search, items);
+                        });
+
                     });
-
                 });
-            });
 
-            chain.then(function (items) {
+                chain.then(function (items) {
 
-                //$log.debug('AppServices.api.posts.updatePosts(): ' + JSON.stringify(items,null,2));
-                return DB.createCollection('post', items);
-            });
+                    //$log.debug('AppServices.api.posts.updatePosts(): ' + JSON.stringify(items,null,2));
+                    return DB.createCollection('post', items);
+                });
 
-            chain.then(function () {
+                chain.then(function () {
 
-                return service.find();
+                    return service.find();
+                });
+
+
             });
 
             return chain;
@@ -198,7 +204,7 @@
 
         };
 
-        service.openPost = function (postUrl,newWindow,emailCallback,completionCallback) {
+        service.openPost = function (postUrl, newWindow, emailCallback, completionCallback) {
 
             if (newWindow === undefined) {
                 newWindow = false;
@@ -250,7 +256,7 @@
 
             }, function () {
 
-            },newWindow);
+            }, newWindow);
 
             //return deferred.promise;
         };

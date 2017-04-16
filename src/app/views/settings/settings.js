@@ -9,7 +9,7 @@
     ]).config(Config).controller('SettingsCtrl',Controller);
 
     /* @ngInject */
-    function Controller($rootScope,$scope,$log,$q,AppServices) {
+    function Controller($rootScope,$scope,$log,$q, $timeout,AppServices) {
 
         $scope.refreshDefaultSettings = function (){
             return AppServices.api.settings.refreshDefaultSettings().then(function(settings){
@@ -39,9 +39,7 @@
 
                     chain.then(function(){
 
-                        return AppServices.api[service].remove({}).then(function(){
-
-                        });
+                        return AppServices.api[service].remove({});
                     });
 
                 })(key)
@@ -49,8 +47,16 @@
             }
 
             chain.then(function(){
-                AppServices.seed();
-            })
+
+                $timeout(function(){
+                    AppServices.seed().then(function(){
+
+                        $timeout(function(){
+                            $scope.refreshDefaultSettings();
+                        });
+                    });
+                });
+            });
 
             return chain;
 

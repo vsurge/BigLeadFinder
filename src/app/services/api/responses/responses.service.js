@@ -16,10 +16,11 @@
     function Config(remoteProvider) {
         remoteProvider.register('File', './File');
         remoteProvider.register('Email', './Email');
+        remoteProvider.register('Process', './Process');
     }
 
     /** @ngInject */
-    function Service($rootScope, $log, $q, $interpolate, File, Email, DB, _, $, SettingsService) {
+    function Service($rootScope, $log, $q, $interpolate, File, Email, DB, _, $, SettingsService, PostsService, Process) {
 
         var service = {};
 
@@ -28,15 +29,18 @@
             var response = {
                 _id: "response_0",
                 name: "Response1",
-                settings_id:'settings_0',
+                settings_id: 'settings_0',
                 message: {
-                    subject: '',
-                    text: '',
-                    attachments:[]
+                    subject: Process.env.SMTP_SUBJECT,
+                    text: Process.env.SMTP_TEXT,
+                    attachments: []
                 }
             };
+
+            //$log.debug('response: ' + JSON.stringify(response,null,2));
             // Save File
             // Create Response
+
             return service.create(response)
         };
 
@@ -65,16 +69,22 @@
 
             //$log.debug('response: ' + JSON.stringify(response, null, 2));
 
-            SettingsService.find({_id:response.settings_id}).then(function(result){
+            SettingsService.find({_id: response.settings_id}).then(function (result) {
 
                 //$log.debug('settings results: ' + JSON.stringify(result, null, 2));
 
-                if (result && result.docs && result.docs.length > 0)
-                {
+                if (result && result.docs && result.docs.length > 0) {
                     var settings = result.docs[0];
 
                     response.message.from = settings.email.from;
-                    response.message.to = settings.email.test_mode_email;
+
+                    if (settings.email.test_mode === false) {
+                        response.message.to = post.email;
+                    } else {
+                        response.message.to = settings.email.test_mode_email;
+                    }
+
+
 
                     // TODO: parse and replace the response for tokens from the post
 
@@ -84,13 +94,33 @@
                     response.message.subject = subFn(post);
                     response.message.text = textFn(post);
 
-                    $log.debug('response.message: ' + JSON.stringify(response.message, null, 2));
+                    //$log.debug('response.message: ' + JSON.stringify(response.message, null, 2));
 
-                    Email.sendEmail(response.message, settings.email.smtp, callback);
+                    Email.sendEmail(response.message, settings.email.smtp, function (err, info) {
+
+                        if (err) {
+                            post.state = PostService.states.error;
+                            post.error = err;
+                        } else {
+                            post.state = PostService.states.responded;
+                        }
+
+                        if (info) {
+                            post.response_info = info;
+                        }
+
+                        PostsService.create(post).then(function (result) {
+                            if (callback) {
+                                callback(err, info, result)
+                            }
+                        })
+
+                    });
+
                 } else {
 
                     if (callback) {
-                        callback({message:'Could not find settings from response: ' + JSON.stringify(response, null, 2)})
+                        callback({message: 'Could not find settings from response: ' + JSON.stringify(response, null, 2)})
                     }
                 }
 
@@ -105,7 +135,12 @@
             return DB.removeDocs('response', selector);
         };
 
-        service.create = function (response, file) {
+        service.create = function (response) {
+
+            return DB.create('response', response);
+        };
+
+        service.createWithAttachment = function (response, file) {
 
             var deferred = $q.defer();
 
@@ -113,7 +148,7 @@
                 service.saveAttachment(file, function (filename, error) {
 
                     if (error) {
-                        $log.error('response.create.saveAttachment: '  + error);
+                        $log.error('response.create.saveAttachment: ' + error);
                         deferred.reject(error);
                     } else {
 
@@ -122,16 +157,16 @@
                         attachment.path = File.responseAttachmentPath(file.name);
                         response.message.attachments = [attachment];
 
-                        CreateResponseRecord(response,deferred);
+                        CreateResponseRecord(response, deferred);
                     }
                 });
             } else {
 
-                CreateResponseRecord(response,deferred);
+                CreateResponseRecord(response, deferred);
 
             }
 
-            function CreateResponseRecord(response,deferred){
+            function CreateResponseRecord(response, deferred) {
                 DB.create('response', response).then(function (result) {
 
                     deferred.resolve(result);

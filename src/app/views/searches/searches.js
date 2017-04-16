@@ -37,7 +37,7 @@
 
         $scope.refreshSearches = function(){
             $rootScope.ngProgress.start();
-            AppServices.api.searches.find().then(function(result){
+            AppServices.api.searches.find({}).then(function(result){
 
                 //$log.debug('AppServices.api.posts.find(): ' + JSON.stringify(result,null,2));
 

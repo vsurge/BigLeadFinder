@@ -84,6 +84,8 @@
         service.create = function (settings) {
 
             return DB.create('setting', settings).then(function () {
+
+
                 service.refreshDefaultSettings();
             });
         }
