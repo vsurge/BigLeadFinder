@@ -25,7 +25,7 @@
 
             <md-input-container class="md-block">
                 <label>Text</label>
-                <input required name="text" ng-model="response.message.text">
+                <textarea required name="text" ng-model="response.message.text" rows="10" md-select-on-focus></textarea>
                 <div ng-messages="response.text.$error">
                     <div ng-message="required">This is required.</div>
                 </div>

@@ -19,7 +19,7 @@
     }
 
     /** @ngInject */
-    function Service($rootScope, $log, $q, File, Email, DB, _, $, SettingsService) {
+    function Service($rootScope, $log, $q, $interpolate, File, Email, DB, _, $, SettingsService) {
 
         var service = {};
 
@@ -63,11 +63,11 @@
 
         service.sendResponse = function (post, response, callback) {
 
-            $log.debug('response: ' + JSON.stringify(response, null, 2));
+            //$log.debug('response: ' + JSON.stringify(response, null, 2));
 
             SettingsService.find({_id:response.settings_id}).then(function(result){
 
-                $log.debug('settings results: ' + JSON.stringify(result, null, 2));
+                //$log.debug('settings results: ' + JSON.stringify(result, null, 2));
 
                 if (result && result.docs && result.docs.length > 0)
                 {
@@ -77,6 +77,14 @@
                     response.message.to = settings.email.test_mode_email;
 
                     // TODO: parse and replace the response for tokens from the post
+
+                    var subFn = $interpolate(response.message.subject);
+                    var textFn = $interpolate(response.message.text);
+
+                    response.message.subject = subFn(post);
+                    response.message.text = textFn(post);
+
+                    $log.debug('response.message: ' + JSON.stringify(response.message, null, 2));
 
                     Email.sendEmail(response.message, settings.email.smtp, callback);
                 } else {

@@ -25,7 +25,7 @@
 
         var transporter = nodemailer.createTransport(settings);
 
-
+        /*
         // verify connection configuration
         transporter.verify(function(error, success) {
             if (error) {
@@ -34,12 +34,9 @@
                 console.log('Server is ready to take our messages');
             }
         });
+        */
 
-
-
-        transporter.sendMail(message,callback)
-
-
+        transporter.sendMail(message,callback);
     }
 
     Service.init();

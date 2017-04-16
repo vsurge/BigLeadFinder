@@ -67,7 +67,7 @@
         };
 
         var Init = function () {
-            $log.debug('response: ' + JSON.stringify($scope.response,null,2));
+            //$log.debug('response: ' + JSON.stringify($scope.response,null,2));
 
             $timeout(function(){
                 $scope.dropzone = $scope.dzMethods.getDropzone();
