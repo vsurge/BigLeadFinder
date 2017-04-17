@@ -52,29 +52,8 @@
             function(doc){
                 console.log('doc: ' + doc)
             }
-        )
-        //console.dir(browser.title())
-        //console.log('browser.title(): ' + JSON.stringify(browser.title(),null,2));
-
-        /*
-
-        browser.evaluate(function() {
-
-            //console.log('document.documentElement: ' + document.documentElement.outerHTML);
-
-
-            return 'xxx';
-            //return document.documentElement.outerHTML;
-            //document.documentElement
-        }).then(function(html){
-
-            console.log('document.documentElement: ' + html);
-            //document.documentElement
-        });
-
-        */
-
-    }
+        );
+    };
 
     Service.getCities = function (callback) {
 
@@ -82,23 +61,7 @@
 
         var sites_url = 'https://www.craigslist.org/about/sites';
         var jqueryPath = path.resolve('../src/node_modules/jquery/dist/jquery.js');
-        //var jq = fs.readFileSync(jqueryPath, "utf8");
 
-        /*
-        browser.on('did-finish-load', function () {
-            console.log(url + ' Did finish loading');
-
-            //browser.inject('js','jquery.js')
-
-        });
-        */
-
-        //.inject('js',jqueryPath)
-        /*
-         .evaluate(function(_jq){
-         window.$ = window.jQuery = eval(_jq);
-         },jq)
-        */
         browser
             .goto(sites_url)
             .inject('js',jqueryPath)
@@ -113,11 +76,25 @@
 
                     var host_parts = element.hostname.split('.');
 
+                    /* if (element.href === 'http://miami.craigslist.org/brw/') {
+                        cities.push({
+                            href:element.href,
+                            host:element.host,
+                            path:element.pathname,
+                            _id:host_parts[0],
+                            city_name:element.innerText
+                        });
+                    } */
+
                     cities.push({
                         href:element.href,
+                        host:element.host,
+                        path:element.pathname,
                         _id:host_parts[0],
                         city_name:element.innerText
                     });
+
+
 
                 });
 

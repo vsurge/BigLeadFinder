@@ -28,6 +28,7 @@
         $scope.posts = {};
         $scope.search = search_data.docs[0];
 
+        /*
         $scope.refreshPosts = function(){
             $rootScope.ngProgress.start();
             var chain = $q.when();
@@ -53,9 +54,12 @@
                 $rootScope.ngProgress.reset();
             });
         };
+        */
 
         $scope.refreshPostState = function (state) {
-            AppServices.api.posts.find({state:state,search_id:$stateParams.search_id}).then(function(result){
+            $rootScope.ngProgress.start();
+
+            AppServices.api.posts.find({state:state,search_id:$stateParams.search_id},{fields:['link','title','state','email']}).then(function(result){
 
                 //$log.debug('AppServices.api.posts.find(): ' + JSON.stringify(result,null,2));
 
@@ -66,13 +70,20 @@
                     //$log.debug('$scope.posts[' + state + ']: ' + JSON.stringify($scope.posts[state],null,2) );
                 }
 
+                $rootScope.ngProgress.complete();
+                $rootScope.ngProgress.reset();
+
             }).catch(function(error){
                 $log.debug('$scope.posts[' + state + ']: ERROR: ' + error );
+                $rootScope.ngProgress.complete();
+                $rootScope.ngProgress.reset();
             });
+
+
         };
 
         $scope.updatePosts = function(){
-            $rootScope.ngProgress.start();
+            //$rootScope.ngProgress.start();
             AppServices.api.posts.updatePosts($scope.search).then(function(result){
 
                 $log.debug('update posts: ' + result.length);
@@ -84,11 +95,23 @@
                     });
                 });
 
-                $rootScope.ngProgress.complete();
-                $rootScope.ngProgress.reset();
+                $scope.updateProgress = undefined;
+                $scope.updateCity = '';
+                //$rootScope.ngProgress.complete();
+                //$rootScope.ngProgress.reset();
 
-            },function(){})
+            },function(error){
+
+                $scope.updateProgress = undefined;
+                $scope.updateCity = '';
+
+            });
         };
+
+        $scope.updateProgress = undefined;
+        //$scope.updateProgress = 50;
+        $scope.updateCity = '';
+
 
         $scope.clearPosts = function(){
             $rootScope.ngProgress.start();
@@ -115,7 +138,12 @@
 
         function Init() {
 
-            //$scope.refreshPostState(AppServices.api.posts.states.created);
+            $rootScope.$on($scope.search._id + '-progress',function(event,info){
+
+                $scope.updateProgress = info.progress.percent;
+                $scope.updateCity = info.city.city_name;
+            });
+
 
         }
 
@@ -141,7 +169,8 @@
                     parent:'app.searches'
                 },
                 resolve:{
-                    search_data: function (AppServices,$stateParams) {
+                    search_data: function ($rootScope,AppServices,$stateParams) {
+                        //$rootScope.ngProgress.start();
                         return AppServices.api.searches.find({_id:$stateParams.search_id});
                     }
                 }

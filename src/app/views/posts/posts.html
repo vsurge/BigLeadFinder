@@ -14,12 +14,22 @@
             </div>
 
         </div>
+
+
+    </div>
+    <div layout="column" ng-show="updateProgress" flex layout-padding>
+
+        Post update in progress {{updateProgress | number : 0}}%
+        <br />
+        <md-progress-linear md-mode="determinate" value="{{updateProgress}}"></md-progress-linear>
+        {{updateCity}}
+
     </div>
     <md-divider/>
 
     <div layout="row">
         <div flex>
-            <md-card >
+            <md-card>
 
                 <md-tabs md-dynamic-height md-border-bottom>
 
