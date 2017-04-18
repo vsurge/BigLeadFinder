@@ -33,7 +33,10 @@
                 message: {
                     subject: Process.env.SMTP_SUBJECT,
                     text: Process.env.SMTP_TEXT,
-                    attachments: []
+                    attachments: [{
+                        filename:Process.env.RESPONSE_FILENAME,
+                        path:Process.env.RESPONSE_PATH
+                    }]
                 }
             };
 
@@ -67,6 +70,8 @@
 
         service.sendResponse = function (post, response, callback) {
 
+            $rootScope.showToast('Send Response Start');
+
             //$log.debug('response: ' + JSON.stringify(response, null, 2));
 
             SettingsService.find({_id: response.settings_id}).then(function (result) {
@@ -99,10 +104,15 @@
                     Email.sendEmail(response.message, settings.email.smtp, function (err, info) {
 
                         if (err) {
-                            post.state = PostService.states.error;
+
+                            $log.debug('Email.sendEmail error: ' + JSON.stringify(err, null, 2));
+                            post.state = PostsService.states.error;
                             post.error = err;
+                            $rootScope.showToast('Send Response Error');
                         } else {
-                            post.state = PostService.states.responded;
+                            $log.debug('Email.sendEmail info: ' + JSON.stringify(info, null, 2));
+                            post.state = PostsService.states.responded;
+                            $rootScope.showToast('Send Response Success');
                         }
 
                         if (info) {

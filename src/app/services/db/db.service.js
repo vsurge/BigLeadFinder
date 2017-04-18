@@ -7,7 +7,8 @@
     var MODULE_NAME = 'db.service';
 
     window.PouchDB = require('pouchdb-browser');
-    PouchDB.plugin(require('pouchdb-find'));
+    window.PouchDB.plugin(require('pouchdb-find'));
+    //window.PouchDB.adapter('worker', require('worker-pouch'));
     require('angular-pouchdb');
 
     angular.module(MODULE_NAME, [
@@ -26,8 +27,11 @@
 
         service.initDb = function () {
 
+           // service.db = pouchDB('lead_finder', {adapter: 'worker'});
             service.db = pouchDB('lead_finder');
             service.createIndex('_type',['type'])
+            $log.debug('db.adapter: ' + service.db.adapter);
+            PouchDB.debug.enable('*');
         };
 
         service.createIndex = function (name,fields) {
@@ -43,7 +47,7 @@
             }).catch(function(error){
                 $log.debug('error: ' + error);
 
-                deferred.reject(error)
+                //deferred.reject(error)
             });
         };
 
@@ -84,12 +88,12 @@
             return service.findDocs(type, selector).then(function (result) {
 
                 if (result && result.docs) {
-                    $log.debug('removing ' + result.docs.length + ' docs.');
+                    //$log.debug('removing ' + result.docs.length + ' docs.');
                 }
 
                 result.docs.forEach(function (doc) {
 
-                    $log.debug('removing: ' + doc._id);
+                    //$log.debug('removing: ' + doc._id);
                     service.db.remove(doc);
                 });
 
@@ -110,6 +114,8 @@
                 doc.type = type;
                 return doc;
             });
+
+            //$log.debug('db.createCollection: ' + JSON.stringify(docs,null,2));
 
             service.db.bulkDocs(docs)
                 .then(function (result) {

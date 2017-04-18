@@ -106,7 +106,7 @@
             })
             .end()
             .then(function (result) {
-                console.log('Browser.getCities end()');
+                //console.log('Browser.getCities end()');
                 //console.log('result: ' + JSON.stringify(result,null,2));
                 callback(result,null);
 
@@ -122,7 +122,7 @@
 
     Service.openPost = function (bounds,postUrl,emailCallback,completionCallback,newWindow) {
 
-        console.log('openPost: ' + postUrl)
+        //console.log('openPost: ' + postUrl)
         var jqueryPath = path.resolve('../src/node_modules/jquery/dist/jquery.js');
         var noConflictPath = path.resolve('./app/jQueryNoConflict.js');
 

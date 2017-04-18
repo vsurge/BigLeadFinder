@@ -29,6 +29,20 @@
 
         $scope.clearAllData = function () {
 
+            $scope.removeAllData().then(function(){
+
+                $timeout(function(){
+
+                    $scope.seedAllData();
+
+                },2000);
+
+            });
+        };
+
+
+        $scope.removeAllData = function () {
+
             var chain = $q.when();
 
             for(var key in AppServices.api) {
@@ -46,15 +60,34 @@
 
             }
 
+            return chain;
+
+        };
+
+        $scope.seedAllData = function () {
+
+            var chain = $q.when();
+
+            for(var key in AppServices.api) {
+
+                (function(service) {
+                    //var state = JSON.parse(JSON.stringify(input));
+                    //$log.debug(state);
+
+                    chain.then(function(){
+
+                        return AppServices.api[service].seed();
+                    });
+
+                })(key)
+
+            }
+
             chain.then(function(){
 
                 $timeout(function(){
-                    AppServices.seed().then(function(){
-
-                        $timeout(function(){
-                            $scope.refreshDefaultSettings();
-                        });
-                    });
+                    $scope.refreshDefaultSettings();
+                    AppServices.api.cities.updateCities();
                 });
             });
 

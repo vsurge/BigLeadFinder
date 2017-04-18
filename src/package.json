@@ -85,6 +85,7 @@
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.14.1",
     "webpack-material-design-icons": "0.0.2",
+    "worker-pouch": "^2.0.0",
     "write-file-webpack-plugin": "^3.4.2"
   },
   "dependencies": {

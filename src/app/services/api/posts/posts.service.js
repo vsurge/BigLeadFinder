@@ -25,6 +25,7 @@
         service.seed = function () {
             DB.createIndex('_post_link_type', ['link', 'type']);
             DB.createIndex('_post_query_id', ['query_id']);
+            DB.createIndex('_post_state_search', ['state','search_id']);
         };
 
         /*
@@ -89,6 +90,8 @@
 
         service.updatePosts = function (search) {
 
+            $rootScope.showToast('Update Posts Start');
+
             $log.debug('Starting updatePosts');
 
             var chain = $q.when();
@@ -130,6 +133,7 @@
 
                 chain.then(function () {
 
+                    $rootScope.showToast('Update Posts Complete');
                     return service.find();
                 });
 
@@ -185,7 +189,7 @@
                         var filename = link_parts.pop();
                         var post_id = filename.split('.')[0];
 
-                        //$log.debug('title: ' + $this.find("title").first().text());
+                        $log.debug('title: ' + $this.find("title").first().text());
 
                         var item = {
                             _id: post_id,

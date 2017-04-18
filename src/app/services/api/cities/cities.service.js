@@ -27,7 +27,7 @@
     }
 
     /** @ngInject */
-    function Service($rootScope, $log, $q, Browser, DB, _) {
+    function Service($rootScope, $log, $q, Browser, DB, _,$mdToast) {
 
         var service = {};
 
@@ -44,7 +44,9 @@
 
         service.updateCities = function () {
 
-            $log.debug('Starting updateCities');
+            //$log.debug('Starting updateCities');
+
+            $rootScope.showToast('Update Cities Start');
 
             var deferred = $q.defer();
 
@@ -73,6 +75,8 @@
 
                     deferred.reject(error);
                 }
+
+                $rootScope.showToast('Update Cities Complete');
 
             });
 

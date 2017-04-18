@@ -5,7 +5,7 @@
             <th>URL</th>
             <th>DATE</th>
             <th>TITLE</th>
-            <!--<th>Description</th>-->
+            <th>Description</th>
             <th></th>
         </tr>
         </thead>
@@ -14,7 +14,7 @@
             <td>{{item.link}}</td>
             <td>{{item.publish_date}}</td>
             <td ng-click="openPost(item)"><p class="postTitle">{{ item.title }}</p></td>
-            <!--<td class="postDescription">{{ item.description }}</td>-->
+            <td class="postDescription">{{ item.description }}</td>
             <td>
                 <div layout="row">
                     <md-button ng-click="respondPost(item)" class="md-fab md-mini md-primary md-raised"

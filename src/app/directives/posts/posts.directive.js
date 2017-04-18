@@ -43,8 +43,9 @@
         $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(1).withOption('visible', false),
-            DTColumnDefBuilder.newColumnDef(2).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '500px'),
-            DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--numeric').withOption('width', '320px')
+            DTColumnDefBuilder.newColumnDef(2).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px'),
+            DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px'),
+            DTColumnDefBuilder.newColumnDef(4).withOption('className', 'mdl-data-table__cell--numeric').withOption('width', '320px')
 
         ];
 
@@ -69,7 +70,7 @@
         $scope.updateState = function(item,state){
 
             AppServices.api.posts.updateState(item._id,state).then(function(result){
-                //$log.debug('$scope.rejectPost: ' + JSON.stringify(result,null,2));
+                $log.debug('$scope.rejectPost: ' + JSON.stringify(result,null,2));
 
                 $scope.removePost(item);
 

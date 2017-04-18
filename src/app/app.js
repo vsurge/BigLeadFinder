@@ -53,13 +53,22 @@
     ).run(Run).config(Config).config(Theme)
 
     /* @ngInject */
-    function Run($rootScope,$log,process,AppServices){
+    function Run($rootScope,$log, $mdToast,process,AppServices){
 
         $log.debug('Node v' + process.versions.node);
         $log.debug('Chrome v' + process.versions.chrome);
         $log.debug('Electron v' + process.versions.electron);
 
         AppServices.seed();
+
+        $rootScope.showToast = function (message) {
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent(message)
+                    .position('bottom right')
+                    .hideDelay(3000)
+            );
+        }
     }
 
     /* @ngInject */

@@ -30,12 +30,14 @@
                 file = files[0];
             }
 
-            AppServices.api.responses.create(response,file).then(function(){
+            AppServices.api.responses.createWithAttachment(response,file).then(function(){
                 $scope.dropzone.removeAllFiles(true);
 
                 Response(AppServices,{_id:$scope.response._id}).then(function(updatedResponse){
-                    $log.debug('$scope.response: ' + JSON.stringify($scope.response,null,2));
+
                     $scope.response = updatedResponse.docs[0];
+
+                    //$log.debug('$scope.response: ' + JSON.stringify($scope.response,null,2));
                 })
             });
         };
