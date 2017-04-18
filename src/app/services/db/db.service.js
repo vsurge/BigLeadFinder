@@ -31,7 +31,8 @@
             service.db = pouchDB('lead_finder');
             service.createIndex('_type',['type'])
             $log.debug('db.adapter: ' + service.db.adapter);
-            PouchDB.debug.enable('*');
+            //PouchDB.debug.enable('*');
+            PouchDB.debug.disable();
         };
 
         service.createIndex = function (name,fields) {

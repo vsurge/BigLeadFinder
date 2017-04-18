@@ -28,7 +28,7 @@
         $scope.posts = {};
         $scope.search = search_data.docs[0];
 
-
+/*
         $scope.refreshPosts = function(){
             $rootScope.ngProgress.start();
             var chain = $q.when();
@@ -54,6 +54,7 @@
                 $rootScope.ngProgress.reset();
             });
         };
+        */
 
 
         $scope.refreshPostState = function (state) {

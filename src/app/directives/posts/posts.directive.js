@@ -23,7 +23,7 @@
     }
 
     /* @ngInject */
-    function Controller($rootScope, $scope, $log, $timeout, AppServices, DTOptionsBuilder, DTColumnDefBuilder, _) {
+    function Controller($rootScope, $scope, $log, $q, $timeout, AppServices, DTOptionsBuilder, DTColumnBuilder, DTColumnDefBuilder, _) {
 
         $scope.posts = [];
 
@@ -33,21 +33,74 @@
          },true)
          */
 
+        $scope.refreshPosts = function () {
+            $rootScope.ngProgress.start();
+
+            var defer = $q.defer();
+
+            $log.debug('$scope.state: ' + $scope.state);
+            $log.debug('$scope.search: ' + JSON.stringify($scope.search,null,1));
+
+            AppServices.api.posts.find({state:$scope.state,search_id:$scope.search.id},{fields:['_id','publish_date','link','email','title','description']}).then(function(result){
+
+                //$log.debug('AppServices.api.posts.find(): ' + JSON.stringify(result,null,2));
+
+                if (result && result.docs) {
+                    //$log.debug('found posts: ' + result.docs.length);
+                    //$scope.posts = result.docs;
+
+                    defer.resolve(result.docs);
+
+                    //$log.debug('$scope.posts[' + state + ']: ' + JSON.stringify($scope.posts[state],null,2) );
+                }
+
+                $rootScope.ngProgress.complete();
+                $rootScope.ngProgress.reset();
+
+            }).catch(function(error){
+                $log.debug('$scope.posts[' + state + ']: ERROR: ' + error );
+                $rootScope.ngProgress.complete();
+                $rootScope.ngProgress.reset();
+            });
+
+            return defer.promise;
+
+
+        };
+
         $scope.AppServices = AppServices;
 
-        $scope.dtOptions = DTOptionsBuilder.newOptions()
+        $scope.dtOptions = DTOptionsBuilder
+            .fromFnPromise($scope.refreshPosts)
             .withPaginationType('simple_numbers')
             //.withOption('rowCallback', rowCallback)
             .withOption('searching', true)
             .withOption('order', [[ 1, "desc" ]]);
+
+        $scope.dtColumns = [
+            DTColumnBuilder.newColumn('_id','ID'),
+            DTColumnBuilder.newColumn('publish_date','DATE'),
+            DTColumnBuilder.newColumn('link','LINK'),
+            DTColumnBuilder.newColumn('title','TITLE'),
+            DTColumnBuilder.newColumn('description','DESCRIPTION')
+        ];
+
         $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(1).withOption('visible', false),
-            DTColumnDefBuilder.newColumnDef(2).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px'),
+            DTColumnDefBuilder.newColumnDef(2).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px'),
-            DTColumnDefBuilder.newColumnDef(4).withOption('className', 'mdl-data-table__cell--numeric').withOption('width', '320px')
-
+            DTColumnDefBuilder.newColumnDef(4).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px')
         ];
+
+        /*
+        $scope.dtColumnDefs = [
+            DTColumnBuilder.newColumnDef(0).withOption('visible', false),
+            DTColumnBuilder.newColumnDef(1).withOption('visible', false),
+            DTColumnBuilder.newColumnDef(2).withOption('visible', false),
+            DTColumnBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px'),
+            DTColumnDefBuilder.newColumnDef(4).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px')
+        ]; */
 
         $scope.rejectPost = function(item){
 
@@ -191,7 +244,9 @@
             template: require('./posts.directive.html'),
             controller: Controller,
             scope: {
-                posts: '='
+                posts: '=',
+                search: '=',
+                state: '@'
             },
             link: Link
         };
