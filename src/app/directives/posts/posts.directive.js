@@ -104,8 +104,8 @@
                 //$log.debug('type:',JSON.stringify(type,null,2));
                 //$log.debug('full:',JSON.stringify(full,null,2));
 
-                return require('./button_column.html');
-                //return buttonColumnFn({item:full});
+                //return require('./button_column.html');
+                return buttonColumnFn({item:item});
             })
         ];
 
