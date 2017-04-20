@@ -23,7 +23,7 @@
     }
 
     /* @ngInject */
-    function Controller($rootScope, $scope, $log, $q, $timeout, AppServices, DTOptionsBuilder, DTColumnBuilder, DTColumnDefBuilder, _) {
+    function Controller($rootScope, $scope, $log, $q, $timeout, $interpolate, $compile, AppServices, DTOptionsBuilder, DTColumnBuilder, DTColumnDefBuilder, _) {
 
         $scope.posts = [];
 
@@ -75,14 +75,21 @@
             .withPaginationType('simple_numbers')
             //.withOption('rowCallback', rowCallback)
             .withOption('searching', true)
-            .withOption('order', [[ 1, "desc" ]]);
+            .withOption('order', [[ 1, "desc" ]])
+            .withOption('fnRowCallback',
+                function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    $compile(nRow)($scope);
+                });
+
+        var buttonColumnFn = $interpolate(require('./button_column.html'));
 
         $scope.dtColumns = [
             DTColumnBuilder.newColumn('_id','ID'),
             DTColumnBuilder.newColumn('publish_date','DATE'),
             DTColumnBuilder.newColumn('link','LINK'),
             DTColumnBuilder.newColumn('title','TITLE'),
-            DTColumnBuilder.newColumn('description','DESCRIPTION')
+            DTColumnBuilder.newColumn('description','DESCRIPTION'),
+            DTColumnBuilder.newColumn('_id').withTitle('')
         ];
 
         $scope.dtColumnDefs = [
@@ -90,7 +97,16 @@
             DTColumnDefBuilder.newColumnDef(1).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(2).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px'),
-            DTColumnDefBuilder.newColumnDef(4).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px')
+            DTColumnDefBuilder.newColumnDef(4).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px'),
+            DTColumnDefBuilder.newColumnDef(5).withOption('width', '250px').renderWith(function(data, type, item) {
+
+                //$log.debug('data:',JSON.stringify(data,null,2));
+                //$log.debug('type:',JSON.stringify(type,null,2));
+                //$log.debug('full:',JSON.stringify(full,null,2));
+
+                return require('./button_column.html');
+                //return buttonColumnFn({item:full});
+            })
         ];
 
         /*
