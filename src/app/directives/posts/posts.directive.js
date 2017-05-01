@@ -105,7 +105,13 @@
                 //$log.debug('full:',JSON.stringify(full,null,2));
 
                 //return require('./button_column.html');
-                return buttonColumnFn({item:item});
+                var column_markup = buttonColumnFn({item:[JSON.stringify(item)]});
+
+                $log.debug(column_markup);
+
+
+
+                return column_markup;
             })
         ];
 
