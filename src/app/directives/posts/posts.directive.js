@@ -105,6 +105,7 @@
                 //$log.debug('full:',JSON.stringify(full,null,2));
 
                 //return require('./button_column.html');
+                // TODO: Replace offending characters in the item, ' & "
                 var column_markup = buttonColumnFn({item:[JSON.stringify(item)]});
 
                 $log.debug(column_markup);
