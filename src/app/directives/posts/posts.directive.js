@@ -14,8 +14,7 @@
 
     require('./posts.directive.scss');
 
-    angular.module(MODULE_NAME, [
-    ]).directive('posts', Directive);
+    angular.module(MODULE_NAME, []).directive('posts', Directive);
 
     /* @ngInject */
     function Link(scope, element, attrs, controller) {
@@ -23,9 +22,11 @@
     }
 
     /* @ngInject */
-    function Controller($rootScope, $scope, $log, $q, $timeout, $interpolate, $compile, AppServices, DTOptionsBuilder, DTColumnBuilder, DTColumnDefBuilder, _) {
+    function Controller($rootScope, $scope, $log, $timeout, AppServices, DTOptionsBuilder, DTColumnDefBuilder, _) {
 
         $scope.posts = [];
+
+        var vm = this;
 
         /*
          $scope.$watch('cities',function(){
@@ -33,23 +34,38 @@
          },true)
          */
 
-        $scope.refreshPosts = function () {
+        $scope.dtInstance = {};
+
+        $scope.AppServices = AppServices;
+
+        $scope.refreshPosts = function (limit,offset,callback) {
+
+            $log.debug('$scope.refreshPosts:limit,offset ' + limit + ' ' + offset + ' ');
+            //$log.debug('$scope.search: ' + JSON.stringify($scope.search,null,2));
+
             $rootScope.ngProgress.start();
 
-            var defer = $q.defer();
+            AppServices.api.posts.find({state:$scope.state,search_id:$scope.search._id},{fields:['_id','link','title','state','email', 'description', 'search_id'],limit:limit,offset:offset}).then(function(result){
 
-            $log.debug('$scope.state: ' + $scope.state);
-            $log.debug('$scope.search: ' + JSON.stringify($scope.search,null,1));
 
-            AppServices.api.posts.find({state:$scope.state,search_id:$scope.search.id},{fields:['_id','publish_date','link','email','title','description']}).then(function(result){
 
-                //$log.debug('AppServices.api.posts.find(): ' + JSON.stringify(result,null,2));
-
-                if (result && result.docs) {
+                if (result != undefined && result.docs != undefined && result.docs.length > 0) {
                     //$log.debug('found posts: ' + result.docs.length);
-                    //$scope.posts = result.docs;
+                    $log.debug('AppServices.api.posts.find(): ' + JSON.stringify(result,null,2));
 
-                    defer.resolve(result.docs);
+                    /*
+                    $scope.$apply(function(){
+
+                    });
+                    */
+
+                    $scope.posts = result.docs;
+                    /*
+                    if (callback) {
+                        callback({data:$scope.posts})
+                    }
+                    */
+
 
                     //$log.debug('$scope.posts[' + state + ']: ' + JSON.stringify($scope.posts[state],null,2) );
                 }
@@ -58,116 +74,123 @@
                 $rootScope.ngProgress.reset();
 
             }).catch(function(error){
-                $log.debug('$scope.posts[' + state + ']: ERROR: ' + error );
+                $log.debug('$scope.posts[' + $scope.state + ']: ERROR: ' + error );
+                /*
+                if (callback) {
+                    callback($scope.posts)
+                }
+                */
                 $rootScope.ngProgress.complete();
                 $rootScope.ngProgress.reset();
             });
+        };
 
-            return defer.promise;
+        $scope.refreshPostsCallback = function (data, callback, settings) {
+            $log.debug('data: ' + JSON.stringify(data, null, 2));
 
+            $scope.refreshPosts(25,0,callback);
 
         };
 
-        $scope.AppServices = AppServices;
-
-        $scope.dtOptions = DTOptionsBuilder
-            .fromFnPromise($scope.refreshPosts)
+        $scope.dtOptions = DTOptionsBuilder.newOptions()
             .withPaginationType('simple_numbers')
             //.withOption('rowCallback', rowCallback)
             .withOption('searching', true)
-            .withOption('order', [[ 1, "desc" ]])
-            .withOption('fnRowCallback',
-                function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-                    $compile(nRow)($scope);
-                });
+            .withOption('order', [[1, "desc"]])
+            //.withOption('ajax', $scope.refreshPostsCallback)
+            .withOption('processing', true)
+            .withOption('serverSide', false);
+        $scope.dtInstance = {};
 
-        var buttonColumnFn = $interpolate(require('./button_column.html'));
 
-        $scope.dtColumns = [
-            DTColumnBuilder.newColumn('_id','ID'),
-            DTColumnBuilder.newColumn('publish_date','DATE'),
-            DTColumnBuilder.newColumn('link','LINK'),
-            DTColumnBuilder.newColumn('title','TITLE'),
-            DTColumnBuilder.newColumn('description','DESCRIPTION'),
-            DTColumnBuilder.newColumn('_id').withTitle('')
-        ];
+        $('#posts_datatable').on('draw.dt', function() {
+            var table = $('#posts_datatable').DataTable();
+            var info = table.page.info();
+            $log.debug('Showing page: '+info.page+' of '+info.pages );
+        });
+
+        /*
+        $scope.dtOptions = {
+            pagingType:'simple_numbers',
+            searching:true,
+            order:[[1, "desc"]],
+            ajax:function (data, callback, settings) {
+                console.log('data: ' + JSON.stringify(data, null, 2));
+                console.log('settings: ' + JSON.stringify(settings, null, 2));
+                callback({})
+            },
+            serverSide:true
+        };
+
+        $scope.dtInstance = {};
+*/
+
+        /*
+         $('#posts-table').dataTable( {
+         "ajax": function (data, callback, settings) {
+         $log.debug('data: ' + JSON.stringify(data,null,2));
+         $log.debug('settings: ' + JSON.stringify(settings,null,2));
+         callback($scope.posts)
+         }
+         } );
+
+         */
 
         $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(1).withOption('visible', false),
-            DTColumnDefBuilder.newColumnDef(2).withOption('visible', false),
-            DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px'),
-            DTColumnDefBuilder.newColumnDef(4).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px'),
-            DTColumnDefBuilder.newColumnDef(5).withOption('width', '250px').renderWith(function(data, type, item) {
+            DTColumnDefBuilder.newColumnDef(2).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px'), DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px'),
+            DTColumnDefBuilder.newColumnDef(4).withOption('className', 'mdl-data-table__cell--numeric').withOption('width', '320px')
 
-                //$log.debug('data:',JSON.stringify(data,null,2));
-                //$log.debug('type:',JSON.stringify(type,null,2));
-                //$log.debug('full:',JSON.stringify(full,null,2));
-
-                //return require('./button_column.html');
-                // TODO: Replace offending characters in the item, ' & "
-                var column_markup = buttonColumnFn({item:[JSON.stringify(item)]});
-
-                $log.debug(column_markup);
-
-
-
-                return column_markup;
-            })
         ];
 
-        /*
-        $scope.dtColumnDefs = [
-            DTColumnBuilder.newColumnDef(0).withOption('visible', false),
-            DTColumnBuilder.newColumnDef(1).withOption('visible', false),
-            DTColumnBuilder.newColumnDef(2).withOption('visible', false),
-            DTColumnBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px'),
-            DTColumnDefBuilder.newColumnDef(4).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px')
-        ]; */
 
-        $scope.rejectPost = function(item){
 
-            $scope.updateState(item,AppServices.api.posts.states.rejected);
+        $scope.rejectPost = function (item) {
+
+            $scope.updateState(item, AppServices.api.posts.states.rejected);
 
         };
 
-        $scope.archivePost = function(item){
+        $scope.archivePost = function (item) {
 
-            $scope.updateState(item,AppServices.api.posts.states.archived);
-
-        };
-
-        $scope.setCreatedPost = function(item){
-
-            $scope.updateState(item,AppServices.api.posts.states.created);
+            $scope.updateState(item, AppServices.api.posts.states.archived);
 
         };
 
-        $scope.updateState = function(item,state){
+        $scope.setCreatedPost = function (item) {
 
-            AppServices.api.posts.updateState(item._id,state).then(function(result){
-                $log.debug('$scope.rejectPost: ' + JSON.stringify(result,null,2));
+            $scope.updateState(item, AppServices.api.posts.states.created);
+
+        };
+
+        $scope.updateState = function (item, state) {
+
+            AppServices.api.posts.updateState(item._id, state).then(function (result) {
+                //$log.debug('$scope.rejectPost: ' + JSON.stringify(result,null,2));
 
                 $scope.removePost(item);
 
-            }).catch(function(error){
-                $log.error('$scope.updateState: ' +state + ' - ' + error);
+            }).catch(function (error) {
+                $log.error('$scope.updateState: ' + state + ' - ' + error);
             });
 
         };
 
-        $scope.respondPost = function(item){
+        $scope.respondPost = function (item) {
 
             //$log.debug('$scope.respondPost: ' + JSON.stringify(item,null,2));
 
-            AppServices.api.searches.find({_id:item.search_id}).then(function(search){
+            $scope.removePost(item);
+
+            AppServices.api.searches.find({_id: item.search_id}).then(function (search) {
 
                 // TODO: Change this to an instance of the default response or let it get set per post...
-                AppServices.api.responses.find({_id:search.default_response}).then(function(result){
+                AppServices.api.responses.find({_id: search.default_response}).then(function (result) {
 
                     //$log.debug('result: ' + JSON.stringify(result,null,2));
                     var response = result.docs[0];
-                    AppServices.api.responses.sendResponse(item,response,function(err,result,post){
+                    AppServices.api.responses.sendResponse(item, response, function (err, result, post) {
 
                         if (err) {
                             $log.error(err)
@@ -178,8 +201,9 @@
                         }
 
                         if (post) {
-                            $log.debug('post: ' + JSON.stringify(post,null,2));
-                            $scope.updatePost(post.docs[0]);
+                            $log.debug('post: ' + JSON.stringify(post, null, 2));
+
+
                         }
 
                     })
@@ -187,21 +211,18 @@
             });
 
 
-
-
-
         };
 
-        $scope.openPost = function (item,newWindow) {
+        $scope.openPost = function (item, newWindow) {
 
             //$log.debug('$scope.openPost: ' + JSON.stringify(item,null,2));
-            AppServices.api.posts.openPost(item.link,newWindow,function(result){
+            AppServices.api.posts.openPost(item.link, newWindow, function (result) {
                 //$log.debug('$scope.openPost email result: ' + JSON.stringify(result,null,2));
 
-                var updatedPost =  AppServices.api.posts.find({_id:item._id}).then(function(result){
+                var updatedPost = AppServices.api.posts.find({_id: item._id}).then(function (result) {
                     //$log.debug('$scope.openPost email result: ' + JSON.stringify(result,null,2));
 
-                    $scope.$apply(function(){
+                    $scope.$apply(function () {
                         $scope.updatePost(result.docs[0]);
                     });
 
@@ -211,25 +232,25 @@
 
         $scope.removePost = function (item) {
 
-            $scope.posts = _.reject($scope.posts,function(post){
+            $scope.posts = _.reject($scope.posts, function (post) {
                 return post._id == item._id;
             });
             /*
-            $timeout(function(){
-                $scope.$apply(function(){
-                    $scope.posts = _.reject($scope.posts,function(post){
-                        return post._id == item._id;
-                    });
+             $timeout(function(){
+             $scope.$apply(function(){
+             $scope.posts = _.reject($scope.posts,function(post){
+             return post._id == item._id;
+             });
 
-                    $log.debug('$scope.rejectPost/$scope.posts: ' + JSON.stringify($scope.posts,null,2));
-                });
-            });
-            */
+             $log.debug('$scope.rejectPost/$scope.posts: ' + JSON.stringify($scope.posts,null,2));
+             });
+             });
+             */
         };
 
         $scope.updatePost = function (item) {
 
-            $scope.posts = _.map($scope.posts,function(post){
+            $scope.posts = _.map($scope.posts, function (post) {
 
                 if (post._id == item._id) {
 
@@ -252,7 +273,9 @@
 
         function Init() {
 
-           // $scope.refreshPosts();
+            $timeout(function(){
+                $scope.refreshPosts(100,0);
+            });
 
         }
 
@@ -267,9 +290,8 @@
             template: require('./posts.directive.html'),
             controller: Controller,
             scope: {
-                posts: '=',
-                search: '=',
-                state: '@'
+                state: '@',
+                search: '='
             },
             link: Link
         };

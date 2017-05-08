@@ -1,5 +1,51 @@
 <div id="posts-directive">
-    <table datatable="" dt-options="dtOptions" dt-column-defs="dtColumnDefs" dt-columns="dtColumns" class="mdl-data-table dt-left">
+    <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="mdl-data-table dt-left" dt-instance="dtInstance" id="posts_datatable">
+        <thead>
+        <tr>
+            <th>URL</th>
+            <th>DATE</th>
+            <th>TITLE</th>
+            <th>Description</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="item in posts">
+            <td>{{item.link}}</td>
+            <td>{{item.publish_date}}</td>
+            <td ng-click="openPost(item)"><p class="postTitle">{{ item.title }}</p></td>
+            <td class="postDescription">{{ item.description }}</td>
+            <td>
+                <div layout="row">
+                    <md-button ng-click="respondPost(item)" class="md-fab md-mini md-primary md-raised"
+                               ng-disabled="!item.email"  ng-hide="item.state != 'created'">
+                        <md-icon md-font-library="material-icons" aria-label="send">send</md-icon>
+                    </md-button>
+                    <md-button ng-click="rejectPost(item)" class="md-fab md-mini md-warn md-raised"
+                               ng-hide="item.state === 'rejected'">
+                        <md-icon md-font-library="material-icons" aria-label="delete">delete</md-icon>
+                    </md-button>
+                    <md-button ng-click="archivePost(item)" class="md-fab md-mini md-warn md-raised"
+                               ng-hide="item.state === 'archived'">
+                        <md-icon md-font-library="material-icons" aria-label="archive">archive</md-icon>
+                    </md-button>
+                    <md-button ng-click="setCreatedPost(item)" class="md-fab md-mini md-primary md-raised"
+                               ng-hide="item.state === 'created'">
+                        <md-icon md-font-library="material-icons" aria-label="undo">undo</md-icon>
+                    </md-button>
+                    <md-button ng-click="editPost(item)" class="md-fab md-mini md-secondary
+                                md-raised md-hue-1">
+                        <md-icon md-font-library="material-icons" aria-label="edit">mode_edit</md-icon>
+                    </md-button>
+                    <md-button ng-click="openPost(item,true)" class="md-fab md-mini md-primary
+                                md-raised">
+                        <md-icon md-font-library="material-icons" aria-label="open">open_in_new</md-icon>
+                    </md-button>
+                </div>
+
+            </td>
+        </tr>
+        </tbody>
     </table>
 
 </div>
