@@ -52,6 +52,24 @@
             });
         };
 
+        service.findByID = function (type, _id, options) {
+
+            var deferred = $q.defer();
+
+            service.findDocs(type,{_id:_id.toString()},options).then(function (results) {
+
+                //$log.debug('findByID results: ' + JSON.stringify(results,null,2));
+                deferred.resolve(results.docs[0]);
+
+            },function(error){
+
+                $log.error(error);
+                deferred.reject(error)
+            });
+
+            return deferred.promise;
+        };
+
         service.findDocs = function (type, selector, options) {
 
             var predicate = {};
@@ -75,6 +93,8 @@
             //$log.debug('predicate: ',JSON.stringify(predicate,null,2))
 
             return service.db.find(predicate).then(function (results) {
+
+                //$log.debug('findDocs results: ' + JSON.stringify(results,null,2));
 
                 return results;
 

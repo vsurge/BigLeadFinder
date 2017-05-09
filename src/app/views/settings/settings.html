@@ -45,7 +45,7 @@
 
             <md-input-container class="md-block">
                 <label>SMTP Password</label>
-                <input required name="smtp_password" ng-model="settings.email.smtp.auth.pass">
+                <input required name="smtp_password" ng-model="settings.email.smtp.auth.pass" type="password">
                 <div ng-messages="settings.email.smtp.auth.pass.$error">
                     <div ng-message="required">This is required.</div>
                 </div>

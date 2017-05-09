@@ -84,6 +84,10 @@
             return DB.findDocs('post', selector, options);
         };
 
+        service.findByID = function (_id, options) {
+            return DB.findByID('post', _id, options);
+        };
+
         service.remove = function (selector) {
             return DB.removeDocs('post', selector);
         };

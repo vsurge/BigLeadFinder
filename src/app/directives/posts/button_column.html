@@ -1,26 +1,24 @@
-<div layout="row" ng-repeat='item in {{item}}'>
-    <md-button ng-click="respondPost(item)" class="md-fab md-mini md-primary md-raised"
-               ng-disabled="!item.email"  ng-hide=item.state != 'created'">
-        <md-icon md-font-library="material-icons" aria-label="send">send</md-icon>
-    </md-button>
-    <md-button ng-click="rejectPost(item)" class="md-fab md-mini md-warn md-raised"
-               ng-hide="item.state === 'rejected'">
-        <md-icon md-font-library="material-icons" aria-label="delete">delete</md-icon>
-    </md-button>
-    <md-button ng-click="archivePost(item)" class="md-fab md-mini md-warn md-raised"
-               ng-hide="item.state === 'archived'">
-        <md-icon md-font-library="material-icons" aria-label="archive">archive</md-icon>
-    </md-button>
-    <md-button ng-click="setCreatedPost(item)" class="md-fab md-mini md-primary md-raised"
-               ng-hide="item.state === 'created'">
-        <md-icon md-font-library="material-icons" aria-label="undo">undo</md-icon>
-    </md-button>
-    <md-button ng-click="editPost(item)" class="md-fab md-mini md-secondary
+<md-button ng-click="respondPost({{_id}})" class="md-fab md-mini md-primary md-raised"
+           ng-disabled="!{{has_email}}"  ng-hide="!{{created_state}}">
+<md-icon md-font-library="material-icons" aria-label="send">send</md-icon>
+</md-button>
+<md-button ng-click="rejectPost({{_id}})" class="md-fab md-mini md-warn md-raised"
+           ng-hide="{{rejected_state}}">
+    <md-icon md-font-library="material-icons" aria-label="delete">delete</md-icon>
+</md-button>
+<md-button ng-click="archivePost({{_id}})" class="md-fab md-mini md-warn md-raised"
+           ng-hide="{{archived_state}}">
+    <md-icon md-font-library="material-icons" aria-label="archive">archive</md-icon>
+</md-button>
+<md-button ng-click="setCreatedPost({{_id}})" class="md-fab md-mini md-primary md-raised"
+           ng-hide="{{created_state}}">
+    <md-icon md-font-library="material-icons" aria-label="undo">undo</md-icon>
+</md-button>
+<md-button ng-click="editPost({{_id}})" class="md-fab md-mini md-secondary
                                 md-raised md-hue-1">
-        <md-icon md-font-library="material-icons" aria-label="edit">mode_edit</md-icon>
-    </md-button>
-    <md-button ng-click="openPost(item,true)" class="md-fab md-mini md-primary
+    <md-icon md-font-library="material-icons" aria-label="edit">mode_edit</md-icon>
+</md-button>
+<md-button ng-click="openPost({{_id}},true)" class="md-fab md-mini md-primary
                                 md-raised">
-        <md-icon md-font-library="material-icons" aria-label="open">open_in_new</md-icon>
-    </md-button>
-</div>
+    <md-icon md-font-library="material-icons" aria-label="open">open_in_new</md-icon>
+</md-button>
