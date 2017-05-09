@@ -23,13 +23,14 @@
     /** @ngInject */
     function Service($log,$q,CitiesService,PostsService,SearchesService,ResponsesService,SettingsService) {
 
-
-
         this.cities = CitiesService;
         this.posts = PostsService;
         this.searches = SearchesService;
         this.responses = ResponsesService;
         this.settings = SettingsService;
+
+        $log.debug('this.searches.type: ' + this.searches.type);
+        $log.debug('this.posts.type: ' + this.posts.type);
     };
 
     module.exports = MODULE_NAME;

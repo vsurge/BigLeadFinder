@@ -6,11 +6,7 @@
 
     var MODULE_NAME = 'api.cities';
 
-    //require('angular-local-storage');
-    //window.PouchDB = require('pouchdb-browser');
-    //PouchDB.plugin(require('pouchdb-find'));
-    //require('angular-pouchdb');
-
+    require('services/api/base/base.factory');
     require('services/db/db.service');
 
     //var Nightmare = require('nightmare');
@@ -18,7 +14,8 @@
 
     angular.module(MODULE_NAME, [
         'pouchdb',
-        'db.service'
+        'db.service',
+        'api.service_base'
     ]).config(Config).service('CitiesService', Service);
 
     /** @ngInject */
@@ -27,12 +24,18 @@
     }
 
     /** @ngInject */
-    function Service($rootScope, $log, $q, Browser, DB, _,$mdToast) {
+    function Service($rootScope, $log, $q, Browser, DB, _,$mdToast,ServiceBase) {
 
-        var service = {};
+        var service = function(){
+            ServiceBase.constructor.call(this);
+            this.type = 'city';
+        };
 
-        service.seed = function () {};
+        service.prototype = Object.create(ServiceBase.constructor.prototype);
 
+        service.prototype.seed = function () {};
+
+        /*
         service.find = function (selector) {
             return DB.findDocs('city',selector);
 
@@ -41,8 +44,9 @@
         service.remove = function (selector) {
             return DB.removeDocs('city',selector);
         };
+        */
 
-        service.updateCities = function () {
+        service.prototype.updateCities = function () {
 
             //$log.debug('Starting updateCities');
 
@@ -83,7 +87,7 @@
             return deferred.promise;
         };
 
-        return service;
+        return new service();
     };
 
     module.exports = MODULE_NAME;

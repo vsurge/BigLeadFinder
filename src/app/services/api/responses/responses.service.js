@@ -6,10 +6,12 @@
 
     var MODULE_NAME = 'api.responses';
 
+    require('services/api/base/base.factory');
     require('services/db/db.service');
 
     angular.module(MODULE_NAME, [
-        'db.service'
+        'db.service',
+        'api.service_base'
     ]).config(Config).service('ResponsesService', Service);
 
     /** @ngInject */
@@ -20,11 +22,16 @@
     }
 
     /** @ngInject */
-    function Service($rootScope, $log, $q, $interpolate, File, Email, DB, _, $, SettingsService, PostsService, Process) {
+    function Service($rootScope, $log, $q, $interpolate, File, Email, DB, _, $, SettingsService, PostsService, Process, ServiceBase) {
 
-        var service = {};
+        var service = function(){
+            ServiceBase.constructor.call(this);
+            this.type = 'response';
+        };
 
-        service.seed = function () {
+        service.prototype = Object.create(ServiceBase.constructor.prototype);
+
+        service.prototype.seed = function () {
 
             var response = {
                 _id: "response_0",
@@ -47,7 +54,7 @@
             return service.create(response)
         };
 
-        service.saveAttachment = function (file, callback) {
+        service.prototype.saveAttachment = function (file, callback) {
 
             $log.debug('saveAttachment file: ' + JSON.stringify(file, null, 2));
 
@@ -68,7 +75,7 @@
             reader.readAsBinaryString(file);
         };
 
-        service.sendResponse = function (post, response, callback) {
+        service.prototype.sendResponse = function (post, response, callback) {
 
             $rootScope.showToast('Send Response Start');
 
@@ -137,6 +144,7 @@
             });
         };
 
+        /*
         service.find = function (selector) {
             return DB.findDocs('response', selector);
         };
@@ -149,8 +157,9 @@
 
             return DB.create('response', response);
         };
+        */
 
-        service.createWithAttachment = function (response, file) {
+        service.prototype.createWithAttachment = function (response, file) {
 
             var deferred = $q.defer();
 
@@ -192,7 +201,7 @@
             return deferred.promise;
         }
 
-        return service;
+        return new service();
     };
 
     module.exports = MODULE_NAME;

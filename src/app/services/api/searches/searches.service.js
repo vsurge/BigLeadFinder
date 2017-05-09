@@ -6,10 +6,12 @@
 
     var MODULE_NAME = 'api.searches';
 
+    require('services/api/base/base.factory');
     require('services/db/db.service');
 
     angular.module(MODULE_NAME, [
-        'db.service'
+        'db.service',
+        'api.service_base'
     ]).config(Config).service('SearchesService', Service);
 
     /** @ngInject */
@@ -18,16 +20,25 @@
     }
 
     /** @ngInject */
-    function Service($rootScope, $log, $q, Browser, DB, _, $) {
+    function Service($rootScope, $log, $q, Browser, DB, _, $, ServiceBase) {
 
-        var service = {};
+        var service = function(){
+            ServiceBase.constructor.call(this);
+            this.type = 'search';
+        };
 
-        service.seed = function () {
+        service.prototype = Object.create(ServiceBase.constructor.prototype);
+
+
+        //service.type = 'search';
+
+        service.prototype.seed = function () {
             service.create({_id:'Search_0',name:'iOS', query:'ios', categories:['sof', 'cpg'], default_response:'response_0'});
             service.create({_id:'Search_1',name:'Angular', query:'angular', categories:['sof', 'cpg'], default_response:'response_0'});
             service.create({_id:'Search_2',name:'Rails', query:'rails', categories:['sof', 'cpg'], default_response:'response_0'});
         };
 
+        /*
         service.find = function (selector) {
             return DB.findDocs('search', selector);
         };
@@ -44,9 +55,10 @@
 
             return DB.create('search', search);
         };
+        */
 
 
-        return service;
+        return new service();
     };
 
     module.exports = MODULE_NAME;

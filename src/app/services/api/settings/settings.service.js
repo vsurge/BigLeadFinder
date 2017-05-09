@@ -6,6 +6,7 @@
 
     var MODULE_NAME = 'api.settings';
 
+    require('services/api/base/base.factory');
     require('services/db/db.service');
 
     angular.module(MODULE_NAME, [
@@ -18,11 +19,22 @@
     }
 
     /** @ngInject */
-    function Service($rootScope, $log, $q, Process, DB, _, $) {
+    function Service($rootScope, $log, $q, Process, DB, _, $, ServiceBase) {
 
-        var service = {};
+        var service = function(){
+            ServiceBase.constructor.call(this);
+            this.type = 'settings';
 
-        service.seed = function () {
+            var self = this;
+
+            this.refreshDefaultSettings().then(function(result){
+                self.defaultSettings = result;
+            });
+        };
+
+        service.prototype = Object.create(ServiceBase.constructor.prototype);
+
+        service.prototype.seed = function () {
             var settings = {
                 _id: "settings_0",
                 name: "default",
@@ -49,18 +61,17 @@
             return service.create(settings);
         };
 
-        service.refreshDefaultSettings = function () {
+        service.prototype.refreshDefaultSettings = function () {
 
             var deferred = $q.defer();
 
-            service.find({name: 'default'}).then(function (result) {
+            service.prototype.find({name: 'default'}).then(function (result) {
 
                 //$log.debug('service.getDefaultSettings: ' + JSON.stringify(result,null,2));
 
                 if (result && result.docs && result.docs.length > 0) {
 
-                    service.defaultSettings = result.docs[0];
-                    deferred.resolve(service.defaultSettings);
+                    deferred.resolve(result.docs[0]);
                 } else {
                     deferred.reject({message: 'Not found.'})
                 }
@@ -73,6 +84,7 @@
             return deferred.promise;
         };
 
+        /*
         service.find = function (selector) {
             return DB.findDocs('setting', selector);
         };
@@ -89,8 +101,9 @@
                 service.refreshDefaultSettings();
             });
         }
+        */
 
-
+        /*
         function Init() {
 
             service.refreshDefaultSettings();
@@ -98,8 +111,9 @@
         }
 
         Init();
+        */
 
-        return service;
+        return new service();
     };
 
     module.exports = MODULE_NAME;
