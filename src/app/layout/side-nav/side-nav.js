@@ -19,9 +19,9 @@
             state: 'app.dashboard',
             type: 'link'
         }, {
-            id: 'app.searches',
+            id: 'app.searches.list',
             name: 'Searches',
-            state: 'app.searches',
+            state: 'app.searches.list',
             type: 'link'
         }, {
             id: 'app.posts',

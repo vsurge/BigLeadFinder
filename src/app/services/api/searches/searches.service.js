@@ -32,6 +32,10 @@
             return DB.findDocs('search', selector);
         };
 
+        service.findByID = function (_id, options) {
+            return DB.findByID('search', _id, options);
+        };
+
         service.remove = function (selector) {
             return DB.removeDocs('search', selector);
         };

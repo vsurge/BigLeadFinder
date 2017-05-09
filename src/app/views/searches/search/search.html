@@ -1,2 +1,69 @@
-<div class="md-display-2">Search</div>
-<md-divider ></md-divider>
+<div layout="row" width="100%">
+    <div layout="column" flex="50">
+        <div class="md-display-2" ng-if="search.name">{{search.name}} SEARCH </div>
+        <div class="md-display-2" ng-if="!search.name">NEW SEARCH</div>
+    </div>
+    <div layout="column" layout-align="end end" flex="50">
+        <div layout="row" flex>
+
+        </div>
+
+    </div>
+</div>
+<md-divider/>
+<div layout="column">
+
+    <md-content layout-padding>
+
+        <!--<div class="md-display-1">SMTP</div>-->
+
+        <form name="searchForm">
+
+            <md-input-container class="md-block">
+                <label>Name</label>
+                <input required name="name" ng-model="search.name">
+                <div ng-messages="search.name.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+
+            <md-input-container class="md-block">
+                <label>Query</label>
+                <input required name="query" ng-model="search.query">
+                <div ng-messages="search.query.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+
+            <div layout="column">
+
+            <md-input-container>
+                <label>Categories</label>
+                <md-select ng-model="search.categories"
+                           md-on-close="showCategory()"
+                           multiple>
+                    <md-optgroup label="categories">
+                        <md-option ng-value="category" ng-repeat="category in categories">{{category}}</md-option>
+                    </md-optgroup>
+                </md-select>
+            </md-input-container>
+
+            <md-input-container>
+                <label>Default Response</label>
+                <md-select ng-model="search.default_response">
+                    <md-optgroup label="responses">
+                        <md-option ng-value="item._id" ng-repeat="item in responses">{{item.name}}</md-option>
+                    </md-optgroup>
+                </md-select>
+            </md-input-container>
+            </div>
+            <div>
+                <md-button ng-click="updateSearch(search)" type="submit" class="md-raised md-primary" ng-disabled="searchForm.$invalid">Save</md-button>
+
+                <md-button ng-click="deleteSearch(search)" type="submit" class="md-raised md-warn" ng-disabled="searchForm.$invalid">Delete</md-button>
+            </div>
+
+        </form>
+    </md-content>
+
+</div>

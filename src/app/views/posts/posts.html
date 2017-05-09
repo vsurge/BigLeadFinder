@@ -6,11 +6,12 @@
         </div>
         <div layout="column" layout-align="end end" flex="50">
             <div layout="row" flex>
-                <md-button ng-click="refreshPosts()" class="md-primary md-raised">Refresh Posts</md-button>
+
                 <md-button ng-click="updatePosts()" class="md-secondary md-raised">Update Posts</md-button>
+
                 <md-button ng-click="clearPosts()" class="md-warn md-raised">Clear Posts</md-button>
 
-                <md-button ng-click="clearRejectedPosts()" class="md-warn md-raised">Clear Rejected</md-button>
+
             </div>
 
         </div>
@@ -53,7 +54,9 @@
 
                     <md-tab label="rejected" >
                         <md-content class="md-padding">
+
                             <posts posts="posts.rejected" search="search" state="rejected"></posts>
+                            <md-button ng-click="clearRejectedPosts()" class="md-warn md-raised">Clear Rejected</md-button>
                         </md-content>
                     </md-tab>
 

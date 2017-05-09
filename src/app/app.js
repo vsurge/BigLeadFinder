@@ -72,11 +72,12 @@
     }
 
     /* @ngInject */
-    function Config($qProvider,$urlRouterProvider) {
+    function Config($qProvider,$urlRouterProvider,$locationProvider) {
 
 
         $qProvider.errorOnUnhandledRejections(false);
-        $urlRouterProvider.otherwise('/searches');
+        $urlRouterProvider.otherwise('/slist');
+        //$locationProvider.html5Mode(true);
     }
 
     /* @ngInject */

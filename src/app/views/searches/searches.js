@@ -18,7 +18,8 @@
 
     angular.module(MODULE_NAME,[
         'ui.router',
-        'datatables'
+        'datatables',
+        'app.views.search'
     ]).config(Config).controller('SearchesCtrl',Controller);
 
     /* @ngInject */
@@ -56,6 +57,10 @@
             $state.go('app.posts',{search_id:search._id})
         }
 
+        $scope.editSearch = function (search) {
+            $state.go('app.search',{search_id:search._id})
+        }
+
         function Init() {
 
             $scope.refreshSearches();
@@ -69,8 +74,8 @@
     /* @ngInject */
     function Config($stateProvider) {
         $stateProvider
-            .state('app.searches', {
-                url: '/searches',
+            .state('app.searchlist', {
+                url: '/slist',
                 views: {
                     'container@': {
                         template: require('./searches.html'),
@@ -83,6 +88,7 @@
                     parent:'app.dashboard'
                 },
                 resolve:{
+
                 }
             });
     };

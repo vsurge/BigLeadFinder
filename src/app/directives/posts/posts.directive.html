@@ -1,4 +1,8 @@
 <div id="posts-directive">
+
+    <md-button ng-click="refreshPosts()" class="md-fab md-mini md-primary md-raised">
+        <md-icon md-font-library="material-icons" aria-label="refresh">refresh</md-icon>
+    </md-button>
     <table datatable="" dt-options="dtOptions" dt-column-defs="dtColumnDefs" dt-columns="dtColumns" dt-instance="dtInstance" class="mdl-data-table dt-left">
     </table>
 
