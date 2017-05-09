@@ -118,7 +118,8 @@
                     }
                 },
                 ncyBreadcrumb: {
-                    label: 'Responses'
+                    label: 'Responses',
+                    parent:'app.dashboard'
                 }
             });
     };

@@ -3,6 +3,7 @@
 
     var MODULE_NAME = 'app.views.dashboard';
     require('angular-ui-router');
+    require('./dashboard.scss');
 
     angular.module(MODULE_NAME,[
         'ui.router'

@@ -118,7 +118,8 @@
                     }
                 },
                 ncyBreadcrumb: {
-                    label: 'Settings'
+                    label: 'Settings',
+                    parent:'app.dashboard'
                 }
             });
     };

@@ -41,7 +41,7 @@
             //$log.debug('$scope.state: ' + $scope.state);
             //$log.debug('$scope.search: ' + JSON.stringify($scope.search,null,1));
 
-            AppServices.api.posts.find({state:$scope.state,search_id:$scope.search.id},{fields:['_id','publish_date','link','email','title','description','search_id','state']}).then(function(result){
+            AppServices.api.posts.find({state:$scope.state,search_id:$scope.search._id},{fields:['_id','publish_date','link','email','title','description','search_id','state']}).then(function(result){
 
                 //$log.debug('AppServices.api.posts.find(): ' + JSON.stringify(result,null,2));
 
