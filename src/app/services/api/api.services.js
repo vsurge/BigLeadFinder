@@ -8,7 +8,8 @@
     require('./posts/posts.service');
     require('./searches/searches.service');
     require('./responses/responses.service');
-    require('./settings/settings.service');
+    require('./app-settings/app-settings.service');
+    require('./email-settings/email-settings.service');
 
     var MODULE_NAME = 'api.services';
 
@@ -17,20 +18,19 @@
         'api.posts',
         'api.searches',
         'api.responses',
-        'api.settings'
+        'api.app-settings',
+        'api.email-settings'
     ]).service('ApiServices', Service);
 
     /** @ngInject */
-    function Service($log,$q,CitiesService,PostsService,SearchesService,ResponsesService,SettingsService) {
+    function Service($log,$q,CitiesService,PostsService,SearchesService,ResponsesService,AppSettingsService,EmailSettingsService) {
 
         this.cities = CitiesService;
         this.posts = PostsService;
         this.searches = SearchesService;
         this.responses = ResponsesService;
-        this.settings = SettingsService;
-
-        $log.debug('this.searches.type: ' + this.searches.type);
-        $log.debug('this.posts.type: ' + this.posts.type);
+        this.app_settings = AppSettingsService;
+        this.email_settings = EmailSettingsService;
     };
 
     module.exports = MODULE_NAME;

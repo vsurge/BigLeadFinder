@@ -23,7 +23,7 @@
     ]).config(Config).controller('PostsCtrl',Controller);
 
     /* @ngInject */
-    function Controller($rootScope, $scope, $log, $q, $timeout, AppServices, DTOptionsBuilder, DTColumnDefBuilder,$stateParams,search_data) {
+    function Controller($rootScope, $scope, $log, $q, $timeout, $state, AppServices, DTOptionsBuilder, DTColumnDefBuilder,$stateParams,search_data) {
 
         $scope.posts = {};
         $scope.search = search_data.docs[0];
@@ -122,6 +122,9 @@
                 $rootScope.ngProgress.complete();
                 $rootScope.ngProgress.reset();
 
+
+                $state.go('app.searchlist');
+
             },function(){})
         };
 
@@ -140,6 +143,8 @@
         function Init() {
 
             $rootScope.$on($scope.search._id + '-progress',function(event,info){
+
+                $log.debug(JSON.stringify(info,null,2));
 
                 $scope.updateProgress = info.progress.percent;
                 $scope.updateCity = info.city.city_name;

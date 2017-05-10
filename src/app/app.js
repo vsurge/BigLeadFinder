@@ -21,7 +21,7 @@
     require('./views/posts/posts');
     require('./views/searches/searches');
     require('./views/responses/responses');
-    require('./views/settings/settings');
+    require('./views/app-settings/app-settings');
 
     require('./services/app.services');
 
@@ -43,7 +43,7 @@
         'app.views.posts',
         'app.views.searches',
         'app.views.responses',
-        'app.views.settings',
+        'app.views.app-settings',
         // App Services,
         'app.services'
     ]).constant('$',

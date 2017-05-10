@@ -158,8 +158,11 @@
 
         $scope.updateState = function(_id,state){
 
+            //$log.debug('$scope.updateState: ' + _id + ' ' + state);
+
             AppServices.api.posts.findByID(_id).then(function(item){
 
+                //$log.debug('AppServices.api.posts.findByID: ' + JSON.stringify(item,null,2));
                 AppServices.api.posts.updateState(item._id,state).then(function(result){
                     //$log.debug('$scope.rejectPost: ' + JSON.stringify(result,null,2));
 
@@ -231,12 +234,21 @@
         };
 
 
+        $scope.reloadTable = function(){
+            //$scope.refreshPosts().then()
+            $scope.dtInstance.reloadData();
+        }
 
 
         function Init() {
 
-           // $scope.refreshPosts();
+            if ($scope.state == AppServices.api.posts.states.created) {
+                $rootScope.$on($scope.search._id + '-found',function(event,info){
 
+                    $scope.dtInstance.reloadData();
+                });
+
+            }
         }
 
         Init();

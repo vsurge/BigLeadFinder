@@ -1,4 +1,5 @@
-<div class="md-display-2">RESPONSE</div>
+<div class="md-display-2" ng-if="response.name">{{response.name}} RESPONSE </div>
+<div class="md-display-2" ng-if="!response.name">NEW RESPONSE</div>
 <md-divider ></md-divider>
 
 <div layout="column">
@@ -40,6 +41,9 @@
 
             <div>
                 <md-button ng-click="updateResponse(response)" type="submit" class="md-raised md-primary" ng-disabled="responseForm.$invalid">Save</md-button>
+
+                <md-button ng-click="deleteResponse(response)" type="submit" class="md-raised md-warn">Delete</md-button>
+            </div>
             </div>
 
         </form>

@@ -1,18 +1,18 @@
 (function(){
     'use strict';
 
-    var MODULE_NAME = 'app.views.settings';
+    var MODULE_NAME = 'app.views.app-settings';
     require('angular-ui-router');
 
     angular.module(MODULE_NAME,[
         'ui.router'
-    ]).config(Config).controller('SettingsCtrl',Controller);
+    ]).config(Config).controller('AppSettingsCtrl',Controller);
 
     /* @ngInject */
     function Controller($rootScope,$scope,$log,$q, $timeout,AppServices) {
 
         $scope.refreshDefaultSettings = function (){
-            return AppServices.api.settings.refreshDefaultSettings().then(function(settings){
+            return AppServices.api.app_settings.refreshDefaultSettings().then(function(settings){
 
                 //$log.debug('settings: ' + JSON.stringify(settings,null,2))
                 $scope.settings = settings;
@@ -24,7 +24,7 @@
 
         $scope.updateSettings = function (settings) {
             //$log.debug('settings: ' + JSON.stringify(settings,null,2));
-            AppServices.api.settings.create(settings)
+            AppServices.api.app_settings.create(settings)
         };
 
         $scope.clearAllData = function () {
@@ -108,17 +108,17 @@
     /* @ngInject */
     function Config($stateProvider) {
         $stateProvider
-            .state('app.settings', {
-                url: '/settings',
+            .state('app.app-settings', {
+                url: '/app-settings',
                 views: {
                     'container@': {
-                        template: require('./settings.html'),
-                        controller: 'SettingsCtrl',
+                        template: require('./app-settings.html'),
+                        controller: 'AppSettingsCtrl',
                         controllerAs: 'vm'
                     }
                 },
                 ncyBreadcrumb: {
-                    label: 'Settings',
+                    label: 'App Settings',
                     parent:'app.dashboard'
                 }
             });

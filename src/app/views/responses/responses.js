@@ -42,6 +42,8 @@
 
         $scope.data = [];
 
+
+
         /*
          $scope.$watch('cities',function(){
          $scope.data = $rootScope.cities;
@@ -56,7 +58,7 @@
             .withOption('searching', false)
             .withOption('order', [[ 0, "asc" ]]);
         $scope.dtColumnDefs = [
-            DTColumnDefBuilder.newColumnDef(0).withOption('className', 'mdl-data-table__cell--non-numeric'),
+            DTColumnDefBuilder.newColumnDef(0).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(1).withOption('className', 'mdl-data-table__cell--non-numeric'),
             DTColumnDefBuilder.newColumnDef(2).withOption('className', 'mdl-data-table__cell--non-numeric'),
             DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--non-numeric'),
@@ -86,6 +88,10 @@
             */
         };
 
+        $scope.editResponse = function () {
+            $state.go('app.response',{})
+        }
+
         function Init() {
 
             //$log.debug('$scope.data: ' + JSON.stringify($scope.data,null,2));
@@ -114,6 +120,7 @@
                 },
                 resolve:{
                     responses: function (AppServices) {
+
                         return AppServices.api.responses.find({});
                     }
                 },

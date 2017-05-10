@@ -17,10 +17,10 @@
     ]).config(Config).controller('ResponseCtrl',Controller);
 
     /* @ngInject */
-    function Controller($scope,$log,$timeout,AppServices,response,$,_) {
+    function Controller($rootScope,$scope,$log,$timeout,$state,AppServices,response,$,_) {
 
         $scope.dzMethods = {};
-        $scope.response = response.docs[0];
+        $scope.response = response;
 
         $scope.updateResponse = function (response) {
             var files = $scope.dropzone.getAcceptedFiles();
@@ -69,6 +69,13 @@
             }
         };
 
+        $scope.deleteResponse  = function (response) {
+            AppServices.api.responses.remove({_id:response._id}).then(function(){
+                $rootScope.showToast(response.name + ' Response Removed.');
+                $state.go('app.responses');
+            })
+        };
+
         var Init = function () {
             //$log.debug('response: ' + JSON.stringify($scope.response,null,2));
 
@@ -106,7 +113,13 @@
 
     /* @ngInject */
     function Response (AppServices,$stateParams) {
-        return AppServices.api.responses.find({_id:$stateParams._id});
+
+        if ($stateParams._id) {
+            return AppServices.api.responses.findByID($stateParams._id);
+        } else {
+            return {};
+        }
+
     }
 
     module.exports = MODULE_NAME;

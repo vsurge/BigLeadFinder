@@ -4,14 +4,14 @@
 (function () {
     'use strict';
 
-    var MODULE_NAME = 'api.settings';
+    var MODULE_NAME = 'api.app-settings';
 
     require('services/api/base/base.factory');
     require('services/db/db.service');
 
     angular.module(MODULE_NAME, [
         'db.service'
-    ]).config(Config).service('SettingsService', Service);
+    ]).config(Config).service('AppSettingsService', Service);
 
     /** @ngInject */
     function Config(remoteProvider) {
@@ -23,7 +23,7 @@
 
         var service = function(){
             ServiceBase.constructor.call(this);
-            this.type = 'settings';
+            this.type = 'app_settings';
 
             var self = this;
 
@@ -36,26 +36,10 @@
 
         service.prototype.seed = function () {
             var settings = {
-                _id: "settings_0",
+                _id: "app_settings_0",
                 name: "default",
-                email: {
-                    from:Process.env.SMTP_FROM,
-                    test_mode: true,
-                    test_mode_email: Process.env.SMTP_TEST_TO,
-                    smtp: {
-                        host: Process.env.SMTP_HOST,
-                        port: 465,
-                        secure: true, // upgrade later with STARTTLS
-                        auth: {
-                            user: Process.env.SMTP_USER,
-                            pass: Process.env.SMTP_PASS
-                        },
-                        tls: {
-                            // do not fail on invalid certs
-                            rejectUnauthorized: false
-                        }
-                    }
-                }
+                test_mode: true,
+                test_mode_email: Process.env.SMTP_TEST_TO,
             };
 
             return service.create(settings);
@@ -83,35 +67,6 @@
 
             return deferred.promise;
         };
-
-        /*
-        service.find = function (selector) {
-            return DB.findDocs('setting', selector);
-        };
-
-        service.remove = function (selector) {
-            return DB.removeDocs('setting', selector);
-        };
-
-        service.create = function (settings) {
-
-            return DB.create('setting', settings).then(function () {
-
-
-                service.refreshDefaultSettings();
-            });
-        }
-        */
-
-        /*
-        function Init() {
-
-            service.refreshDefaultSettings();
-
-        }
-
-        Init();
-        */
 
         return new service();
     };

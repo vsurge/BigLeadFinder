@@ -22,7 +22,7 @@
     }
 
     /** @ngInject */
-    function Service($rootScope, $log, $q, $interpolate, File, Email, DB, _, $, SettingsService, PostsService, Process, ServiceBase) {
+    function Service($rootScope, $log, $q, $interpolate, File, Email, DB, _, $, EmailSettingsService, PostsService, Process, ServiceBase) {
 
         var service = function(){
             ServiceBase.constructor.call(this);
@@ -81,7 +81,7 @@
 
             //$log.debug('response: ' + JSON.stringify(response, null, 2));
 
-            SettingsService.find({_id: response.settings_id}).then(function (result) {
+            EmailSettingsService.find({_id: response.settings_id}).then(function (result) {
 
                 //$log.debug('settings results: ' + JSON.stringify(result, null, 2));
 
@@ -95,8 +95,6 @@
                     } else {
                         response.message.to = settings.email.test_mode_email;
                     }
-
-
 
                     // TODO: parse and replace the response for tokens from the post
 

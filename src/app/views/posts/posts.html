@@ -7,10 +7,10 @@
         <div layout="column" layout-align="end end" flex="50">
             <div layout="row" flex>
 
-                <md-button ng-click="updatePosts()" class="md-secondary md-raised">Update Posts</md-button>
+                <md-button ng-click="updatePosts()" class="md-fab md-mini md-primary md-raised" aria-label="Update Posts">
+                    <md-icon md-font-library="material-icons" aria-label="update">update</md-icon>
 
-                <md-button ng-click="clearPosts()" class="md-warn md-raised">Clear Posts</md-button>
-
+                </md-button>
 
             </div>
 
@@ -70,6 +70,8 @@
 
             </md-card>
         </div>
+
     </div>
+    <md-button ng-click="clearPosts()" class="md-warn md-raised">Clear Posts</md-button>
 
 </div>

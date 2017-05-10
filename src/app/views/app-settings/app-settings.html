@@ -1,0 +1,39 @@
+<div layout="row" width="100%">
+    <div layout="column" flex="50">
+        <div class="md-display-2">APP SETTINGS</div>
+    </div>
+    <div layout="column" layout-align="end end" flex="50">
+        <div layout="row" flex>
+            <md-button ng-click="clearAllData()" class="md-warn md-raised">Clear All Data</md-button>
+
+        </div>
+
+    </div>
+</div>
+<md-divider/>
+<div layout="column">
+
+    <md-content layout-padding>
+
+            <div class="md-display-1">Test Mode</div>
+
+            <md-input-container class="md-block">
+                <md-checkbox ng-model="settings.test_mode" aria-label="Test Mode">
+                    Override recipient email addresses with test email address.
+                </md-checkbox>
+            </md-input-container>
+
+            <md-input-container class="md-block">
+                <label>Test Email Address</label>
+                <input ng-disabled="!settings.email.test_mode" name="test_mode_email" ng-model="settings.test_mode_email">
+
+            </md-input-container>
+
+            <div>
+                <md-button ng-click="updateSettings(settings)" type="submit" class="md-raised md-primary" ng-disabled="settingsForm.$invalid">Save</md-button>
+            </div>
+
+        </form>
+    </md-content>
+
+</div>

@@ -26,14 +26,9 @@
             ServiceBase.constructor.call(this);
             this.type = 'post';
 
-            this.states = {};
-            this.states.created = 'created';
-            this.states.responded = 'responded';
-            this.states.rejected = 'rejected';
-            this.states.archived = 'archived';
-            this.states.error = 'error';
 
-            Object.freeze(this.states);
+
+            //Object.freeze(this.states);
         };
 
         service.prototype = Object.create(ServiceBase.constructor.prototype);
@@ -54,20 +49,25 @@
          archived
          error
          */
-
+        service.prototype.states = {};
+        service.prototype.states.created = 'created';
+        service.prototype.states.responded = 'responded';
+        service.prototype.states.rejected = 'rejected';
+        service.prototype.states.archived = 'archived';
+        service.prototype.states.error = 'error';
 
 
         service.prototype.updateState = function (_id, newState) {
             var deferred = $q.defer();
 
-            service.find({_id: _id}).then(function (result) {
+            service.prototype.find({_id: _id}).then(function (result) {
 
                 if (result && result.docs && result.docs.length > 0) {
                     var post = result.docs[0];
 
                     post.state = newState;
 
-                    service.create(post).then(function (create_result) {
+                    service.prototype.create(post).then(function (create_result) {
 
                         deferred.resolve(create_result)
                     })
@@ -135,7 +135,7 @@
 
                         chain = chain.then(function (items) {
                             i_current = i_current + 1;
-                            return service.getCityRss(city, cat, search, chain,{total:i_total,current:i_current});
+                            return service.prototype.getCityRss(city, cat, search, chain,{total:i_total,current:i_current});
                         });
 
                     });
@@ -152,7 +152,7 @@
                 chain.then(function () {
 
                     $rootScope.showToast('Update Posts Complete');
-                    return service.find();
+                    return service.prototype.find();
                 });
 
 
@@ -162,6 +162,8 @@
         };
 
         service.prototype.getCityRss = function (city, cat, query, chain, progress) {
+
+            var self = this;
 
             //$log.debug('service.getCityRss city: ' + JSON.stringify(city, null, 2));
 
@@ -178,13 +180,13 @@
 
             $log.debug('url: ' + url);
 
-            service.find({
+            service.prototype.find({
                 city_id: city._id,
                 search_id: query._id,
                 category_id: cat._id
             }).then(function (result) {
 
-                //$log.debug('service.getCityRss result: ' + JSON.stringify(result, null, 2));
+                $log.debug('service.getCityRss result: ' + JSON.stringify(result, null, 2));
 
                 var existing_posts = (result.docs === undefined) ? [] : result.docs;
 
@@ -218,7 +220,7 @@
                             city_id: city._id,
                             search_id: query._id,
                             category_id: cat._id,
-                            state: service.states.created
+                            state: self.states.created
                         };
 
                         // Let's retain the state for any existing item...
@@ -239,6 +241,12 @@
                     DB.createCollection('post', _items).then(function(result){
 
                         deferred.resolve(result.docs);
+
+                        if (_items.length > 0) {
+                            $rootScope.$broadcast(query._id + '-found',{city:city,cat:cat,query:query,progress:progress});
+                        }
+
+
                     });
 
 
