@@ -37,7 +37,7 @@
             var response = {
                 _id: "response_0",
                 name: "Response1",
-                settings_id: 'settings_0',
+                email_settings_id: 'email_settings_0',
                 message: {
                     subject: Process.env.SMTP_SUBJECT,
                     text: Process.env.SMTP_TEXT,
@@ -82,19 +82,19 @@
 
             //$log.debug('response: ' + JSON.stringify(response, null, 2));
 
-            EmailSettingsService.find({_id: response.settings_id}).then(function (result) {
+            EmailSettingsService.find({_id: response.email_settings_id}).then(function (result) {
 
                 //$log.debug('settings results: ' + JSON.stringify(result, null, 2));
 
                 if (result && result.docs && result.docs.length > 0) {
-                    var settings = result.docs[0];
+                    var email_settings = result.docs[0];
 
-                    response.message.from = settings.email.from;
+                    response.message.from = email_settings.email.from;
 
-                    if (settings.email.test_mode === false) {
+                    if (email_settings.email.test_mode === false) {
                         response.message.to = post.email;
                     } else {
-                        response.message.to = settings.email.test_mode_email;
+                        response.message.to = email_settings.email.test_mode_email;
                     }
 
                     // TODO: parse and replace the response for tokens from the post
@@ -107,7 +107,7 @@
 
                     //$log.debug('response.message: ' + JSON.stringify(response.message, null, 2));
 
-                    Email.sendEmail(response.message, settings.email.smtp, function (err, info) {
+                    Email.sendEmail(response.message, email_settings.email.smtp, function (err, info) {
 
                         if (err) {
 

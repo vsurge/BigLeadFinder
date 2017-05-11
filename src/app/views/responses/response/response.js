@@ -17,10 +17,11 @@
     ]).config(Config).controller('ResponseCtrl',Controller);
 
     /* @ngInject */
-    function Controller($rootScope,$scope,$log,$timeout,$state,AppServices,response,$,_) {
+    function Controller($rootScope,$scope,$log,$timeout,$state,AppServices,email_settings,response,$,_) {
 
         $scope.dzMethods = {};
         $scope.response = response;
+        $scope.email_settings = email_settings.docs;
 
         $scope.updateResponse = function (response) {
             var files = $scope.dropzone.getAcceptedFiles();
@@ -102,7 +103,11 @@
                     }
                 },
                 resolve:{
-                    response:Response
+                    response:Response,
+                    email_settings: function ($rootScope,AppServices) {
+
+                        return AppServices.api.email_settings.find({});
+                    }
                 },
                 ncyBreadcrumb: {
                     label: 'Responses',

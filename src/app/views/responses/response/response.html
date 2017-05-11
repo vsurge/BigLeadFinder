@@ -16,6 +16,15 @@
                 </div>
             </md-input-container>
 
+            <md-input-container>
+                <label>Email Settings</label>
+                <md-select ng-model="response.email_settings_id" style="min-width: 160px;">
+                    <md-optgroup label="email settings">
+                        <md-option ng-value="item._id" ng-repeat="item in email_settings">{{item.name}}</md-option>
+                    </md-optgroup>
+                </md-select>
+            </md-input-container>
+
             <md-input-container class="md-block">
                 <label>Subject</label>
                 <input required name="subject" ng-model="response.message.subject">
