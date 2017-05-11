@@ -64,7 +64,7 @@
 
                     if (result.cities.length > 0) {
 
-                        service.remove().then(function (){
+                        service.prototype.remove().then(function (){
                             return DB.createCollection('city',result.cities);
                         }).then(function(){
                             deferred.resolve()

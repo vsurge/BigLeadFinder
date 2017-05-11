@@ -23,12 +23,12 @@
 
         var service = function(){
             ServiceBase.constructor.call(this);
-            this.type = 'email_settings';
+            //this.type = 'email_settings';
 
         };
 
         service.prototype = Object.create(ServiceBase.constructor.prototype);
-        service.prototype.type = 'email_setting';
+        service.prototype.type = 'email_settings';
 
         service.prototype.seed = function () {
             var settings = {

@@ -1,6 +1,7 @@
 <div layout="row" width="100%">
     <div layout="column" flex="50">
-        <div class="md-display-2">EMAIL SETTINGS</div>
+        <div class="md-display-2" ng-if="settings.name">{{settings.name}} Email Settings</div>
+        <div class="md-display-2" ng-if="!settings.name">New Email Settings</div>
     </div>
     <div layout="column" layout-align="end end" flex="50">
         <div layout="row" flex>
@@ -17,6 +18,14 @@
         <div class="md-display-1">SMTP</div>
 
         <form name="settingsForm">
+
+            <md-input-container class="md-block">
+                <label>Settings Name</label>
+                <input required name="name" ng-model="settings.name">
+                <div ng-messages="settings.name.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
 
             <md-input-container class="md-block">
                 <label>SMTP Server</label>
@@ -58,6 +67,7 @@
 
             <div>
                 <md-button ng-click="updateSettings(settings)" type="submit" class="md-raised md-primary" ng-disabled="settingsForm.$invalid">Save</md-button>
+                <md-button ng-click="deleteSettings(settings)" type="submit" class="md-raised md-warn">Delete</md-button>
             </div>
 
         </form>

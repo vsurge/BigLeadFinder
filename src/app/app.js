@@ -22,6 +22,7 @@
     require('./views/searches/searches');
     require('./views/responses/responses');
     require('./views/app-settings/app-settings');
+    require('./views/email-settings/email-settings');
 
     require('./services/app.services');
 
@@ -44,6 +45,7 @@
         'app.views.searches',
         'app.views.responses',
         'app.views.app-settings',
+        'app.views.email-settings',
         // App Services,
         'app.services'
     ]).constant('$',

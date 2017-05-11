@@ -1,7 +1,7 @@
 (function(){
     'use strict';
 
-    var MODULE_NAME = 'app.views.responses';
+    var MODULE_NAME = 'app.views.email-settings';
     require('angular-ui-router');
 
     require('datatables.net');
@@ -11,18 +11,16 @@
     require('dataTables.material');
     require('dataTables.material.css');
 
-    require('./response/response');
-    require('views/email-settings/email-settings');
+    require('./email-settings-detail/email-settings-detail');
 
     angular.module(MODULE_NAME,[
         'ui.router',
         'datatables',
-        'app.views.response',
-        'app.views.email-settings'
-    ]).config(Config).controller('ResponsesCtrl',Controller);
+        'app.views.email-settings-detail'
+    ]).config(Config).controller('EmailSettingsCtrl',Controller);
 
     /* @ngInject */
-    function Controller($scope,$log,$state,AppServices,responses, DTOptionsBuilder, DTColumnDefBuilder) {
+    function Controller($scope,$log,$state,AppServices,email_settings, DTOptionsBuilder, DTColumnDefBuilder) {
 
         function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
             // Unbind first in order to avoid any duplicate handler (see https://github.com/l-lin/angular-datatables/issues/87)
@@ -38,7 +36,7 @@
         $scope.onRowSelect = function (item) {
 
             //$log.debug('item: ' + JSON.stringify(item,null,2));
-            $state.go('app.response',item)
+            $state.go('app.email-settings-detail',item);
 
         };
 
@@ -62,36 +60,10 @@
         $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(1).withOption('className', 'mdl-data-table__cell--non-numeric'),
-            DTColumnDefBuilder.newColumnDef(2).withOption('className', 'mdl-data-table__cell--non-numeric'),
-            DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--non-numeric'),
         ];
 
-        $scope.refreshResponses = function(){
-
-            //$scope.data = [{name:"Response1",body:"Lorem Ipsum dolor sit amit.",attachment:"/opt/var/bin/file.doc"}];
-
-
-
-            /*
-            $rootScope.ngProgress.start();
-            AppServices.api.searches.find().then(function(result){
-
-                //$log.debug('AppServices.api.posts.find(): ' + JSON.stringify(result,null,2));
-
-                if (result && result.docs) {
-                    //$log.debug('found searches: ' + result.docs.length);
-                    $scope.data = result.docs;
-                }
-
-                $rootScope.ngProgress.complete();
-                $rootScope.ngProgress.reset();
-
-            });
-            */
-        };
-
-        $scope.editResponse = function () {
-            $state.go('app.response',{})
+        $scope.editSettings = function (item) {
+            $state.go('app.email-settings-detail',item);
         }
 
         function Init() {
@@ -99,8 +71,10 @@
             //$log.debug('$scope.data: ' + JSON.stringify($scope.data,null,2));
 
 
-            if (responses && responses.docs) {
-                $scope.data = responses.docs;
+            if (email_settings && email_settings.docs) {
+                $scope.data = email_settings.docs;
+
+
             }
         }
 
@@ -111,24 +85,24 @@
     /* @ngInject */
     function Config($stateProvider) {
         $stateProvider
-            .state('app.responses', {
-                url: '/responses',
+            .state('app.email-settings', {
+                url: '/email-settings',
                 views: {
                     'container@': {
-                        template: require('./responses.html'),
-                        controller: 'ResponsesCtrl',
+                        template: require('./email-settings.html'),
+                        controller: 'EmailSettingsCtrl',
                         controllerAs: 'vm'
                     }
                 },
                 resolve:{
-                    responses: function (AppServices) {
+                    email_settings: function (AppServices) {
 
-                        return AppServices.api.responses.find({});
+                        return AppServices.api.email_settings.find({});
                     }
                 },
                 ncyBreadcrumb: {
-                    label: 'Responses',
-                    parent:'app.dashboard'
+                    label: 'Email Settings',
+                    parent:'app.responses'
                 }
             });
     };

@@ -34,9 +34,9 @@
 
         service.prototype.create = function (item) {
 
-            $log.debug('create: ' + this.type);
+            //$log.debug('create: ' + this.type);
             return DB.create(this.type, item).then(function(result){
-                $log.debug('result: ' + result);
+                //$log.debug('result: ' + result);
             }).catch(function(error){
                 $log.error(error);
             });

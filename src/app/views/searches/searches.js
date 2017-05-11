@@ -40,7 +40,7 @@
             $rootScope.ngProgress.start();
             AppServices.api.searches.find({}).then(function(result){
 
-                $log.debug('AppServices.api.searches.find(): ' + JSON.stringify(result,null,2));
+                //$log.debug('AppServices.api.searches.find(): ' + JSON.stringify(result,null,2));
 
                 if (result && result.docs) {
                     //$log.debug('found searches: ' + result.docs.length);

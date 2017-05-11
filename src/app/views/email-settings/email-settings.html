@@ -1,16 +1,15 @@
 
 
-<div id="responses-container">
+<div id="email-settings-container">
 
 
     <div layout="row" width="100%">
         <div layout="column" flex="50">
-            <div class="md-display-1">Responses</div>
+            <div class="md-display-1">Email Settings</div>
         </div>
         <div layout="column" layout-align="end end" flex="50">
             <div layout="row" flex>
-                <md-button ui-sref="app.email-settings" class="md-primary md-raised">Email Settings</md-button>
-                <md-button ng-click="editResponse({})" class="md-fab md-mini md-primary md-raised">
+                <md-button ng-click="editSettings({})" class="md-fab md-mini md-primary md-raised">
                     <md-icon md-font-library="material-icons" aria-label="add_circle">add_circle</md-icon>
                 </md-button>
             </div>
@@ -25,16 +24,12 @@
                 <tr>
                     <th>ID</th>
                     <th>NAME</th>
-                    <th>SUBJECT</th>
-                    <th>ATTACHMENT</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="item in data" ng-click="onRowSelect(item)">
                     <td>{{ item._id }}</td>
                     <td>{{ item.name }}</td>
-                    <td>{{ item.message.subject}}</td>
-                    <td>{{ item.message.attachments[0].filename}}</td>
                 </tr>
                 </tbody>
             </table>
