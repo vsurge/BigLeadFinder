@@ -22,8 +22,8 @@
     function Service($rootScope, $log, $q, Process, DB, _, $, ServiceBase) {
 
         var service = function(){
+
             ServiceBase.constructor.call(this);
-            this.type = 'app_settings';
 
             var self = this;
 
@@ -34,7 +34,10 @@
 
         service.prototype = Object.create(ServiceBase.constructor.prototype);
 
+        service.prototype.type = 'app_settings';
+
         service.prototype.seed = function () {
+
             var settings = {
                 _id: "app_settings_0",
                 name: "default",
@@ -42,7 +45,7 @@
                 test_mode_email: Process.env.SMTP_TEST_TO,
             };
 
-            return service.create(settings);
+            return service.prototype.create(settings);
         };
 
         service.prototype.refreshDefaultSettings = function () {

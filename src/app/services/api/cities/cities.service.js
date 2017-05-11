@@ -28,10 +28,12 @@
 
         var service = function(){
             ServiceBase.constructor.call(this);
-            this.type = 'city';
+            //this.type = 'city';
         };
 
         service.prototype = Object.create(ServiceBase.constructor.prototype);
+
+        service.prototype.type = 'city';
 
         service.prototype.seed = function () {};
 

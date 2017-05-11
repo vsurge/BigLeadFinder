@@ -28,8 +28,8 @@
             for(var key in self.api) {
 
                 (function(service) {
-                    //var state = JSON.parse(JSON.stringify(input));
-                    //$log.debug(state);
+
+                    //$log.debug(JSON.stringify(service));
 
                     chain.then(function(){
 

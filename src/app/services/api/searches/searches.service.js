@@ -22,20 +22,20 @@
     /** @ngInject */
     function Service($rootScope, $log, $q, Browser, DB, _, $, ServiceBase) {
 
-        var service = function(){
+        var service = function() {
             ServiceBase.constructor.call(this);
             this.type = 'search';
         };
 
         service.prototype = Object.create(ServiceBase.constructor.prototype);
-
+        service.prototype.type = 'search';
 
         //service.type = 'search';
 
         service.prototype.seed = function () {
-            service.create({_id:'Search_0',name:'iOS', query:'ios', categories:['sof', 'cpg'], default_response:'response_0'});
-            service.create({_id:'Search_1',name:'Angular', query:'angular', categories:['sof', 'cpg'], default_response:'response_0'});
-            service.create({_id:'Search_2',name:'Rails', query:'rails', categories:['sof', 'cpg'], default_response:'response_0'});
+            service.prototype.create({_id:'Search_0',name:'iOS', query:'ios', categories:['sof', 'cpg'], default_response:'response_0'});
+            service.prototype.create({_id:'Search_1',name:'Angular', query:'angular', categories:['sof', 'cpg'], default_response:'response_0'});
+            service.prototype.create({_id:'Search_2',name:'Rails', query:'rails', categories:['sof', 'cpg'], default_response:'response_0'});
         };
 
         /*

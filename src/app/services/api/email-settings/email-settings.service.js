@@ -28,6 +28,7 @@
         };
 
         service.prototype = Object.create(ServiceBase.constructor.prototype);
+        service.prototype.type = 'email_setting';
 
         service.prototype.seed = function () {
             var settings = {
@@ -51,7 +52,7 @@
                 }
             };
 
-            return service.create(settings);
+            return service.prototype.create(settings);
         };
 
         return new service();

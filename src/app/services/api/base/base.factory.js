@@ -22,12 +22,24 @@
 
         function service() {
 
-            this.type = undefined;
+            var self = this;
         }
+
+        Object.defineProperty(service.prototype, 'type', {
+            get: function() { return this._type; },
+            set: function(newValue) { this._type = newValue; },
+            enumerable: true,
+            configurable: true
+        });
 
         service.prototype.create = function (item) {
 
-            return DB.create(this.type, item);
+            $log.debug('create: ' + this.type);
+            return DB.create(this.type, item).then(function(result){
+                $log.debug('result: ' + result);
+            }).catch(function(error){
+                $log.error(error);
+            });
         }
 
         service.prototype.find = function (selector, options) {

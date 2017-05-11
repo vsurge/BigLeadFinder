@@ -30,6 +30,7 @@
         };
 
         service.prototype = Object.create(ServiceBase.constructor.prototype);
+        service.prototype.type = 'response';
 
         service.prototype.seed = function () {
 
@@ -51,7 +52,7 @@
             // Save File
             // Create Response
 
-            return service.create(response)
+            return service.prototype.create(response)
         };
 
         service.prototype.saveAttachment = function (file, callback) {

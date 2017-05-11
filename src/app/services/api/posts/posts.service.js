@@ -24,15 +24,13 @@
 
         var service = function(){
             ServiceBase.constructor.call(this);
-            this.type = 'post';
 
-
-
+            //this.type = 'post';
             //Object.freeze(this.states);
         };
 
         service.prototype = Object.create(ServiceBase.constructor.prototype);
-
+        service.prototype.type = 'post';
 
         service.prototype.seed = function () {
             DB.createIndex('_post_link_type', ['link', 'type']);
