@@ -8,9 +8,11 @@
     window._ = require('underscore');
 
     require('angular');
-    require('angular-material');
-    require('angular-aria');
     require('angular-animate');
+    require('angular-aria');
+    require('angular-messages');
+
+    require('angular-material');
 
     require('angular-electron');
 
@@ -33,6 +35,7 @@
     angular.module(MODULE_NAME, [
         // Vendor Modules
         'ngMaterial',
+        'ngAnimate',
         'angular-electron',
         //'ngAria',
         //'ngAnimate',
@@ -60,6 +63,7 @@
         $log.debug('Node v' + process.versions.node);
         $log.debug('Chrome v' + process.versions.chrome);
         $log.debug('Electron v' + process.versions.electron);
+        $log.debug('Angular v' + angular.version.full);
 
         AppServices.seed();
 

@@ -14,7 +14,7 @@
            ng-hide="{{created_state}}">
     <md-icon md-font-library="material-icons" aria-label="undo">undo</md-icon>
 </md-button>
-<md-button ng-click="editPost({{_id}})" class="md-fab md-mini md-secondary
+<md-button ui-sref="app.post-edit({_id:{{_id}}})" class="md-fab md-mini md-secondary
                                 md-raised md-hue-1">
     <md-icon md-font-library="material-icons" aria-label="edit">mode_edit</md-icon>
 </md-button>

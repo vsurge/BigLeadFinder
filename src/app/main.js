@@ -1,24 +1,24 @@
-const electron = require('electron')
+var electron = require('electron');
 //require('electron-reload')(process.cwd() + '/dist');
 // Module to control application life.
-const app = electron.app
+var app = electron.app;
 // Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
+var BrowserWindow = electron.BrowserWindow;
 
 //require('electron-debug')({showDevTools: false})
 
-const path = require('path')
-const url = require('url')
+var path = require('path');
+var url = require('url');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+var mainWindow
 //var client = require('electron-connect').client;
 
 
 function createWindow () {
 
-  var Positioner = require('electron-positioner')
+  var Positioner = require('electron-positioner');
 
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 1200, height: 1000,
@@ -34,7 +34,7 @@ function createWindow () {
     pathname: process.cwd() + '/dist/index.html',
     protocol: 'file:',
     slashes: false
-  }))
+  }));
 
 
   //positioner.move('trayLeft',mainWindow.getBounds())

@@ -1,0 +1,54 @@
+<div id="post-edit">
+    <div layout="row" width="100%">
+        <div layout="column" flex>
+            <a ng-href="{{post.link}}" target="_blank" class="no_decorate" style="color:black">
+            <div class="md-display-2"  >{{post.title}}</div>
+            </a>
+        </div>
+        <!--<div layout="column" layout-align="end end" flex="50">-->
+            <!---->
+
+        <!--</div>-->
+
+    </div>
+    <md-divider/>
+    <div layout="column">
+
+        <md-content layout-padding>
+            <form name="postForm">
+
+
+
+                <md-input-container class="md-block">
+                    <label>Email</label>
+                    <input  name="email" ng-model="post.email" type="email">
+                    <div ng-messages="post.email.$error" role="alert" minlength="5" maxlength="100" ng-pattern="/^.+@.+\..+$/" >
+                        <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+                            Your email must be between 5 and 100 characters long and look like an e-mail address.
+                        </div>
+                    </div>
+                </md-input-container>
+
+
+                <md-input-container>
+                    <label>Response</label>
+                    <md-select ng-model="post.response_id">
+                        <md-optgroup label="responses">
+                            <md-option ng-value="item._id" ng-repeat="item in responses">{{item.name}}</md-option>
+                        </md-optgroup>
+                    </md-select>
+                </md-input-container>
+
+                <div>
+                    <md-button ng-click="updatePost(post)" type="submit" class="md-raised md-primary" ng-disabled="postForm.$invalid">Save</md-button>
+
+                    <md-button ng-click="respondPost(post._id)" type="submit" class="md-raised md-primary" ng-disabled="postForm.$invalid">Send Response</md-button>
+                </div>
+
+            </form>
+        </md-content>
+
+    </div>
+</div>
+
+

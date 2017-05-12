@@ -14,7 +14,10 @@
 
     require('./posts.directive.scss');
 
+    var PostEdit = require('./post-edit/post-edit');
+
     angular.module(MODULE_NAME, [
+        'app.views.post-edit'
     ]).directive('posts', Directive);
 
     /* @ngInject */
@@ -23,7 +26,8 @@
     }
 
     /* @ngInject */
-    function Controller($rootScope, $scope, $log, $q, $timeout, $interpolate, $compile, AppServices, DTOptionsBuilder, DTColumnBuilder, DTColumnDefBuilder, _) {
+    function Controller($rootScope, $scope, $log, $q, $timeout, $window, $state, $interpolate, $compile, AppServices, DTOptionsBuilder, DTColumnBuilder, DTColumnDefBuilder, _) {
+
 
         //$scope.posts = [];
 
@@ -176,6 +180,7 @@
             });
         };
 
+        /*
         $scope.respondPost = function(_id){
 
             //$log.debug('$scope.respondPost: ' + JSON.stringify(item,null,2));
@@ -210,6 +215,14 @@
 
             });
         };
+        */
+
+        $scope.respondPost = function(_id){
+
+            AppServices.api.responses.respondPost(_id,search.default_response).then(function(post){
+                $scope.dtInstance.reloadData();
+            })
+        };
 
         $scope.openPost = function (_id,newWindow) {
 
@@ -233,12 +246,10 @@
 
         };
 
-
         $scope.reloadTable = function(){
             //$scope.refreshPosts().then()
             $scope.dtInstance.reloadData();
         }
-
 
         function Init() {
 
@@ -261,6 +272,7 @@
             restrict: 'E',
             template: require('./posts.directive.html'),
             controller: Controller,
+            controllerAs: 'dirVm',
             scope: {
                 posts: '=',
                 search: '=',

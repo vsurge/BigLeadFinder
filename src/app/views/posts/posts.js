@@ -16,6 +16,7 @@
 
     require('directives/posts/posts.directive');
 
+
     angular.module(MODULE_NAME,[
         'ui.router',
         'datatables',
@@ -27,34 +28,6 @@
 
         $scope.posts = {};
         $scope.search = search_data.docs[0];
-
-/*
-        $scope.refreshPosts = function(){
-            $rootScope.ngProgress.start();
-            var chain = $q.when();
-
-            for(var key in AppServices.api.posts.states) {
-
-                (function(state) {
-                    //var state = JSON.parse(JSON.stringify(input));
-                    //$log.debug(state);
-
-                    chain.then(function(){
-
-                        return $scope.refreshPostState(state);
-                    });
-
-                })(key)
-
-            }
-
-            chain.then(function(){
-                //$log.debug('complete');
-                $rootScope.ngProgress.complete();
-                $rootScope.ngProgress.reset();
-            });
-        };
-        */
 
 
         $scope.refreshPostState = function (state) {
@@ -140,6 +113,7 @@
         };
 
 
+
         function Init() {
 
             $rootScope.$on($scope.search._id + '-progress',function(event,info){
@@ -156,7 +130,7 @@
         Init();
 
 
-    };
+    }
 
     /* @ngInject */
     function Config($stateProvider) {
