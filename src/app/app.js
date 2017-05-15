@@ -82,7 +82,7 @@
 
 
         $qProvider.errorOnUnhandledRejections(false);
-        $urlRouterProvider.otherwise('/slist');
+        $urlRouterProvider.otherwise('/app-settings');
         //$locationProvider.html5Mode(true);
     }
 

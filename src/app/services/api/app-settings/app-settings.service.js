@@ -8,6 +8,7 @@
 
     require('services/api/base/base.factory');
     require('services/db/db.service');
+    window.JSZip = require('jszip');
 
     angular.module(MODULE_NAME, [
         'db.service'
@@ -64,12 +65,20 @@
                 }
 
             }).catch(function (error) {
-                $log.error('service.getDefaultSettings.error: ' + error)
+                $log.error('service.getDefaultSettings.error: ' + error);
                 deferred.reject(error)
             });
 
             return deferred.promise;
         };
+
+
+
+
+
+
+
+
 
         return new service();
     };

@@ -56,6 +56,23 @@
             return DB.removeDocs(this.type, selector);
         };
 
+        service.prototype.export = function () {
+
+            //$log.debug('service.type: ' + this.type);
+            return DB.findDocs(this.type, {});
+        };
+
+        service.prototype.import = function (items) {
+
+            //$log.debug('service.type: ' + this.type);
+            return DB.createCollection(this.type, items).then(function(result){
+                //$log.debug('result: ' + result);
+            }).catch(function(error){
+                $log.error(error);
+            });
+        };
+
+
         return new service();
     };
 

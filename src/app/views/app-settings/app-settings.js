@@ -3,13 +3,15 @@
 
     var MODULE_NAME = 'app.views.app-settings';
     require('angular-ui-router');
+    require('angular-file-saver');
 
     angular.module(MODULE_NAME,[
-        'ui.router'
+        'ui.router',
+        'ngFileSaver'
     ]).config(Config).controller('AppSettingsCtrl',Controller);
 
     /* @ngInject */
-    function Controller($rootScope,$scope,$log,$q, $timeout,AppServices) {
+    function Controller($rootScope,$scope,$log,$q, $timeout,$filter,AppServices,FileSaver, Blob, $) {
 
         $scope.refreshDefaultSettings = function (){
             return AppServices.api.app_settings.refreshDefaultSettings().then(function(settings){
@@ -94,6 +96,28 @@
             return chain;
 
         };
+
+        $scope.exportData = function (){
+            AppServices.exportData().then(function (blob) {
+
+                var date = new Date();
+                var filename = 'LeadFinderExport_' + $filter('date')(date, 'yyyy-MM-dd_HH-mm-ss_Z') + '.zip'
+                FileSaver.saveAs(blob, filename);
+            });
+        };
+
+        $scope.importData = function (){
+
+            $("#fileInput").trigger('click');
+
+        };
+
+        $scope.fileNameChanged = function (element) {
+
+            AppServices.importData(element).then(function (result) {
+                $rootScope.showToast('Settings Imported!')
+            });
+        }
 
         $scope.settings = {};
 
