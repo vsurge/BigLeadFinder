@@ -164,15 +164,78 @@
 
         };
 
-        this.importData = function () {
+        this.importAll = function (element) {
 
             var deferred = $q.defer();
+
+            //$log.debug('importAll');
+
+            this.importData(element).then(function(data_zip){
+
+                //$log.debug('data_zip: ' + JSON.stringify(data_zip,null,2));
+
+                //$log.debug('importData complete: ' + data_zip);
+
+                self.importFiles(data_zip).then(function(zip){
+                    deferred.resolve(zip);
+                }).catch(function(error){
+                    $log.error('importFiles error: ' + error)
+                });
+
+            });/*.catch(function(error){
+                $log.error('importData error: ' + JSON.stringify(error,null,2))
+            });*/
 
             return deferred.promise;
 
         };
 
+        this.importFiles = function (zip) {
+
+            //$log.debug('importFiles: ' + JSON.stringify(zip,null,2));
+            //$log.debug('importFiles: ' + zip);
+
+            var deferred = $q.defer();
+            var promises = [];
+
+            zip.folder("LeadFinderExport").folder("files").folder("response_attachments").forEach(function(relativePath,file_zip){
+
+                var deferredFile = $q.defer();
+                promises.push(deferredFile.promise);
+
+                //$log.debug('file_zip: ' + JSON.stringify(file_zip,null,2));
+                //$log.debug('relativePath: ' + relativePath);
+
+                file_zip.async("binarystring").then(function success(content) {
+                        // use the content
+
+                    //$log.debug('content:')
+                    File.saveFile(content,relativePath,function(result){
+                            $log.debug('saveAttachment');
+                            deferredFile.resolve(file_zip);
+                        })
+
+                    },function error(e) {
+                        // handle the error
+                        $log.debug('error: ' + e);
+                        deferredFile.reject(e);
+                    });
+            });
+
+            var allPromises = $q.all(promises);
+
+            allPromises.then(function(result){
+
+                deferred.resolve(result);
+
+            });
+
+            return deferred.promise;
+        };
+
         this.importData = function (element) {
+
+            //$log.debug('importData');
 
             var deferred = $q.defer();
 
@@ -188,6 +251,9 @@
 
                         (function(service) {
 
+                            var deferredFile = $q.defer();
+                            promises.push(deferredFile.promise);
+
                             zip.folder("LeadFinderExport").folder("data").file(service + '.json').async("string").then(function(result){
 
                                 var objects = JSON.parse(result).map(function(item){
@@ -197,8 +263,14 @@
 
                                 console.dir(objects);
 
-                                var promise = self.api[service].import(objects);
-                                promises.push(promise);
+                                self.api[service].import(objects).then(function(result){
+                                    //$log.debug(service + '.import: ' + result);
+                                    deferredFile.resolve(result)
+                                }).catch(function(error){
+                                    $log.error(service + '.import: ' + error);
+                                    deferredFile.reject(error);
+                                });
+
                             });
 
                         })(key)
@@ -208,8 +280,11 @@
                     var allPromise = $q.all(promises);
 
                     allPromise.then(function(results){
-
-                        deferred.resolve(result)
+                        //$log.debug('allPromise: ' + results);
+                        deferred.resolve(zip);
+                    },function(error){
+                        $log.error('allPromise: ' + error);
+                        deferred.reject(error);
                     });
 
 

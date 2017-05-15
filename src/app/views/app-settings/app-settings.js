@@ -116,7 +116,7 @@
 
         $scope.fileNameChanged = function (element) {
 
-            AppServices.importData(element).then(function (result) {
+            AppServices.importAll(element).then(function (result) {
                 $rootScope.showToast('Settings Imported!')
             });
         }
