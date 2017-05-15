@@ -36,6 +36,7 @@
             service.prototype.create({_id:'Search_0',name:'iOS', query:'ios', categories:['sof', 'cpg'], default_response:'response_0'});
             service.prototype.create({_id:'Search_1',name:'Angular', query:'angular', categories:['sof', 'cpg'], default_response:'response_0'});
             service.prototype.create({_id:'Search_2',name:'Rails', query:'rails', categories:['sof', 'cpg'], default_response:'response_0'});
+            service.prototype.create({_id:'Search_3',name:'Node', query:'node | nodejs | node.js | "node js"', categories:['sof', 'cpg'], default_response:'response_0'});
         };
 
         /*

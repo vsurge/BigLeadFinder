@@ -6,6 +6,7 @@
 
     require('./cities/cities.service');
     require('./posts/posts.service');
+    require('./rejected-posts/rejected-posts.service');
     require('./searches/searches.service');
     require('./responses/responses.service');
     require('./app-settings/app-settings.service');
@@ -16,6 +17,7 @@
     angular.module(MODULE_NAME, [
         'api.cities',
         'api.posts',
+        'api.rejected-posts',
         'api.searches',
         'api.responses',
         'api.app-settings',
@@ -23,10 +25,11 @@
     ]).service('ApiServices', Service);
 
     /** @ngInject */
-    function Service($log,$q,CitiesService,PostsService,SearchesService,ResponsesService,AppSettingsService,EmailSettingsService) {
+    function Service($log,$q,CitiesService,PostsService,RejectedPostsService,SearchesService,ResponsesService,AppSettingsService,EmailSettingsService) {
 
         this.cities = CitiesService;
         this.posts = PostsService;
+        this.rejected_posts = RejectedPostsService;
         this.searches = SearchesService;
         this.responses = ResponsesService;
         this.app_settings = AppSettingsService;

@@ -106,7 +106,7 @@
 
             $rootScope.$on($scope.search._id + '-progress',function(event,info){
 
-                $log.debug(JSON.stringify(info,null,2));
+                //$log.debug(JSON.stringify(info,null,2));
 
                 $scope.updateProgress = info.progress.percent;
                 $scope.updateCity = info.city.city_name;

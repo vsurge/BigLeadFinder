@@ -8,10 +8,12 @@
 
     require('services/db/db.service');
     require('services/api/base/base.factory');
+    require('services/api/rejected-posts/rejected-posts.service');
 
     angular.module(MODULE_NAME, [
         'db.service',
-        'api.service_base'
+        'api.service_base',
+        'api.rejected-posts'
     ]).config(Config).service('PostsService', Service);
 
     /** @ngInject */
@@ -20,7 +22,7 @@
     }
 
     /** @ngInject */
-    function Service($rootScope, $log, $q, Browser, DB, _, $,ServiceBase, currentWindow, CitiesService) {
+    function Service($rootScope, $log, $q, Browser, DB, _, $,ServiceBase, currentWindow, CitiesService, RejectedPostsService) {
 
         var service = function(){
             ServiceBase.constructor.call(this);
@@ -62,6 +64,14 @@
 
                 if (result && result.docs && result.docs.length > 0) {
                     var post = result.docs[0];
+
+                    if (newState == service.prototype.states.rejected) {
+                        RejectedPostsService.markRejected(post._id);
+                    }
+
+                    if (post.state == service.prototype.states.rejected && newState != service.prototype.states.rejected) {
+                        RejectedPostsService.unMarkRejected(post._id);
+                    }
 
                     post.state = newState;
 
@@ -194,6 +204,8 @@
                     //var $xml = $(xmlDoc)
                     //var _items = (items === undefined) ? [] : items;
                     var _items = [];
+
+                    var promises = [];
                     $xml.find("item").each(function () {
                         var $this = $(this);
 
@@ -221,32 +233,46 @@
                             state: self.states.created
                         };
 
-                        // Let's retain the state for any existing item...
-                        var existing_item = _.find(existing_posts, {_id: item._id});
+                        var promise = RejectedPostsService.isRejected(item._id).then(function(rejected){
+                            if (rejected) {
+                                $log.debug('RejectedPost Found: ' + JSON.stringify(rejected,null,2))
+                            } else {
 
-                        if (existing_item) {
-                            $log.debug('Existing item found, meging...');
-                            item.state = existing_item.state;
-                        }
+                                $log.debug('Post WAS NOT Rejected: ' + JSON.stringify(rejected,null,2))
+                                // Let's retain the state for any existing item...
+                                var existing_item = _.find(existing_posts, {_id: item._id});
 
-                        $log.debug('POST:city: [' + city._id + '] ' + JSON.stringify(item, null, 2));
+                                if (existing_item) {
+                                    $log.debug('Existing item found, merging...');
+                                    item.state = existing_item.state;
+                                }
 
-                        _items.push(item);
-                    });
+                                $log.debug('POST:city: [' + city._id + '] ' + JSON.stringify(item, null, 2));
 
-                    $log.debug('items: ' + JSON.stringify(_items,null,2));
+                                _items.push(item);
+                            }
+                        });
 
-                    DB.createCollection('post', _items).then(function(result){
-
-                        deferred.resolve(result.docs);
-
-                        if (_items.length > 0) {
-                            $rootScope.$broadcast(query._id + '-found',{city:city,cat:cat,query:query,progress:progress});
-                        }
-
+                        promises.push(promise);
 
                     });
 
+                    $q.all(promises).then(function(result){
+
+                        $log.debug('items: ' + JSON.stringify(_items,null,2));
+
+                        DB.createCollection('post', _items).then(function(result){
+
+                            deferred.resolve(result.docs);
+
+                            if (_items.length > 0) {
+                                $rootScope.$broadcast(query._id + '-found',{city:city,cat:cat,query:query,progress:progress});
+                            }
+
+
+                        });
+
+                    });
 
                 }).fail(function(error) {
 

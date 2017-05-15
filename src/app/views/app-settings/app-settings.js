@@ -11,7 +11,7 @@
     ]).config(Config).controller('AppSettingsCtrl',Controller);
 
     /* @ngInject */
-    function Controller($rootScope,$scope,$log,$q, $timeout,$filter,AppServices,FileSaver, Blob, $) {
+    function Controller($rootScope,$scope,$log,$q, $timeout, $state,$filter,AppServices,FileSaver, Blob, $) {
 
         $scope.refreshDefaultSettings = function (){
             return AppServices.api.app_settings.refreshDefaultSettings().then(function(settings){
@@ -38,6 +38,8 @@
                     $scope.seedAllData();
 
                 },2000);
+
+                $state.go('app.dashboard');
 
             });
         };

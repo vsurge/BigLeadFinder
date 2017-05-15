@@ -69,11 +69,11 @@
                //$log.debug('Object.keys(results): ' + JSON.stringify(Object.keys(results),null,2));
                console.dir(results)
 
-                var zip = new JSZip();
+               var zip = new JSZip();
 
                results.forEach(function(service){
 
-                   zip.file(service.name + '.json', JSON.stringify(service.docs,null,2));
+                   zip.folder("LeadFinderExport").folder("data").file(service.name + '.json', JSON.stringify(service.docs,null,2));
                });
 
 
@@ -112,7 +112,7 @@
 
                         (function(service) {
 
-                            new_zip.file(service + '.json').async("string").then(function(result){
+                            zip.folder("LeadFinderExport").folder("data").file(service + '.json').async("string").then(function(result){
 
                                 var objects = JSON.parse(result).map(function(item){
                                     delete item._rev;
