@@ -100,7 +100,7 @@
         };
 
         $scope.exportData = function (){
-            AppServices.exportData().then(function (blob) {
+            AppServices.exportAll().then(function (blob) {
 
                 var date = new Date();
                 var filename = 'LeadFinderExport_' + $filter('date')(date, 'yyyy-MM-dd_HH-mm-ss_Z') + '.zip'

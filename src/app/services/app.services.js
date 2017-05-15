@@ -10,10 +10,16 @@
     angular.module(MODULE_NAME, [
         'api.services',
         'db.service'
-    ]).service('AppServices', Service);
+    ]).config(Config).service('AppServices', Service);
+
+    /** @ngInject */
+    function Config(remoteProvider) {
+        remoteProvider.register('File', './File');
+
+    }
 
     /* @ngInject */
-    function Service(ApiServices,$log,$q,DB) {
+    function Service(ApiServices,$log,$q,DB,File) {
 
         this.api = ApiServices;
         this.db = DB;
@@ -43,7 +49,80 @@
 
         }
 
-       this.exportData = function () {
+        this.exportAll = function () {
+
+            return this.exportData().then(function(zip){
+
+                return self.exportFiles(zip).then(function(final_zip){
+
+                    $log.debug('final_zip: ' + JSON.stringify(final_zip,null,2));
+                    return final_zip.generateAsync({type:"blob"});
+                });
+            });
+        };
+
+        this.exportFiles = function (zip) {
+
+            //$log.debug('exportFiles: ' + JSON.stringify(zip,null,2));
+
+            var deferred = $q.defer();
+
+            self.api.responses.find({}).then(function(result){
+
+                //$log.debug('result: ' + JSON.stringify(result,null,2));
+                var responses = result.docs;
+
+                var promises = [];
+
+                responses.forEach(function(response){
+
+                    //$log.debug('response: ' + JSON.stringify(response,null,2));
+
+                    if (response.message.attachments && response.message.attachments.length > 0 && response.message.attachments[0]) {
+                        var deferredFile = $q.defer();
+                        promises.push(deferredFile.promise);
+
+                        File.getFileBinary(response.message.attachments[0].filename, function (err, buffer) {
+
+                            if (err) {
+                                $log.error('exportFiles error: ' + err);
+                                deferredFile.reject(err)
+                            } else {
+
+                                $log.debug('adding: ' + response.message.attachments[0].filename);
+                                zip.folder("LeadFinderExport").folder("files").folder("response_attachments").file(response.message.attachments[0].filename, buffer, {binary: true});
+
+                                deferredFile.resolve({
+                                    filename: response.message.attachments[0].filename,
+                                    buffer: buffer
+                                });
+                            }
+
+                        });
+
+
+
+                    }
+                });
+
+
+                var allPromises = $q.all(promises);
+
+                allPromises.then(function(files){
+
+
+
+                    deferred.resolve(zip);
+
+                })
+
+
+            });
+
+            return deferred.promise;
+        };
+
+        this.exportData = function () {
 
             var deferred = $q.defer();
             var promises = [];
@@ -62,12 +141,12 @@
 
             }
 
-           var allPromise = $q.all(promises)
+           var allPromise = $q.all(promises);
 
            allPromise.then(function(results){
 
                //$log.debug('Object.keys(results): ' + JSON.stringify(Object.keys(results),null,2));
-               console.dir(results)
+               //console.dir(results)
 
                var zip = new JSZip();
 
@@ -77,11 +156,8 @@
                });
 
 
-               zip.generateAsync({type:"blob"}).then(function(result){
+               deferred.resolve(zip);
 
-                   deferred.resolve(result)
-
-               })
             });
 
            return deferred.promise;
