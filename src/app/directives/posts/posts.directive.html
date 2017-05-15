@@ -4,8 +4,13 @@
     <table datatable="" dt-options="dtOptions" dt-column-defs="dtColumnDefs" dt-columns="dtColumns" dt-instance="dtInstance" class="mdl-data-table dt-left">
     </table>
 
-    <md-button ng-click="dtInstance.reloadData()" class="md-fab md-mini md-primary md-raised">
-        <md-icon md-font-library="material-icons" aria-label="refresh">refresh</md-icon>
-    </md-button> Refresh Posts
+    <div layout="column">
+        <md-button ng-click="dtInstance.reloadData()" class="md-fab md-mini md-primary md-raised">
+            <md-icon md-font-library="material-icons" aria-label="refresh">refresh</md-icon>
+        </md-button> Refresh Posts
+
+        <md-button ng-click="clearPosts()" class="md-warn md-raised" style="max-width: 240px;">Delete {{state}} Posts</md-button>
+    </div>
+
 
 </div>

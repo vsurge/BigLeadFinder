@@ -129,7 +129,7 @@
 
                     }
 
-                    var allPromise = $q.all(promises)
+                    var allPromise = $q.all(promises);
 
                     allPromise.then(function(results){
 

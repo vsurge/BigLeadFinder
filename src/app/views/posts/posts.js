@@ -87,19 +87,7 @@
         $scope.updateCity = '';
 
 
-        $scope.clearPosts = function(){
-            $rootScope.ngProgress.start();
-            AppServices.api.posts.remove().then(function(result){
 
-                $scope.data = [];
-                $rootScope.ngProgress.complete();
-                $rootScope.ngProgress.reset();
-
-
-                $state.go('app.searchlist');
-
-            },function(){})
-        };
 
         $scope.clearRejectedPosts = function(){
             $rootScope.ngProgress.start();

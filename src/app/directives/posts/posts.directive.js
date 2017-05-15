@@ -180,6 +180,20 @@
             });
         };
 
+        $scope.clearPosts = function(){
+            $rootScope.ngProgress.start();
+            AppServices.api.posts.remove({state:$scope.state}).then(function(result){
+
+                $scope.data = [];
+                $rootScope.ngProgress.complete();
+                $rootScope.ngProgress.reset();
+
+
+                $state.go('app.searchlist');
+
+            },function(){})
+        };
+
         /*
         $scope.respondPost = function(_id){
 
