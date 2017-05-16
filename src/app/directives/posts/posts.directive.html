@@ -1,16 +1,108 @@
 <div id="posts-directive">
 
+    <div layout="row">
 
-    <table datatable="" dt-options="dtOptions" dt-column-defs="dtColumnDefs" dt-columns="dtColumns" dt-instance="dtInstance" class="mdl-data-table dt-left">
-    </table>
+        <div layout="column" flex="50">
+            <table id="posts-table
+" datatable="" dt-options="dtOptions" dt-column-defs="dtColumnDefs" dt-columns="dtColumns"
+                   dt-instance="dtIntanceCallback" class="mdl-data-table dt-left">
+            </table>
+        </div>
+
+        <div layout="column" flex="50">
+
+            <md-card>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{selected_post.title}}</span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content>
+                    <p>
+                        {{selected_post.description}}
+                    </p>
+                </md-card-content>
+                <md-card-actions layout="row" layout-align="end" >
+                    <div layout-margin>
+                    <md-button ng-click="respondPost(selected_post._id)" class="md-fab md-mini md-primary md-raised"
+                               ng-disabled="!selected_post.email" ng-show="selected_post.state == 'created'">
+                        <md-icon md-font-library="material-icons" aria-label="send">send</md-icon>
+                    </md-button>
+                    <md-button ng-click="rejectPost(selected_post._id)" class="md-fab md-mini md-warn md-raised"
+                               ng-hide="selected_post.state == 'rejected'">
+                        <md-icon md-font-library="material-icons" aria-label="delete">delete</md-icon>
+                    </md-button>
+                    <md-button ng-click="archivePost(selected_post._id)" class="md-fab md-mini md-warn md-raised"
+                               ng-hide="selected_post.state == 'archived'">
+                        <md-icon md-font-library="material-icons" aria-label="archive">archive</md-icon>
+                    </md-button>
+
+                    <md-button ng-click="setCreatedPost(selected_post._id)" class="md-fab md-mini md-primary md-raised"
+                               ng-hide="selected_post.state == 'created'">
+                        <md-icon md-font-library="material-icons" aria-label="undo">undo</md-icon>
+                    </md-button>
+                    <md-button ui-sref="app.post-edit({_id:selected_post._id})" class="md-fab md-mini md-secondary
+                                md-raised md-hue-1">
+                        <md-icon md-font-library="material-icons" aria-label="edit">mode_edit</md-icon>
+                    </md-button>
+                    <md-button ng-click="openPost(selected_post._id,true)" class="md-fab md-mini md-primary
+                                md-raised">
+                        <md-icon md-font-library="material-icons" aria-label="open">open_in_new</md-icon>
+                    </md-button>
+                    </div>
+                </md-card-actions>
+            </md-card>
+
+            <!--
+            <md-divider></md-divider>
+
+
+            <div layout="row">
+                <md-button ng-click="respondPost(selected_post._id)" class="md-fab md-mini md-primary md-raised"
+                           ng-disabled="!selected_post.email" ng-show="selected_post.state == 'created'">
+                    <md-icon md-font-library="material-icons" aria-label="send">send</md-icon>
+                </md-button>
+                <md-button ng-click="rejectPost(selected_post._id)" class="md-fab md-mini md-warn md-raised"
+                           ng-hide="selected_post.state == 'rejected'">
+                    <md-icon md-font-library="material-icons" aria-label="delete">delete</md-icon>
+                </md-button>
+                <md-button ng-click="archivePost(selected_post._id)" class="md-fab md-mini md-warn md-raised"
+                           ng-hide="selected_post.state == 'archived'">
+                    <md-icon md-font-library="material-icons" aria-label="archive">archive</md-icon>
+                </md-button>
+            </div>
+
+
+            <div layout="row">
+                <md-button ng-click="setCreatedPost(selected_post._id)" class="md-fab md-mini md-primary md-raised"
+                           ng-hide="selected_post.state == 'created'">
+                    <md-icon md-font-library="material-icons" aria-label="undo">undo</md-icon>
+                </md-button>
+                <md-button ui-sref="app.post-edit({_id:selected_post._id})" class="md-fab md-mini md-secondary
+                                md-raised md-hue-1">
+                    <md-icon md-font-library="material-icons" aria-label="edit">mode_edit</md-icon>
+                </md-button>
+                <md-button ng-click="openPost(selected_post._id,true)" class="md-fab md-mini md-primary
+                                md-raised">
+                    <md-icon md-font-library="material-icons" aria-label="open">open_in_new</md-icon>
+                </md-button>
+            </div>
+-->
+
+        </div>
+
+
+    </div>
 
     <div layout="column">
         <md-button ng-click="dtInstance.reloadData()" class="md-fab md-mini md-primary md-raised">
             <md-icon md-font-library="material-icons" aria-label="refresh">refresh</md-icon>
-        </md-button> Refresh Posts
+        </md-button>
+        Refresh Posts
 
-        <md-button ng-click="clearPosts()" class="md-warn md-raised" style="max-width: 240px;">Delete {{state}} Posts</md-button>
+        <md-button ng-click="clearPosts()" class="md-warn md-raised" style="max-width: 240px;">Delete {{state}}
+            Posts
+        </md-button>
     </div>
-
 
 </div>

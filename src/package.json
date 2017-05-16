@@ -45,6 +45,7 @@
     "co": "^4.6.0",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.23.0",
+    "datatables-select": "^1.1.0",
     "datatables.net": "^1.10.13",
     "devtron": "^1.4.0",
     "dropzone": "^4.3.0",

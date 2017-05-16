@@ -7,17 +7,23 @@
 
     require('datatables.net');
     require('angular-datatables/dist/angular-datatables');
+    require('datatables-select/css/select.dataTables.scss');
     require('angular-datatables/dist/css/angular-datatables.css');
     require('material-design-lite/material.css');
     require('dataTables.material');
     require('dataTables.material.css');
+
+    require('datatables-select');
+    require('angular-datatables/dist/plugins/select/angular-datatables.select');
 
     require('./posts.directive.scss');
 
     var PostEdit = require('./post-edit/post-edit');
 
     angular.module(MODULE_NAME, [
-        'app.views.post-edit'
+        'app.views.post-edit',
+        'datatables',
+        'datatables.select'
     ]).directive('posts', Directive);
 
     /* @ngInject */
@@ -26,18 +32,28 @@
     }
 
     /* @ngInject */
-    function Controller($rootScope, $scope, $log, $q, $timeout, $window, $state, $interpolate, $compile, AppServices, DTOptionsBuilder, DTColumnBuilder, DTColumnDefBuilder, _) {
+    function Controller($rootScope, $scope, $log, $q, $timeout, $window, $state, $interpolate, $compile, AppServices, DTOptionsBuilder, DTColumnBuilder, DTColumnDefBuilder, _, $) {
 
 
+        $scope.posts = [];
+        $scope.selected_post = false;
+        $scope.dtInstance = false;
+        $scope.AppServices = AppServices;
 
+        $scope.dtIntanceCallback = function (instance) {
 
-        //$scope.posts = [];
+            //$log.debug('$scope.dtIntanceCallback');
 
-        /*
-         $scope.$watch('cities',function(){
-         $scope.data = $rootScope.cities;
-         },true)
-         */
+            if (!$scope.dtInstance) {
+                $log.debug($scope.state + ' $scope.dtInstance');
+                $scope.dtInstance = instance;
+            }
+
+            if (!$scope.selected_post) {
+                var row = $scope.dtInstance.DataTable.row(':eq(0)', { page: 'current' }).select();
+                $scope.setSelectedPost(row.id());
+            }
+        };
 
         $scope.refreshPosts = function () {
             $rootScope.ngProgress.start();
@@ -51,13 +67,18 @@
 
                 //$log.debug('AppServices.api.posts.find(): ' + JSON.stringify(result,null,2));
 
-                if (result && result.docs) {
+                if (result && result.docs && result.docs.length > 0) {
                     //$log.debug('found posts: ' + result.docs.length);
                     //$scope.posts = result.docs;
+
+                    $scope.posts = result.docs;
 
                     defer.resolve(result.docs);
 
                     //$log.debug('$scope.posts[' + state + ']: ' + JSON.stringify($scope.posts[state],null,2) );
+                } else {
+                    $scope.posts = [];
+                    defer.resolve([]);
                 }
 
                 $rootScope.ngProgress.complete();
@@ -74,15 +95,53 @@
 
         };
 
-        $scope.AppServices = AppServices;
+        function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            // Unbind first in order to avoid any duplicate handler (see https://github.com/l-lin/angular-datatables/issues/87)
+            $('td', nRow).unbind('click');
+            $('td', nRow).bind('click', function () {
+                $scope.$apply(function () {
+                    $scope.onRowSelect(aData);
+                });
+            });
+            return nRow;
+        }
+
+        $scope.onRowSelect = function (item) {
+
+            $scope.setSelectedPost(item._id);
+        };
+
+        $scope.setSelectedPost = function(post_id){
+
+            $log.debug('post_id: ' + post_id);
+            $scope.selected_post = _.find($scope.posts,{_id:post_id});
+            $scope.openPost(post_id,true);
+
+            var row_id =  '#' + post_id.toString();
+
+            //var row = $scope.dtInstance.row(row_id);
+            //$log.debug('row: ' + JSON.stringify(row.data(),null,2));
+            //row.select();
+
+        };
 
         $scope.dtOptions = DTOptionsBuilder
             .fromFnPromise($scope.refreshPosts)
             .withPaginationType('simple_numbers')
-            //.withOption('rowCallback', rowCallback)
+            .withOption('rowCallback', rowCallback)
             .withOption('searching', true)
             .withOption('order', [[ 1, "desc" ]])
-            .withOption('createdRow', createdRow);
+            .withOption('rowId', '_id')
+            .withOption('select','single')
+            .withOption('initComplete', function(settings, json) {
+                //$log.debug('#posts-table init complete!');
+            });
+            /*
+            .withSelect({
+                style:    'single'
+            });
+            */
+            //.withOption('select',{style:'single'});
 
         var buttonColumnFn = $interpolate(require('./button_column.html'));
 
@@ -90,10 +149,7 @@
             DTColumnBuilder.newColumn('_id','ID'),
             DTColumnBuilder.newColumn('publish_date','DATE'),
             DTColumnBuilder.newColumn('link','LINK'),
-            DTColumnBuilder.newColumn('title','TITLE'),
-            DTColumnBuilder.newColumn('description','DESCRIPTION'),
-            DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable()
-                .renderWith(actionsHtml)
+            DTColumnBuilder.newColumn('title','TITLE')
         ];
 
         $scope.dtColumnDefs = [
@@ -101,39 +157,8 @@
             DTColumnDefBuilder.newColumnDef(1).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(2).withOption('visible', false),
             DTColumnDefBuilder.newColumnDef(3).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px'),
-            DTColumnDefBuilder.newColumnDef(4).withOption('className', 'mdl-data-table__cell--non-numeric').withOption('width', '250px'),
-            DTColumnDefBuilder.newColumnDef(5).withOption('width', '250px')
         ];
 
-        function createdRow(row, data, dataIndex) {
-            // Recompiling so we can bind Angular directive to the DT
-            $compile(angular.element(row).contents())($scope);
-        }
-
-        function actionsHtml(data, type, item, meta) {
-
-            var has_email = item.email != undefined;
-            var created_state = item.state == 'created';
-            var rejected_state = item.state == 'rejected';
-            var archived_state = item.state == 'archived';
-
-            var interpol = {
-                _id:item._id,
-                has_email:has_email,
-                created_state:created_state,
-                rejected_state:rejected_state,
-                archived_state:archived_state
-            };
-
-            // TODO: Replace offending characters in the item, ' & "
-            var column_markup = buttonColumnFn(interpol);
-
-            //$log.debug(column_markup);
-
-            return column_markup;
-        }
-
-        $scope.dtInstance = {};
 
         /*
         $scope.dtColumnDefs = [
@@ -196,43 +221,6 @@
             },function(){})
         };
 
-        /*
-        $scope.respondPost = function(_id){
-
-            //$log.debug('$scope.respondPost: ' + JSON.stringify(item,null,2));
-
-            AppServices.api.posts.findByID(_id).then(function(item){
-
-                AppServices.api.searches.find({_id:item.search_id}).then(function(search){
-
-                    // TODO: Change this to an instance of the default response or let it get set per post...
-                    AppServices.api.responses.find({_id:search.default_response}).then(function(result){
-
-                        //$log.debug('result: ' + JSON.stringify(result,null,2));
-                        var response = result.docs[0];
-                        AppServices.api.responses.sendResponse(item,response,function(err,result,post){
-
-                            if (err) {
-                                $log.error(err)
-                            }
-
-                            if (result) {
-                                //$log.debug('$scope.respondPost: ' + JSON.stringify(result,null,2));
-                            }
-
-                            if (post) {
-                                $log.debug('post: ' + JSON.stringify(post,null,2));
-                                $scope.dtInstance.reloadData();
-                            }
-
-                        })
-                    });
-                });
-
-            });
-        };
-        */
-
         $scope.respondPost = function($event,_id){
 
 
@@ -274,6 +262,14 @@
 
         function Init() {
 
+
+            $scope.$on('event:dataTableLoaded',function(id,dt){
+
+                $log.debug('event:dataTableLoaded');
+                //$scope.dtAPI = $(dt.id).dataTable().api();
+            });
+
+
             if ($scope.state == AppServices.api.posts.states.created) {
                 $rootScope.$on($scope.search._id + '-found',function(event,info){
 
@@ -288,9 +284,15 @@
                 });
 
             }
+
+
+
+
         }
 
         Init();
+
+
 
 
     }

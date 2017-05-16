@@ -23,4 +23,8 @@ posts  {
     //text-overflow: ellipsis;
     //max-width:300px;
   }
+
+  tr.selected {
+    background-color: #E0E0E0;
+  }
 }
