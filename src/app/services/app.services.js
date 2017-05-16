@@ -15,11 +15,12 @@
     /** @ngInject */
     function Config(remoteProvider) {
         remoteProvider.register('File', './File');
+        remoteProvider.register('Process', './Process');
 
     }
 
     /* @ngInject */
-    function Service(ApiServices,$log,$q,DB,File) {
+    function Service(ApiServices,$log,$q,DB,File, Process) {
 
         this.api = ApiServices;
         this.db = DB;
@@ -28,24 +29,29 @@
 
         this.seed = function () {
 
-            var chain = $q.when();
 
-            for(var key in self.api) {
 
-                (function(service) {
+            var deferred = $q.defer();
 
-                    //$log.debug(JSON.stringify(service));
 
-                    chain.then(function(){
+            if (Process.env.NODE_ENV != 'development') {
 
-                        return self.api[service].seed();
+                File.getFileBinaryProjectFile(Process.env.SEED_IMPORT,function(error,file){
+
+                    self.importAll(file).then(function (result) {
+                        $rootScope.showToast('SEED_IMPORT Complete!')
+                        deferred.resolve(result);
                     });
 
-                })(key)
+                });
 
+            } else {
+                deferred.resolve();
             }
 
-            return chain;
+
+
+            return deferred.promise;
 
         }
 
@@ -82,7 +88,7 @@
                         var deferredFile = $q.defer();
                         promises.push(deferredFile.promise);
 
-                        File.getFileBinary(response.message.attachments[0].filename, function (err, buffer) {
+                        File.getFileBinaryAttachment(response.message.attachments[0].filename, function (err, buffer) {
 
                             if (err) {
                                 $log.error('exportFiles error: ' + err);
@@ -164,13 +170,13 @@
 
         };
 
-        this.importAll = function (element) {
+        this.importAll = function (file) {
 
             var deferred = $q.defer();
 
             //$log.debug('importAll');
 
-            this.importData(element).then(function(data_zip){
+            this.importData(file).then(function(data_zip){
 
                 //$log.debug('data_zip: ' + JSON.stringify(data_zip,null,2));
 
@@ -211,7 +217,7 @@
 
                     //$log.debug('content:')
                     File.saveFile(content,relativePath,function(result){
-                            $log.debug('saveAttachment');
+                            //$log.debug('saveAttachment');
                             deferredFile.resolve(file_zip);
                         })
 
@@ -233,7 +239,7 @@
             return deferred.promise;
         };
 
-        this.importData = function (element) {
+        this.importData = function (file) {
 
             //$log.debug('importData');
 
@@ -241,7 +247,7 @@
 
             var new_zip = new JSZip();
             // more files !
-            new_zip.loadAsync(element.files['0'])
+            new_zip.loadAsync(file)
                 .then(function(zip) {
                     // you now have every files contained in the loaded zip
 
@@ -261,7 +267,7 @@
                                     return item;
                                 });
 
-                                console.dir(objects);
+                                //console.dir(objects);
 
                                 self.api[service].import(objects).then(function(result){
                                     //$log.debug(service + '.import: ' + result);

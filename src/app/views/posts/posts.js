@@ -33,7 +33,7 @@
         $scope.refreshPostState = function (state) {
             $rootScope.ngProgress.start();
 
-            AppServices.api.posts.find({state:state,search_id:$stateParams.search_id},{fields:['link','title','state','email']}).then(function(result){
+            AppServices.api.posts.find({state:state,search_id:$stateParams.search_id},{fields:['link','title','state','email'],limit:30}).then(function(result){
 
                 //$log.debug('AppServices.api.posts.find(): ' + JSON.stringify(result,null,2));
 

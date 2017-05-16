@@ -29,6 +29,8 @@
     function Controller($rootScope, $scope, $log, $q, $timeout, $window, $state, $interpolate, $compile, AppServices, DTOptionsBuilder, DTColumnBuilder, DTColumnDefBuilder, _) {
 
 
+
+
         //$scope.posts = [];
 
         /*
@@ -231,10 +233,13 @@
         };
         */
 
-        $scope.respondPost = function(_id){
+        $scope.respondPost = function($event,_id){
 
-            AppServices.api.responses.respondPost(_id,search.default_response).then(function(post){
+
+            $event.currentTarget.disabled = true;
+            AppServices.api.responses.respondPost(_id,$scope.search.default_response).then(function(post){
                 $scope.dtInstance.reloadData();
+
             })
         };
 
@@ -265,12 +270,21 @@
             $scope.dtInstance.reloadData();
         }
 
+        $scope.isReloading = false;
+
         function Init() {
 
             if ($scope.state == AppServices.api.posts.states.created) {
                 $rootScope.$on($scope.search._id + '-found',function(event,info){
 
-                    $scope.dtInstance.reloadData();
+                    if (!$scope.isReloading) {
+                        $scope.isReloading = true;
+                        $timeout(function(){
+                            $scope.dtInstance.reloadData();
+                            $scope.isReloading = false;
+                        },10000);
+                    }
+
                 });
 
             }
@@ -290,7 +304,8 @@
             scope: {
                 posts: '=',
                 search: '=',
-                state: '@'
+                state: '@',
+                limit: '@',
             },
             link: Link
         };

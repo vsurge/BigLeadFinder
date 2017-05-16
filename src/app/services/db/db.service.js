@@ -30,7 +30,7 @@
            // service.db = pouchDB('lead_finder', {adapter: 'worker'});
             service.db = pouchDB('lead_finder');
             service.createIndex('_type',['type'])
-            $log.debug('db.adapter: ' + service.db.adapter);
+            //$log.debug('db.adapter: ' + service.db.adapter);
             //PouchDB.debug.enable('*');
             PouchDB.debug.disable();
         };

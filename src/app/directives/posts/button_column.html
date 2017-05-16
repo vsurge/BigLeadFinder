@@ -1,4 +1,4 @@
-<md-button ng-click="respondPost({{_id}})" class="md-fab md-mini md-primary md-raised"
+<md-button ng-click="respondPost($event,{{_id}})" class="md-fab md-mini md-primary md-raised"
            ng-disabled="!{{has_email}}"  ng-hide="!{{created_state}}">
 <md-icon md-font-library="material-icons" aria-label="send">send</md-icon>
 </md-button>

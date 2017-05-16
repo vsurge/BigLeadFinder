@@ -58,12 +58,13 @@
     ).run(Run).config(Config).config(Theme)
 
     /* @ngInject */
-    function Run($rootScope,$log, $mdToast,process,AppServices){
+    function Run($rootScope,$log, $mdToast,process,AppServices, Process){
 
         $log.debug('Node v' + process.versions.node);
         $log.debug('Chrome v' + process.versions.chrome);
         $log.debug('Electron v' + process.versions.electron);
         $log.debug('Angular v' + angular.version.full);
+        $log.debug('NODE_ENV: ' + Process.env.NODE_ENV);
 
         AppServices.seed();
 
@@ -78,11 +79,12 @@
     }
 
     /* @ngInject */
-    function Config($qProvider,$urlRouterProvider,$locationProvider) {
+    function Config($qProvider,$urlRouterProvider,$locationProvider,remoteProvider) {
 
 
         $qProvider.errorOnUnhandledRejections(false);
-        $urlRouterProvider.otherwise('/app-settings');
+        $urlRouterProvider.otherwise('/dashboard');
+        remoteProvider.register('Process', './Process');
         //$locationProvider.html5Mode(true);
     }
 

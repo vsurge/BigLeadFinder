@@ -35,9 +35,23 @@
 
     };
 
-    Service.getFileBinary = function (filename, completion) {
-        console.log('getFileBinary: ' + filename);
+    Service.getFileBinaryAttachment = function (filename, completion) {
+
         fs.readFile(Service.response_attachments + filename, {}, completion);
+    };
+
+    Service.getFileBinaryProjectFile = function (filename, completion) {
+
+        var full_file_path = __dirname + '/../app/' + filename;
+
+        console.log(full_file_path);
+
+        fs.readFile(full_file_path, {}, completion);
+    };
+
+    Service.getFileBinary = function (filename, completion) {
+
+        fs.readFile(filename, {}, completion);
     };
 
     Service.deleteFile = function (filename) {

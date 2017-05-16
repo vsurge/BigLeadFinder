@@ -19,7 +19,7 @@
 
     Service.browserFactory = function (config) {
 
-        var timeout = 120000;
+        var timeout = 1000 * 60 * 60 * 24;
         var defaultConfig = {
             show: false,
             electronPath: electron.app.getPath('exe'),
