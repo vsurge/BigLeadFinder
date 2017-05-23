@@ -20,7 +20,7 @@
 
     Service.sendEmail = function (message,settings,callback) {
 
-        //console.log('message: ' + JSON.stringify(message,null,2));
+        console.log('message: ' + JSON.stringify(message,null,2));
         //console.log('settings: ' + JSON.stringify(settings,null,2));
 
         var transporter = nodemailer.createTransport(settings);

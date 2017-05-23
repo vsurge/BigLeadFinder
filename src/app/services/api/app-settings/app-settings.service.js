@@ -28,9 +28,12 @@
 
             var self = this;
 
+            this.refreshDefaultSettings();
+            /*
             this.refreshDefaultSettings().then(function(result){
                 self.defaultSettings = result;
             });
+            */
         };
 
         service.prototype = Object.create(ServiceBase.constructor.prototype);
@@ -51,6 +54,7 @@
 
         service.prototype.refreshDefaultSettings = function () {
 
+            var self = this;
             var deferred = $q.defer();
 
             service.prototype.find({name: 'default'}).then(function (result) {
@@ -59,6 +63,7 @@
 
                 if (result && result.docs && result.docs.length > 0) {
 
+                    self.defaultSettings = result.docs[0];
                     deferred.resolve(result.docs[0]);
                 } else {
                     deferred.reject({message: 'Not found.'})

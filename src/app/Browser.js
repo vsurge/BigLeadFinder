@@ -167,6 +167,11 @@
 
                 if (emailCallback) {
                     emailCallback(result)
+
+                    if (result) {
+                        emailCallback = null;
+                    }
+
                 }
 
             }).catch(function(error){

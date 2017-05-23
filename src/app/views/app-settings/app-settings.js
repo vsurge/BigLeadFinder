@@ -26,7 +26,10 @@
 
         $scope.updateSettings = function (settings) {
             //$log.debug('settings: ' + JSON.stringify(settings,null,2));
-            AppServices.api.app_settings.create(settings)
+            AppServices.api.app_settings.create(settings).then(function(result){
+                AppServices.api.app_settings.refreshDefaultSettings();
+            });
+
         };
 
         $scope.clearAllData = function () {

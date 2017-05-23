@@ -242,7 +242,8 @@
                                     city_id: city._id,
                                     search_id: query._id,
                                     category_id: cat._id,
-                                    state: self.states.created
+                                    state: self.states.created,
+                                    email:null
                                 };
 
                                 _items.push(item);
@@ -299,7 +300,7 @@
 
                     //DB.findDocs('post',{link:{$eq:postUrl}}).then(function(results){
                     DB.findDocs('post', {link: postUrl}).then(function (results) {
-                        //$log.debug('posts: ' + JSON.stringify(results, null, 2));
+                        $log.debug('posts: ' + JSON.stringify(results, null, 2));
 
                         if (results && results.docs && results.docs.length > 0) {
 
@@ -309,7 +310,7 @@
 
                             DB.db.put(post).then(function (result) {
 
-                                //$log.debug('db.put result: ' + JSON.stringify(result,null,2));
+                                $log.debug('db.put result: ' + JSON.stringify(result,null,2));
                                 if (emailCallback) {
                                     emailCallback(result);
                                 }

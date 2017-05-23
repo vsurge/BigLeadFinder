@@ -14,88 +14,51 @@
             <md-card>
                 <md-card-title>
                     <md-card-title-text>
-                        <span class="md-headline">{{selected_post.title}}</span>
+                        <span class="md-headline">{{selectedPost().title}}</span>
                     </md-card-title-text>
                 </md-card-title>
                 <md-card-content>
                     <p>
-                        {{selected_post.description}}
+                        {{selectedPost().description}}
                     </p>
                 </md-card-content>
                 <md-card-actions layout="row" layout-align="end" >
                     <div layout-margin>
-                    <md-button ng-click="respondPost(selected_post._id)" class="md-fab md-mini md-primary md-raised"
-                               ng-disabled="!selected_post.email" ng-show="selected_post.state == 'created'">
+                    <md-button ng-click="respondPost(selectedPost()._id)" class="md-fab md-mini md-primary md-raised"
+                               ng-disabled="!selectedPost().email" ng-show="selectedPost().state == 'created'">
                         <md-icon md-font-library="material-icons" aria-label="send">send</md-icon>
                     </md-button>
-                    <md-button ng-click="rejectPost(selected_post._id)" class="md-fab md-mini md-warn md-raised"
-                               ng-hide="selected_post.state == 'rejected'">
+                    <md-button ng-click="rejectPost(selectedPost()._id)" class="md-fab md-mini md-warn md-raised"
+                               ng-hide="selectedPost().state == 'rejected'">
                         <md-icon md-font-library="material-icons" aria-label="delete">delete</md-icon>
                     </md-button>
-                    <md-button ng-click="archivePost(selected_post._id)" class="md-fab md-mini md-warn md-raised"
-                               ng-hide="selected_post.state == 'archived'">
+                    <md-button ng-click="archivePost(selectedPost()._id)" class="md-fab md-mini md-warn md-raised"
+                               ng-hide="selectedPost().state == 'archived'">
                         <md-icon md-font-library="material-icons" aria-label="archive">archive</md-icon>
                     </md-button>
 
-                    <md-button ng-click="setCreatedPost(selected_post._id)" class="md-fab md-mini md-primary md-raised"
-                               ng-hide="selected_post.state == 'created'">
+                    <md-button ng-click="setCreatedPost(selectedPost()._id)" class="md-fab md-mini md-primary md-raised"
+                               ng-hide="selectedPost().state == 'created'">
                         <md-icon md-font-library="material-icons" aria-label="undo">undo</md-icon>
                     </md-button>
-                    <md-button ui-sref="app.post-edit({_id:selected_post._id})" class="md-fab md-mini md-secondary
+                    <md-button ui-sref="app.post-edit({_id:selectedPost()._id})" class="md-fab md-mini md-secondary
                                 md-raised md-hue-1">
                         <md-icon md-font-library="material-icons" aria-label="edit">mode_edit</md-icon>
                     </md-button>
-                    <md-button ng-click="openPost(selected_post._id,true)" class="md-fab md-mini md-primary
+                    <md-button ng-click="openPost(selectedPost()._id,true)" class="md-fab md-mini md-primary
                                 md-raised">
                         <md-icon md-font-library="material-icons" aria-label="open">open_in_new</md-icon>
                     </md-button>
                     </div>
                 </md-card-actions>
             </md-card>
-
-            <!--
-            <md-divider></md-divider>
-
-
-            <div layout="row">
-                <md-button ng-click="respondPost(selected_post._id)" class="md-fab md-mini md-primary md-raised"
-                           ng-disabled="!selected_post.email" ng-show="selected_post.state == 'created'">
-                    <md-icon md-font-library="material-icons" aria-label="send">send</md-icon>
-                </md-button>
-                <md-button ng-click="rejectPost(selected_post._id)" class="md-fab md-mini md-warn md-raised"
-                           ng-hide="selected_post.state == 'rejected'">
-                    <md-icon md-font-library="material-icons" aria-label="delete">delete</md-icon>
-                </md-button>
-                <md-button ng-click="archivePost(selected_post._id)" class="md-fab md-mini md-warn md-raised"
-                           ng-hide="selected_post.state == 'archived'">
-                    <md-icon md-font-library="material-icons" aria-label="archive">archive</md-icon>
-                </md-button>
-            </div>
-
-
-            <div layout="row">
-                <md-button ng-click="setCreatedPost(selected_post._id)" class="md-fab md-mini md-primary md-raised"
-                           ng-hide="selected_post.state == 'created'">
-                    <md-icon md-font-library="material-icons" aria-label="undo">undo</md-icon>
-                </md-button>
-                <md-button ui-sref="app.post-edit({_id:selected_post._id})" class="md-fab md-mini md-secondary
-                                md-raised md-hue-1">
-                    <md-icon md-font-library="material-icons" aria-label="edit">mode_edit</md-icon>
-                </md-button>
-                <md-button ng-click="openPost(selected_post._id,true)" class="md-fab md-mini md-primary
-                                md-raised">
-                    <md-icon md-font-library="material-icons" aria-label="open">open_in_new</md-icon>
-                </md-button>
-            </div>
--->
-
         </div>
 
 
     </div>
 
     <div layout="column">
-        <md-button ng-click="dtInstance.reloadData()" class="md-fab md-mini md-primary md-raised">
+        <md-button ng-click="$scope.refreshTable" class="md-fab md-mini md-primary md-raised">
             <md-icon md-font-library="material-icons" aria-label="refresh">refresh</md-icon>
         </md-button>
         Refresh Posts

@@ -82,7 +82,7 @@
 
             $rootScope.showToast('Send Response Start');
 
-            //$log.debug('response: ' + JSON.stringify(response, null, 2));
+            $log.debug('response: ' + JSON.stringify(response, null, 2));
 
             EmailSettingsService.find({_id: response.email_settings_id}).then(function (result) {
 
@@ -94,6 +94,7 @@
                     response.message.from = email_settings.email.from;
 
                     if (AppSettingsService.defaultSettings.test_mode === false) {
+                        //$log.debug('post.email: ' + post.email);
                         response.message.to = post.email;
                     } else {
                         response.message.to = AppSettingsService.defaultSettings.test_mode_email;
@@ -153,16 +154,18 @@
 
             PostsService.findByID(_id).then(function(item){
 
+                $log.debug('post: ' + JSON.stringify(item,null,2));
+
                 // TODO: Change this to an instance of the default response or let it get set per post...
                 service.prototype.findByID(response_id).then(function(response){
 
-                    //$log.debug('result: ' + JSON.stringify(result,null,2));
+                    //$log.debug('result: ' + JSON.stringify(response,null,2));
 
                     service.prototype.sendResponse(item,response,function(err,result,post){
 
                         if (err) {
-                            $log.error(err)
-                            deferred.reject(error)
+                            $log.error(err);
+                            deferred.reject(error);
                         }
 
                         if (result) {
@@ -170,7 +173,7 @@
                         }
 
                         if (post) {
-                            $log.debug('post: ' + JSON.stringify(post,null,2));
+                            //$log.debug('post: ' + JSON.stringify(post,null,2));
                         }
 
                         deferred.resolve(post);

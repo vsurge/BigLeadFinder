@@ -267,7 +267,7 @@
                                     return item;
                                 });
 
-                                //console.dir(objects);
+                                console.dir(objects);
 
                                 self.api[service].import(objects).then(function(result){
                                     //$log.debug(service + '.import: ' + result);
