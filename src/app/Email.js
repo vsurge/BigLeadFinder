@@ -1,7 +1,5 @@
 (function () {
 
-    'user strict';
-
     var electron = require('electron');
     var File = require('./File.js');
 

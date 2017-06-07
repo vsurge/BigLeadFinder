@@ -3,8 +3,7 @@
     'user strict';
 
     var electron = require('electron');
-    // Module to create native browser window.
-    var BrowserWindow = electron.BrowserWindow
+    var BrowserWindow = electron.BrowserWindow;
 
     var path = require('path');
     var fs = require('fs');
