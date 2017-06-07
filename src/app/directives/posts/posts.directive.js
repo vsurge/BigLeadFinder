@@ -168,7 +168,7 @@
             .withPaginationType('simple_numbers')
             .withOption('rowCallback', rowCallback)
             .withOption('searching', true)
-            .withOption('order', [[ 1, "desc" ]])
+            .withOption('order', [[ 2, "desc" ]])
             .withOption('rowId', '_id')
             .withOption('select','single')
             .withOption('initComplete', function(settings, json) {
